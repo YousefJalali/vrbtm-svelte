@@ -169,7 +169,7 @@
 			<summary class="btn btn-sm btn-primary lg:btn-md lg:hidden">Random Omit</summary>
 
 			<div
-				class="dropdown-content w-[calc(100vw-3rem)] lg:w-full bg-base-200 p-4 rounded-box shadow-lg lg:shadow-none"
+				class="dropdown-content z-50 w-[calc(100vw-3rem)] lg:w-full bg-base-200 p-4 rounded-box shadow-lg lg:shadow-none"
 				use:clickOutside
 				on:outclick={() => {
 					if (isMobile) {

@@ -16,7 +16,8 @@ export default {
 					secondary: '#C7D9FF',
 					accent: '#FF7F50'
 				}
-			}
+			},
+			'business'
 		]
 	}
 }
