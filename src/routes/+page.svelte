@@ -19,12 +19,12 @@
 	let editMode = true
 	let text = ''
 
-	text =
-		"Start by creating a `new` SvelteKit project if you don't have one set up already. The most common approach is outlined in the Getting Started with SvelteKit introduction. Start by creating a `new` SvelteKit project if you don't have one set up already. The most common approach is outlined in the Getting Started with SvelteKit introduction. Start by creating a `new` SvelteKit project if you don't have one set up already. The most common approach is outlined in the Getting Started with SvelteKit introduction. Start by creating a `new` SvelteKit project if you don't have one set up already. The most common approach is outlined in the Getting Started with SvelteKit introduction. Start by creating a `new` SvelteKit project if you don't have one set up already. The most common approach is outlined in the Getting Started with SvelteKit introduction."
+	// text =
+	// 	"Start by creating a `new` SvelteKit project if you don't have one set up already. The most common approach is outlined in the Getting Started with SvelteKit introduction. Start by creating a `new` SvelteKit project if you don't have one set up already. The most common approach is outlined in the Getting Started with SvelteKit introduction. Start by creating a `new` SvelteKit project if you don't have one set up already. The most common approach is outlined in the Getting Started with SvelteKit introduction. Start by creating a `new` SvelteKit project if you don't have one set up already. The most common approach is outlined in the Getting Started with SvelteKit introduction. Start by creating a `new` SvelteKit project if you don't have one set up already. The most common approach is outlined in the Getting Started with SvelteKit introduction."
 
-	text = `In 2024, the tech industry will see significant changes. For example, consider the breakthrough technologies like Quantum Computing and AI: they’re revolutionizing fields ranging from finance to healthcare. You might encounter various challenges: for instance, data privacy issues, which are critical in the age of ubiquitous connectivity. Companies will have to adapt quickly—especially those dealing with sensitive information. Moreover, the rise of remote work will bring both opportunities and obstacles. Will organizations be able to balance productivity with employee well-being? Time will tell. Don’t forget to check out the latest trends: virtual reality (VR), augmented reality (AR), and blockchain technologies. Remember: staying updated is crucial for staying competitive. 12345!`
+	// text = `In 2024, the tech industry will see significant changes. For example, consider the breakthrough technologies like Quantum Computing and AI: they’re revolutionizing fields ranging from finance to healthcare. You might encounter various challenges: for instance, data privacy issues, which are critical in the age of ubiquitous connectivity. Companies will have to adapt quickly—especially those dealing with sensitive information. Moreover, the rise of remote work will bring both opportunities and obstacles. Will organizations be able to balance productivity with employee well-being? Time will tell. Don’t forget to check out the latest trends: virtual reality (VR), augmented reality (AR), and blockchain technologies. Remember: staying updated is crucial for staying competitive. 12345!`
 
-	text = ''
+	// text = ''
 
 	$: isMobile = windowSize < 1024
 
@@ -46,6 +46,7 @@
 	function clearOmit() {
 		text = text.replaceAll('`', '')
 		hasOmittedWord = false
+		showOmittedWords = ''
 	}
 
 	function onOmit() {
@@ -57,6 +58,8 @@
 			.split(' ')
 			.map((word) => omitWord(word))
 			.join(' ')
+
+		showOmittedWords = ''
 
 		if (isMobile) {
 			showDifficultyDropdown(false)
@@ -102,6 +105,14 @@
 
 		return res
 	}
+
+	function onTextAreaBlur() {
+		disableEditMode()
+		if (!text.length) {
+			hasOmittedWord = false
+			showOmittedWords = ''
+		}
+	}
 </script>
 
 <svelte:window bind:innerWidth={windowSize} />
@@ -109,38 +120,12 @@
 <div
 	class="flex-1 flex flex-col-reverse justify-center h-full p-6 pt-0 lg:p-8 lg:pt-0 lg:gap-8 lg:flex-row"
 >
-	<div class="relative prose flex flex-col flex-1 bg-base-200 rounded-box">
-		<!-- {#if !editMode}
-			<button
-				on:click={() => {
-					if (textarea) {
-						textarea.focus()
-					}
-
-					// editMode = true
-				}}
-				class="btn btn-sm btn-square btn-ghost absolute right-0 top-0 z-50 lg:hidden"
-				><svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="size-6"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-					/>
-				</svg>
-			</button>
-		{/if} -->
+	<div class="relative prose flex flex-col flex-1 bg-base-300 rounded-box">
 		{#if editMode}
 			<textarea
 				bind:this={textarea}
 				bind:value={text}
-				on:blur={disableEditMode}
+				on:blur={onTextAreaBlur}
 				placeholder="type here..."
 				class="p-4 lg:p-6 resize-none flex-1 h-fit w-full bg-transparent fields"
 				style="field-sizing: content;"
