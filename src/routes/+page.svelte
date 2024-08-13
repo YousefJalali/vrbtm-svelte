@@ -67,10 +67,14 @@
 		if (text.length <= 0) return
 		editMode = false
 	}
+	function enableEditMode() {
+		editMode = true
+		// if (textarea) textarea.focus()
+	}
 
-	// $: if (editMode && textarea) {
-	// 	textarea.focus()
-	// }
+	$: if (editMode && textarea) {
+		textarea.focus()
+	}
 
 	function omitWord(word: string) {
 		let split = word.match(/[^\s()<>[\]:.,;?!@#*+&=]+|[\s()<>[\]:.,;?!@#*+&=]/g)
@@ -105,14 +109,38 @@
 <div
 	class="flex-1 flex flex-col-reverse justify-center h-full p-6 pt-0 lg:p-8 lg:pt-0 lg:gap-8 lg:flex-row"
 >
-	<div class="prose flex flex-col flex-1 bg-base-200 rounded-box">
+	<div class="relative prose flex flex-col flex-1 bg-base-200 rounded-box">
+		<!-- {#if !editMode}
+			<button
+				on:click={() => {
+					if (textarea) {
+						textarea.focus()
+					}
+
+					// editMode = true
+				}}
+				class="btn btn-sm btn-square btn-ghost absolute right-0 top-0 z-50 lg:hidden"
+				><svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="size-6"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+					/>
+				</svg>
+			</button>
+		{/if} -->
 		{#if editMode}
 			<textarea
 				bind:this={textarea}
-				use:clickOutside
-				on:outclick={disableEditMode}
-				on:blur={disableEditMode}
 				bind:value={text}
+				on:blur={disableEditMode}
 				placeholder="type here..."
 				class="p-4 lg:p-6 resize-none flex-1 h-fit w-full bg-transparent fields"
 				style="field-sizing: content;"
@@ -124,12 +152,9 @@
 			<div
 				tabindex={0}
 				class="p-4 lg:p-6 resize-none flex-1 h-fit w-full bg-transparent [&>p]:m-0 [&_code]:bg-primary [&_code]:text-primary hover:[&_code]:bg-transparent {showOmittedWords}"
-				use:longpress={600}
-				on:longpress={() => (editMode = true)}
-				on:click={() => {
-					if (!isMobile) {
-						editMode = true
-					}
+				on:click={(e) => {
+					if (e.target && e.target.nodeName === 'CODE') return
+					enableEditMode()
 				}}
 			>
 				{@html marked(text)}
@@ -148,7 +173,6 @@
 				use:clickOutside
 				on:outclick={() => {
 					if (isMobile) {
-						console.log('clicked')
 						showDifficultyDropdown(false)
 					}
 				}}
@@ -182,9 +206,6 @@
 				>
 					Omit
 				</button>
-				<!-- {#if !text.length}
-					<span class="label-text-alt text-center block mt-2">Add some text</span>
-				{/if} -->
 			</div>
 		</details>
 
