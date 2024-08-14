@@ -7,7 +7,9 @@
 		<h1 class="py-6">VRBTM 💉</h1>
 	</header>
 
-	<div class="flex flex-col min-h-[calc(100vh-84px)] lg:min-h-[calc(100vh-100px)]">
+	<div
+		class="flex flex-col min-h-[calc(100vh-84px)] lg:min-h-[calc(100vh-100px)] lg:max-h-[calc(100vh-100px)]"
+	>
 		<slot />
 	</div>
 </div>
