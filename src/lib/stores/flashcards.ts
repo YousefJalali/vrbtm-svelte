@@ -62,11 +62,21 @@ function handleFlashcards() {
 		update((flashcards) => [{ id: uuidv4(), question, answer }, ...flashcards])
 	}
 
+	function edit({ id, question, answer }: { id: string; question: string; answer: string }) {
+		update((flashcards) => flashcards.map((f) => (f.id === id ? { ...f, question, answer } : f)))
+	}
+
+	function remove(flashcardId: string) {
+		update((flashcards) => flashcards.filter((f) => f.id !== flashcardId))
+	}
+
 	return {
 		subscribe,
 		set,
 		update,
-		create
+		create,
+		edit,
+		remove
 	}
 }
 

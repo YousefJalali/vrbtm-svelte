@@ -1,13 +1,21 @@
 <script lang="ts">
 	import { flashcards } from '$lib/stores'
 
-	let flashcardsModal: HTMLDialogElement
+	let flashcardsFormModal: HTMLDialogElement
 	let flashcardsOptionsModal: HTMLDialogElement
 	let cards: { [cardId: string]: HTMLLIElement } = {}
-	let selectedCard: null | { id: string; x: number; y: number } = null
+	let selectedCardId: null | string = null
+	let selectedCardPos: null | { x: number; y: number } = null
+
+	let optionsStyle = ''
+	$: if (selectedCardPos) {
+		optionsStyle = `position: absolute; width: 208px; top: ${selectedCardPos.y + 24}px; left: ${selectedCardPos.x - 208 - 24}px`
+	}
 
 	function onShowOptions(cardId: string) {
 		if (!cards[cardId]) return
+
+		selectedCardId = cardId
 
 		flashcardsOptionsModal.showModal()
 
@@ -15,20 +23,13 @@
 
 		if (right < 600) return //return if mobile
 
-		selectedCard = {
-			id: cardId,
+		selectedCardPos = {
 			x: x + width,
 			y: y
 		}
 	}
 
-	let optionsStyle = ''
-
-	$: if (selectedCard) {
-		optionsStyle = `position: absolute; width: 208px; top: ${selectedCard.y + 24}px; left: ${selectedCard.x - 208 - 24}px`
-	}
-
-	function onCreateFlashcard(e: SubmitEvent) {
+	function handleFlashcardForm(e: SubmitEvent) {
 		if (!e.target) return
 
 		const formData = new FormData(e.target as HTMLFormElement)
@@ -40,21 +41,37 @@
 			data[key] = value.toString()
 		}
 
-		flashcards.create({ question: data.question, answer: data.answer })
+		if (selectedCardId) {
+			flashcards.edit({ id: selectedCardId, question: data.question, answer: data.answer })
+		} else {
+			flashcards.create({ question: data.question, answer: data.answer })
+		}
 
-		flashcardsModal.close()
+		flashcardsFormModal.close()
+	}
+
+	function onDelete() {
+		if (!selectedCardId) return
+		flashcards.remove(selectedCardId)
+
+		flashcardsOptionsModal.close()
+	}
+
+	function onEdit() {
+		flashcardsOptionsModal.close()
+		flashcardsFormModal.showModal()
+	}
+
+	function onOptionsModalClose() {
+		selectedCardId = null
+		selectedCardPos = null
 	}
 </script>
 
 <div class="flex flex-col flex-1 h-0 drawer drawer-end lg:drawer-open">
 	<input id="flashcards-drawer" type="checkbox" class="drawer-toggle" />
 
-	<div class="drawer-content flex flex-col items-center justify-center">
-		<!-- Page content here -->
-		<!-- <label for="flashcards-drawer" class="btn btn-sm btn-primary drawer-button lg:hidden">
-			Open
-		</label> -->
-	</div>
+	<div class="drawer-content flex flex-col items-center justify-center"></div>
 	<div class="drawer-side">
 		<label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
@@ -65,7 +82,7 @@
 				<h1 class="m-0">Flashcards</h1>
 				<button
 					class="btn btn-ghost btn-circle btn-sm -mr-2"
-					on:click={() => flashcardsModal.showModal()}
+					on:click={() => flashcardsFormModal.showModal()}
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -134,12 +151,12 @@
 	class="modal modal-bottom sm:modal-middle sm:backdrop:bg-transparent"
 >
 	<form method="dialog" class="modal-backdrop">
-		<button on:click={() => (selectedCard = null)}>close</button>
+		<button on:click={onOptionsModalClose}>close</button>
 	</form>
 	<div class="modal-box p-0" style={optionsStyle}>
 		<ul class="menu dropdown-content bg-base-100 rounded-box z-[1] p-2 shadow">
 			<li>
-				<a href={null}
+				<a href={null} on:click={onEdit}
 					><svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -158,7 +175,7 @@
 				>
 			</li>
 			<li class="text-error">
-				<a href={null}
+				<a href={null} on:click={onDelete}
 					><svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -182,7 +199,7 @@
 
 <!-- flashcardsModal -->
 <dialog
-	bind:this={flashcardsModal}
+	bind:this={flashcardsFormModal}
 	id="flashcards_modal"
 	class="modal modal-bottom sm:modal-middle"
 >
@@ -194,11 +211,11 @@
 		</div>
 
 		<div class="prose mb-4">
-			<h3>Create Flashcard</h3>
+			<h3>{selectedCardId ? 'Update' : 'Create'} Flashcard</h3>
 			<p>Fill in the details below to craft your perfect flashcard and make learning a breeze!</p>
 		</div>
 
-		<form class="flex flex-col gap-4" on:submit|preventDefault={onCreateFlashcard}>
+		<form class="flex flex-col gap-4" on:submit|preventDefault={handleFlashcardForm}>
 			<label class="form-control w-full">
 				<div class="label">
 					<span class="label-text">Question?</span>
@@ -208,6 +225,7 @@
 					type="text"
 					placeholder="What is the powerhouse of the cell?"
 					class="input input-bordered w-full"
+					value={$flashcards.find((f) => f.id === selectedCardId)?.question || ''}
 				/>
 			</label>
 
@@ -219,26 +237,11 @@
 					name="answer"
 					class="textarea resize-none textarea-bordered h-24"
 					placeholder="The powerhouse of the cell is the mitochondrion."
+					value={$flashcards.find((f) => f.id === selectedCardId)?.answer || ''}
 				></textarea>
 			</label>
 
-			<button class="btn btn-primary" type="submit">Create</button>
+			<button class="btn btn-primary" type="submit">{selectedCardId ? 'Update' : 'Create'}</button>
 		</form>
 	</div>
 </dialog>
-
-<!-- `absolute !w-52 top-[${selectedCard.y + 24}px] left-[${selectedCard.x - 208 - 24}px]` -->
-
-<!-- <style>
-	.options {
-		padding: 0;
-	}
-
-	/* @media (min-width: 700px) { */
-		.options {
-			position: absolute !important;
-			top: calc(var(--posY) + 24px) !important;
-			left: calc(var(--posX) - 208px - 24px) !important;
-		}
-	/* } */
-</style> -->
