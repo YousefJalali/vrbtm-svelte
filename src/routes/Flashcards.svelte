@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { flashcards } from '$lib/stores'
+	import { page } from '$app/stores'
+	import { flashcards, notebooks } from '$lib/stores'
 
 	let flashcardsFormModal: HTMLDialogElement
 	let flashcardsOptionsModal: HTMLDialogElement
@@ -11,6 +12,8 @@
 	$: if (selectedCardPos) {
 		optionsStyle = `position: absolute; width: 208px; top: ${selectedCardPos.y + 24}px; left: ${selectedCardPos.x - 208 - 24}px`
 	}
+
+	$: activeNotebook = $page.url.searchParams.get('notebook')
 
 	function onShowOptions(cardId: string) {
 		if (!cards[cardId]) return
@@ -44,7 +47,10 @@
 		if (selectedCardId) {
 			flashcards.edit({ id: selectedCardId, question: data.question, answer: data.answer })
 		} else {
-			flashcards.create({ question: data.question, answer: data.answer })
+			const notebookName = $page.url.searchParams.get('notebook')
+			const notebookId = notebooks.findId(notebookName)
+			if (!notebookId) return
+			flashcards.create({ notebookId, question: data.question, answer: data.answer })
 		}
 
 		flashcardsFormModal.close()
@@ -76,10 +82,8 @@
 		<label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
 		<div class="flex flex-col bg-base-200 max-w-[80vw]">
-			<div
-				class="prose prose-sm sticky top-0 z-50 bg-base-200 flex justify-between items-center p-4 pb-2"
-			>
-				<h1 class="m-0">Flashcards</h1>
+			<div class="sticky top-0 z-50 bg-base-200 flex justify-between items-center p-4 pb-2">
+				<h1 class="text-2xl font-bold">Flashcards</h1>
 				<button
 					class="btn btn-ghost btn-circle btn-sm -mr-2"
 					on:click={() => flashcardsFormModal.showModal()}
@@ -99,45 +103,47 @@
 
 			<ul class="h-full flex-1 px-4 py-6 space-y-4 text-center">
 				{#each $flashcards as flashcard (flashcard.id)}
-					<li class="relative min-h-[100px] flex" bind:this={cards[flashcard.id]}>
-						<label class="swap swap-flip flex-1 place-content-stretch">
-							<input type="checkbox" />
+					{#if flashcard.notebookId === notebooks.findId(activeNotebook)}
+						<li class="relative min-h-[100px] flex" bind:this={cards[flashcard.id]}>
+							<label class="swap swap-flip flex-1 place-content-stretch">
+								<input type="checkbox" />
 
-							<div class="swap-on">
-								<div class="card bg-base-200 border-4 border-base-100 shadow-md h-full">
-									<div class="card-body p-4 flex justify-center items-center">
-										<p class="flex-none">{flashcard.answer}</p>
+								<div class="swap-on">
+									<div class="card bg-base-200 border-4 border-base-100 shadow-md h-full">
+										<div class="card-body p-4 flex justify-center items-center">
+											<p class="flex-none">{flashcard.answer}</p>
+										</div>
 									</div>
 								</div>
-							</div>
-							<div class="swap-off">
-								<div class="relative card bg-base-100 shadow-md h-full">
-									<div class="card-body p-4 flex justify-center items-center">
-										<p class="flex-none">{flashcard.question}</p>
-									</div>
+								<div class="swap-off">
+									<div class="relative card bg-base-100 shadow-md h-full">
+										<div class="card-body p-4 flex justify-center items-center">
+											<p class="flex-none">{flashcard.question}</p>
+										</div>
 
-									<button
-										on:click={() => onShowOptions(flashcard.id)}
-										class="btn btn-xs btn-circle absolute top-1 right-1"
-										><svg
-											xmlns="http://www.w3.org/2000/svg"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke-width="1.5"
-											stroke="currentColor"
-											class="size-6"
+										<button
+											on:click={() => onShowOptions(flashcard.id)}
+											class="btn btn-xs btn-circle absolute top-1 right-1"
+											><svg
+												xmlns="http://www.w3.org/2000/svg"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke-width="1.5"
+												stroke="currentColor"
+												class="size-6"
+											>
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+												/>
+											</svg></button
 										>
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-											/>
-										</svg></button
-									>
+									</div>
 								</div>
-							</div>
-						</label>
-					</li>
+							</label>
+						</li>
+					{/if}
 				{/each}
 			</ul>
 		</div>
