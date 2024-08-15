@@ -72,7 +72,7 @@
 	<input id="flashcards-drawer" type="checkbox" class="drawer-toggle" />
 
 	<div class="drawer-content flex flex-col items-center justify-center"></div>
-	<div class="drawer-side">
+	<div class="drawer-side lg:rounded-box">
 		<label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
 		<div class="flex flex-col bg-base-200 max-w-[80vw]">
