@@ -9,14 +9,15 @@ export default {
 	daisyui: {
 		themes: [
 			{
-				lofi: {
+				winter: {
 					// eslint-disable-next-line @typescript-eslint/no-require-imports
-					...require('daisyui/src/theming/themes')['lofi'],
+					...require('daisyui/src/theming/themes')['winter'],
 					primary: '#4E63F2',
 					secondary: '#C7D9FF',
 					accent: '#FF7F50'
 				}
 			},
+
 			'business'
 		]
 	}
