@@ -3,6 +3,9 @@
 	import { page } from '$app/stores'
 	import { notebooks } from '$lib/stores'
 
+	let notebooksFormModal: HTMLDialogElement
+	let selectedNotebookId: null | string = null
+
 	function clickHandler(notebookName: string) {
 		let query = new URLSearchParams()
 
@@ -12,6 +15,32 @@
 	}
 
 	$: activeNotebook = $page.url.searchParams.get('notebook')
+
+	function handleNotebookForm(e: SubmitEvent) {
+		if (!e.target) return
+
+		const formData = new FormData(e.target as HTMLFormElement)
+
+		const data: { [key: string]: string } = {}
+
+		for (let field of formData) {
+			const [key, value] = field
+			data[key] = value.toString()
+		}
+
+		notebooks.create({ name: data.name })
+
+		// if (selectedNotebookId) {
+		// 	flashcards.edit({ id: selectedCardId, question: data.question, answer: data.answer })
+		// } else {
+		// 	const notebookName = $page.url.searchParams.get('notebook')
+		// 	const notebookId = notebooks.findId(notebookName)
+		// 	if (!notebookId) return
+		// 	flashcards.create({ notebookId, question: data.question, answer: data.answer })
+		// }
+
+		notebooksFormModal.close()
+	}
 </script>
 
 <!-- <div class="flex justify-between items-center p-4 pb-2">
@@ -36,7 +65,7 @@
 			<span>Notebooks</span>
 			<button
 				class="btn btn-circle btn-outline btn-ghost btn-xs -mr-2"
-				on:click={() => console.log('ha')}
+				on:click={() => notebooksFormModal.showModal()}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -51,13 +80,12 @@
 			</button>
 		</h2>
 		<ul>
-			{#each Object.keys($notebooks) as notebookId (notebookId)}
+			{#each Object.keys($notebooks) as notebookName (notebookName)}
 				<li>
 					<a
-						class={$notebooks[notebookId].name === activeNotebook ? 'active' : ''}
+						class={notebookName === activeNotebook ? 'active' : ''}
 						href={null}
-						on:click={() => clickHandler($notebooks[notebookId].name)}
-						>{$notebooks[notebookId].name}</a
+						on:click={() => clickHandler(notebookName)}>{notebookName}</a
 					>
 				</li>
 			{/each}
@@ -65,8 +93,40 @@
 	</li>
 </ul>
 
-<!-- <ul class="px-6">
-	{#each $notebooks as notebook (notebook.id)}
-		<li><a>{notebook.name}</a></li>
-	{/each}
-</ul> -->
+<dialog
+	bind:this={notebooksFormModal}
+	id="notebooks_form_modal"
+	class="modal modal-bottom sm:modal-middle"
+>
+	<div class="modal-box">
+		<div class="modal-action m-0">
+			<form method="dialog">
+				<button class="btn btn-sm">x</button>
+			</form>
+		</div>
+
+		<div class="prose mb-4">
+			<h3>{selectedNotebookId ? 'Update' : 'Create'} Notebook</h3>
+			<p>Fill in the details below to craft your perfect notebook and make learning a breeze!</p>
+		</div>
+
+		<form class="flex flex-col gap-4" on:submit|preventDefault={handleNotebookForm}>
+			<label class="form-control w-full">
+				<div class="label">
+					<span class="label-text">Name</span>
+				</div>
+				<input
+					name="name"
+					type="text"
+					placeholder="test"
+					class="input input-bordered w-full"
+					value=""
+				/>
+			</label>
+
+			<button class="btn btn-primary" type="submit"
+				>{selectedNotebookId ? 'Update' : 'Create'}</button
+			>
+		</form>
+	</div>
+</dialog>

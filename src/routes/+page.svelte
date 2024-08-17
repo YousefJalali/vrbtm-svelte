@@ -24,35 +24,45 @@
 	let showOmittedWords = ''
 	let hasOmittedWord = false
 	let editMode = true
-	let text = ''
+	let activeNotebook = $page.url.searchParams.get('notebook')
+	let text = $notebooks[activeNotebook || ''] || ''
 
 	onMount(() => {
 		let query = new URLSearchParams()
 
-		let notebookId = Object.keys($notebooks)[0]
+		let notebookName = Object.keys($notebooks)[0]
 
-		query.set('notebook', $notebooks[notebookId].name)
+		query.set('notebook', notebookName)
 
 		goto(`?${query.toString()}`)
 
-		text = $notebooks[notebookId].text
+		text = $notebooks[notebookName]
 	})
 
-	$: activeNotebookName = $page.url.searchParams.get('notebook')
+	$: if (activeNotebook !== $page.url.searchParams.get('notebook')) {
+		console.log('navigate')
+		activeNotebook = $page.url.searchParams.get('notebook')
+
+		if (activeNotebook) {
+			text = $notebooks[activeNotebook]
+		}
+	}
 
 	$: if (text) {
-		let notebookId = notebooks.findId(activeNotebookName)
-		if (notebookId) {
-			notebooks.updateText({ id: notebookId, text })
+		if (text !== $notebooks[activeNotebook || '']) {
+			console.log('text changed')
+			notebooks.updateText({ name: activeNotebook, text })
 		}
 	}
 
-	$: if (activeNotebookName) {
-		let notebookId = notebooks.findId(activeNotebookName)
-		if (notebookId) {
-			text = $notebooks[notebookId].text
-		}
-	}
+	// $: if (text && text !== ($notebooks[activeNotebook || ''] || '')) {
+	// 	console.log('text changed')
+
+	// 	if (activeNotebook) {
+	// 		console.log(activeNotebook, { text })
+	// 		notebooks.updateText({ name: activeNotebook, text })
+	// 	}
+	// }
 
 	$: isMobile = windowSize < 1024
 
@@ -179,7 +189,7 @@
 						enableEditMode()
 					}}
 				>
-					{@html marked(text)}
+					{@html marked($notebooks[activeNotebook || ''] || '')}
 				</div>
 			{/if}
 		</div>

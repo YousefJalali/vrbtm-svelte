@@ -48,9 +48,8 @@
 			flashcards.edit({ id: selectedCardId, question: data.question, answer: data.answer })
 		} else {
 			const notebookName = $page.url.searchParams.get('notebook')
-			const notebookId = notebooks.findId(notebookName)
-			if (!notebookId) return
-			flashcards.create({ notebookId, question: data.question, answer: data.answer })
+			if (!notebookName) return
+			flashcards.create({ notebookName, question: data.question, answer: data.answer })
 		}
 
 		flashcardsFormModal.close()
@@ -81,7 +80,7 @@
 	<div class="drawer-side lg:rounded-box">
 		<label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
-		<div class="flex flex-col bg-base-200 max-w-[80vw]">
+		<div class="flex flex-col bg-base-200 w-[80vw] lg:w-full min-h-screen lg:min-h-fit">
 			<div class="sticky top-0 z-50 bg-base-200 flex justify-between items-center p-4 pb-2">
 				<h1 class="text-2xl font-bold">Flashcards</h1>
 				<button
@@ -103,7 +102,7 @@
 
 			<ul class="h-full flex-1 px-4 py-6 space-y-4 text-center">
 				{#each $flashcards as flashcard (flashcard.id)}
-					{#if flashcard.notebookId === notebooks.findId(activeNotebook)}
+					{#if flashcard.notebookName === activeNotebook}
 						<li class="relative min-h-[100px] flex" bind:this={cards[flashcard.id]}>
 							<label class="swap swap-flip flex-1 place-content-stretch">
 								<input type="checkbox" />

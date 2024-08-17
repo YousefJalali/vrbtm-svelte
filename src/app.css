@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+	scrollbar-gutter: auto !important;
+}
+
 code {
 	border-radius: var(--rounded-box);
 }
