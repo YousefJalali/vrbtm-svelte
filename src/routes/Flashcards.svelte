@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { flashcards, notebooks } from '$lib/stores'
+	import ListWithOptions from '$lib/ui/ListWithOptions.svelte'
 
 	let flashcardsFormModal: HTMLDialogElement
 	let flashcardsOptionsModal: HTMLDialogElement
