@@ -39,6 +39,7 @@
 	"type": "module",
 	"dependencies": {
 		"marked": "^14.0.0",
+		"openai": "^4.61.1",
 		"uuid": "^10.0.0"
 	}
 }

@@ -19,6 +19,7 @@
 	let difficultyDropdown: HTMLDetailsElement
 	let textarea: HTMLTextAreaElement
 
+	let omitting = false
 	let selectedDifficulty = DIFFICULTIES[1]
 	let windowSize: number
 	let showOmittedWords = ''
@@ -27,17 +28,37 @@
 	let activeNotebook = $page.url.searchParams.get('notebook')
 	let text = $notebooks[activeNotebook || ''] || ''
 
-	onMount(() => {
-		let query = new URLSearchParams()
+	// onMount(async () => {
+	// 	let query = new URLSearchParams()
 
-		let notebookName = Object.keys($notebooks)[0]
+	// 	let notebookName = Object.keys($notebooks)[0]
 
-		query.set('notebook', notebookName)
+	// 	query.set('notebook', notebookName)
 
-		goto(`?${query.toString()}`)
+	// 	goto(`?${query.toString()}`)
 
-		text = $notebooks[notebookName]
-	})
+	// 	text = $notebooks[notebookName]
+	// })
+
+	const handleChatCompletion = async () => {
+		try {
+			const res = await fetch('/api', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					message: text
+				})
+			})
+
+			const data = await res.json()
+
+			return data
+		} catch (error) {
+			console.log('err', error)
+		}
+	}
 
 	$: if (activeNotebook !== $page.url.searchParams.get('notebook')) {
 		console.log('navigate')
@@ -91,21 +112,32 @@
 		showOmittedWords = ''
 	}
 
-	function onOmit() {
+	async function onOmit() {
 		if (text.length < 2) return
 
-		clearOmit()
+		omitting = true
 
-		text = text
-			.split(' ')
-			.map((word) => omitWord(word))
-			.join(' ')
+		const omitted = await handleChatCompletion()
+
+		// console.log(omitted, omitted.choices[0].message.content)
+
+		text = omitted.choices[0].message.content
+		hasOmittedWord = true
+
+		// clearOmit()
+
+		// text = text
+		// 	.split(' ')
+		// 	.map((word) => omitWord(word))
+		// 	.join(' ')
 
 		showOmittedWords = ''
 
 		if (isMobile) {
 			showDifficultyDropdown(false)
 		}
+
+		omitting = false
 	}
 
 	function disableEditMode() {
@@ -117,32 +149,32 @@
 		// if (textarea) textarea.focus()
 	}
 
-	function omitWord(word: string) {
-		let split = word.match(/[^\s()<>[\]:.,;?!@#*+&=]+|[\s()<>[\]:.,;?!@#*+&=]/g)
+	// function omitWord(word: string) {
+	// 	let split = word.match(/[^\s()<>[\]:.,;?!@#*+&=]+|[\s()<>[\]:.,;?!@#*+&=]/g)
 
-		if (!split || word.length <= 1) return word
+	// 	if (!split || word.length <= 1) return word
 
-		let res = ''
+	// 	let res = ''
 
-		for (let w of split) {
-			let temp = ''
-			if ((/[A-Za-z]/.test(w) || /^[0-9]+$/.test(w)) && w.length > 1) {
-				//a word
-				if (!stopWords[w.toLowerCase()] && Math.random() > DIFFICULTIES_SCORE[selectedDifficulty]) {
-					temp = '``' + w + '``'
-					hasOmittedWord = true
-				} else {
-					temp = w
-				}
-			} else {
-				temp = w
-			}
+	// 	for (let w of split) {
+	// 		let temp = ''
+	// 		if ((/[A-Za-z]/.test(w) || /^[0-9]+$/.test(w)) && w.length > 1) {
+	// 			//a word
+	// 			if (!stopWords[w.toLowerCase()] && Math.random() > DIFFICULTIES_SCORE[selectedDifficulty]) {
+	// 				temp = '``' + w + '``'
+	// 				hasOmittedWord = true
+	// 			} else {
+	// 				temp = w
+	// 			}
+	// 		} else {
+	// 			temp = w
+	// 		}
 
-			res = res + temp
-		}
+	// 		res = res + temp
+	// 	}
 
-		return res
-	}
+	// 	return res
+	// }
 
 	function onTextAreaBlur() {
 		disableEditMode()
@@ -237,6 +269,9 @@
 						disabled={!text.length}
 						class="btn btn-sm lg:btn-md btn-primary mt-3 w-full"
 					>
+						{#if omitting}
+							<span class="loading loading-spinner"></span>
+						{/if}
 						Omit
 					</button>
 				</div>

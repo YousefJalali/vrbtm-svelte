@@ -1,4 +1,4 @@
-import { browser } from '$app/environment'
+// import { browser } from '$app/environment'
 import { get, writable } from 'svelte/store'
 
 const defaultNotebooks = {
@@ -15,12 +15,12 @@ const defaultNotebooks = {
 }
 
 function fetchNotebooks() {
-	if (browser) {
-		const storedNotebooks = localStorage.getItem('notebooks')
+	// if (browser) {
+	// 	const storedNotebooks = localStorage.getItem('notebooks')
 
-		if (typeof storedNotebooks === 'string' && Object.keys(JSON.parse(storedNotebooks)).length)
-			return JSON.parse(storedNotebooks)
-	}
+	// 	if (typeof storedNotebooks === 'string' && Object.keys(JSON.parse(storedNotebooks)).length)
+	// 		return JSON.parse(storedNotebooks)
+	// }
 
 	return defaultNotebooks
 
@@ -36,8 +36,8 @@ function handleNotebooks() {
 		const newNotebook = { [name]: '' }
 		update((notebooks) => ({ ...newNotebook, ...notebooks }))
 
-		const storedNotebooks = localStorage.getItem('notebooks') || {}
-		localStorage.setItem('notebooks', JSON.stringify({ ...newNotebook, ...storedNotebooks }))
+		// const storedNotebooks = localStorage.getItem('notebooks') || {}
+		// localStorage.setItem('notebooks', JSON.stringify({ ...newNotebook, ...storedNotebooks }))
 	}
 
 	function updateName({ oldName, newName }: { oldName: string; newName: string }) {
@@ -58,7 +58,7 @@ function handleNotebooks() {
 		allNotebooks[name] = text
 		set(allNotebooks)
 
-		localStorage.setItem('notebooks', JSON.stringify(allNotebooks))
+		// localStorage.setItem('notebooks', JSON.stringify(allNotebooks))
 	}
 
 	function remove(name: string) {
@@ -69,7 +69,7 @@ function handleNotebooks() {
 
 		set(allNotebooks)
 
-		localStorage.setItem('notebooks', JSON.stringify(allNotebooks))
+		// localStorage.setItem('notebooks', JSON.stringify(allNotebooks))
 	}
 
 	return {
