@@ -195,7 +195,7 @@
 	</div>
 
 	<div
-		class="flex flex-col-reverse lg:bg-base-200 lg:p-4 lg:rounded-box lg:gap-4 lg:flex-row lg:flex-[0_0_55%]"
+		class="w-full flex flex-col-reverse lg:bg-base-200 lg:p-4 lg:rounded-box lg:gap-4 lg:flex-row lg:flex-[0_0_55%]"
 	>
 		<div class="relative flex flex-col flex-1 lg:flex-[0_0_70%] bg-base-300 rounded-box">
 			{#if editMode}
