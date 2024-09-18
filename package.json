@@ -19,6 +19,7 @@
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@tailwindcss/typography": "^0.5.14",
 		"@types/eslint": "^9.6.0",
+		"@types/lodash.debounce": "^4.0.9",
 		"@types/uuid": "^10.0.0",
 		"autoprefixer": "^10.4.20",
 		"daisyui": "^4.12.10",
@@ -38,6 +39,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"lodash.debounce": "^4.0.8",
 		"marked": "^14.0.0",
 		"openai": "^4.61.1",
 		"uuid": "^10.0.0"
