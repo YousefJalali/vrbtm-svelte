@@ -59,39 +59,50 @@
 	</button>
 </div> -->
 
-<ul class="menu rounded-box w-full">
-	<li>
-		<h2 class="menu-title flex items-center justify-between">
-			<span>Notebooks</span>
-			<button
-				class="btn btn-circle btn-outline btn-ghost btn-xs -mr-2"
-				on:click={() => notebooksFormModal.showModal()}
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="size-4"
-				>
-					<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-				</svg>
-			</button>
-		</h2>
-		<ul>
-			{#each Object.keys($notebooks) as notebookName (notebookName)}
+<div class="flex flex-col flex-1 h-0 drawer md:drawer-open z-30">
+	<input id="nav-drawer" type="checkbox" class="drawer-toggle" />
+
+	<div class="drawer-content flex flex-col items-center justify-center"></div>
+	<div class="drawer-side md:rounded-box">
+		<label for="nav-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+
+		<div class="bg-base-200 flex flex-col w-[80vw] md:w-full min-h-screen md:min-h-fit">
+			<ul class="menu rounded-box w-full">
 				<li>
-					<a
-						class={notebookName === activeNotebook ? 'active' : ''}
-						href={null}
-						on:click={() => clickHandler(notebookName)}>{notebookName}</a
-					>
+					<h2 class="menu-title flex items-center justify-between">
+						<span>Notebooks</span>
+						<button
+							class="btn btn-circle btn-outline btn-ghost btn-xs -mr-2"
+							on:click={() => notebooksFormModal.showModal()}
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="size-4"
+							>
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+							</svg>
+						</button>
+					</h2>
+					<ul>
+						{#each Object.keys($notebooks) as notebookName (notebookName)}
+							<li>
+								<a
+									class={notebookName === activeNotebook ? 'active' : ''}
+									href={null}
+									on:click={() => clickHandler(notebookName)}>{notebookName}</a
+								>
+							</li>
+						{/each}
+					</ul>
 				</li>
-			{/each}
-		</ul>
-	</li>
-</ul>
+			</ul>
+		</div>
+	</div>
+</div>
 
 <dialog
 	bind:this={notebooksFormModal}

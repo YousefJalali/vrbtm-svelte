@@ -11,15 +11,17 @@
 	}
 </script>
 
-<div class="border-2 focus-within:border-primary mt-4 p-4 lg:m-0 rounded-box overflow-hidden">
+<div
+	class="border-[1.5px] focus-within:border-primary t-1 p-2 lg:p-4 lg:m-0 rounded-box overflow-hidden"
+>
 	<textarea
 		style="field-sizing: content;"
-		class="w-full h-fit max-h-[calc(100vh*0.2)] resize-none focus:outline-0"
+		class="m-0 p-1 w-full h-fit max-h-[calc(100vh*0.2)] resize-none active:outline-none focus:outline-none focus:ring-0"
 		bind:value={text}
 		placeholder="Add Text..."
 	></textarea>
 
-	<div class="divider my-1"></div>
+	<div class="divider my-0 p-0"></div>
 
 	<div class="flex justify-between items-center">
 		<button class="btn btn-sm btn-ghost w-fit">
