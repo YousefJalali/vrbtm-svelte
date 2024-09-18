@@ -59,7 +59,7 @@
 	</button>
 </div> -->
 
-<ul class="menu bg-base-200 rounded-box w-full">
+<ul class="menu rounded-box w-full">
 	<li>
 		<h2 class="menu-title flex items-center justify-between">
 			<span>Notebooks</span>

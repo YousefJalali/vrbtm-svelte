@@ -81,8 +81,8 @@
 	<div class="drawer-side lg:rounded-box">
 		<label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
-		<div class="flex flex-col bg-base-200 w-[80vw] lg:w-full min-h-screen lg:min-h-fit">
-			<div class="sticky top-0 z-50 bg-base-200 flex justify-between items-center p-4 pb-2">
+		<div class="bg-base-200 flex flex-col w-[80vw] lg:w-full min-h-screen lg:min-h-fit">
+			<div class="sticky top-0 z-50 flex justify-between items-center p-4 pb-2">
 				<h1 class="text-2xl font-bold">Flashcards</h1>
 				<button
 					class="btn btn-ghost btn-circle btn-sm -mr-2"

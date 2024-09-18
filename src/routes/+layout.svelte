@@ -3,7 +3,7 @@
 </script>
 
 <div>
-	<header class="lg:h-[100px] max-w-none flex items-center justify-center p-6">
+	<header class="lg:h-[100px] max-w-none flex items-center justify-center p-4 lg:p-6">
 		<h1 class="font-bold text-3xl lg:text-4xl">VRBTM 💉</h1>
 
 		<label
