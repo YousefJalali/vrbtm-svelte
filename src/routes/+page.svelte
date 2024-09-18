@@ -2,48 +2,44 @@
 	import Flashcards from './Flashcards.svelte'
 	import Notebooks from './Notebooks.svelte'
 	import { page } from '$app/stores'
-	import Editor from './Editor.svelte'
-	import RandomOmit from './RandomOmit.svelte'
-	import Tools from './Tools.svelte'
-	import debounce from 'lodash.debounce'
+	// import Editor from './Editor.svelte'
+	// import RandomOmit from './RandomOmit.svelte'
+	// import Tools from './Tools.svelte'
+	// import debounce from 'lodash.debounce'
 	import { notebooks } from '$lib/stores'
 	import { marked } from 'marked'
+	import { goto } from '$app/navigation'
+	import { onMount, type DispatchOptions, type EventDispatcher } from 'svelte'
+	import TextInput from './TextInput.svelte'
 
 	let windowSize: number
 
 	let activeNotebook: null | string = null
 
-	// onMount(async () => {
-	// 	let query = new URLSearchParams()
+	onMount(() => {
+		let query = new URLSearchParams()
+		let firstNotebook = Object.keys($notebooks)[0]
 
-	// 	let notebookName = Object.keys($notebooks)[0]
+		let notebook: string | null = $page.url.searchParams.get('notebook')
 
-	// 	query.set('notebook', notebookName)
+		query.set('notebook', notebook || firstNotebook)
 
-	// 	goto(`?${query.toString()}`)
-
-	// 	text = $notebooks[notebookName]
-	// })
+		goto(`?${query.toString()}`)
+	})
 
 	$: if (activeNotebook !== $page.url.searchParams.get('notebook')) {
-		console.log('navigate')
+		// console.log('navigate')
 		activeNotebook = $page.url.searchParams.get('notebook')
 	}
 
-	let text = ''
+	// let text = ''
 	let omitting = false
 
-	// const onType = debounce((e) => {
-	// 	const { value } = e.target
-	// 	console.log('text updatedd1')
-	// 	// notebooks.updateText({ name: activeNotebook, text: value })
-	// }, 750)
-
-	async function omitHandler() {
-		if (!activeNotebook) return
+	async function omitHandler(e: CustomEvent) {
+		let text = e.detail.text
+		if (!activeNotebook || !text.length) return
 
 		let temp = text
-		text = ''
 
 		omitting = true
 
@@ -51,9 +47,9 @@
 		const { success } = await notebooks.omit({ name: activeNotebook, textIndex: 0 })
 		omitting = false
 
-		if (!success) {
-			text = temp
-		}
+		// if (!success) {
+		// 	text = temp
+		// }
 	}
 </script>
 
@@ -66,8 +62,8 @@
 		<Notebooks />
 	</div>
 
-	{#if activeNotebook}
-		<div class="relative w-full flex flex-col max-h-[calc(100vh-84px)] lg:gap-4 lg:flex-[0_0_55%]">
+	<div class="relative w-full flex flex-col max-h-[calc(100vh-84px)] lg:gap-4 lg:flex-[0_0_55%]">
+		{#if activeNotebook}
 			<div class="flex flex-col-reverse gap-4 flex-1 h-0 overflow-y-scroll">
 				{#if omitting}
 					<div
@@ -144,47 +140,9 @@
 				{/each}
 			</div>
 
-			<div class="mt-4 lg:m-0 w-full min-h-fit flex flex-col textarea textarea-bordered">
-				<textarea
-					bind:value={text}
-					class=" flex-1 resize-none h-fit"
-					placeholder="Add your text..."
-					cols="1"
-					rows="2"
-				></textarea>
-				<div class="divider my-1"></div>
-
-				<div class="flex justify-between items-center">
-					<button class="btn btn-sm btn-ghost w-fit">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 20 20"
-							fill="currentColor"
-							aria-hidden="true"
-							class="size-4"
-							><path
-								fill-rule="evenodd"
-								d="M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.5a.75.75 0 011.064 1.057l-.498.501-.002.002a4.5 4.5 0 01-6.364-6.364l7-7a4.5 4.5 0 016.368 6.36l-3.455 3.553A2.625 2.625 0 119.52 9.52l3.45-3.451a.75.75 0 111.061 1.06l-3.45 3.451a1.125 1.125 0 001.587 1.595l3.454-3.553a3 3 0 000-4.242z"
-								clip-rule="evenodd"
-							></path></svg
-						>
-						Attach a file</button
-					>
-					<button class="btn btn-sm btn-primary w-fit" on:click={omitHandler}>Omit</button>
-				</div>
-			</div>
-			<!-- <Editor {activeNotebook} />
-
-			
-			<div
-				class="sticky top-0 py-4 lg:bg-base-100 rounded-box flex justify-between lg:flex-1 lg:flex-col-reverse lg:p-0"
-			>
-				<RandomOmit {activeNotebook} {windowSize} />
-
-				<Tools {activeNotebook} />
-			</div> -->
-		</div>
-	{/if}
+			<TextInput on:omit={omitHandler} />
+		{/if}
+	</div>
 
 	<!-- Flashcards -->
 	<div
