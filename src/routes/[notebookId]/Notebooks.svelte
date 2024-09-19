@@ -4,35 +4,12 @@
 	import { notebooks } from '$lib/stores'
 
 	let popover: HTMLElement
-	let notebooksFormModal: HTMLDialogElement
 	let selectedNotebookId: null | string = null
+	let renameMode = false
+	let newTitle = ''
+	let newTitleInputEle: HTMLInputElement
 
 	$: activeNotebookId = $page.params.notebookId
-
-	// function clickHandler(notebookName: string) {
-	// 	let query = new URLSearchParams()
-
-	// 	query.set('notebook', notebookName)
-
-	// 	goto(`?${query.toString()}`)
-	// }
-
-	// function handleNotebookForm(e: SubmitEvent) {
-	// 	if (!e.target) return
-
-	// 	const formData = new FormData(e.target as HTMLFormElement)
-
-	// 	const data: { [key: string]: string } = {}
-
-	// 	for (let field of formData) {
-	// 		const [key, value] = field
-	// 		data[key] = value.toString()
-	// 	}
-
-	// 	notebooks.create({ name: data.name })
-
-	// 	notebooksFormModal.close()
-	// }
 
 	function openPopover(e: MouseEvent, notebookId: string) {
 		selectedNotebookId = notebookId
@@ -45,6 +22,65 @@
 
 	function closePopover() {
 		selectedNotebookId = ''
+	}
+
+	async function deleteNotebookHandler() {
+		// if there is only one notebook
+		if (
+			!selectedNotebookId ||
+			(Object.keys($notebooks).length <= 1 &&
+				$notebooks[selectedNotebookId].title === 'New notebook')
+		)
+			return
+
+		if (activeNotebookId === selectedNotebookId) {
+			if (Object.keys($notebooks).length <= 1) {
+				notebooks.create()
+				await goto(`/${Object.keys($notebooks)[0]}`)
+			} else {
+				let curIndex = Object.keys($notebooks).findIndex((nbId) => nbId === selectedNotebookId)
+
+				if (curIndex === Object.keys($notebooks).length - 1) {
+					curIndex--
+				} else {
+					curIndex++
+				}
+
+				const nextNotebookId = Object.keys($notebooks)[curIndex]
+
+				await goto(`/${nextNotebookId}`)
+			}
+		}
+
+		notebooks.remove({ id: selectedNotebookId })
+
+		popover.togglePopover()
+	}
+
+	function onRename() {
+		if (!selectedNotebookId) return
+
+		renameMode = true
+		popover.hidePopover()
+		newTitle = $notebooks[selectedNotebookId].title
+	}
+
+	$: if (newTitleInputEle) {
+		newTitleInputEle.focus()
+	}
+
+	function renameHandler() {
+		renameMode = false
+		if (!selectedNotebookId) return
+
+		if (newTitle.trim().length < 1) {
+			selectedNotebookId = null
+			return
+		}
+
+		notebooks.updateTitle({ id: selectedNotebookId, newTitle })
+		newTitle = ''
+		selectedNotebookId = null
 	}
 </script>
 
@@ -97,39 +133,53 @@
 					{#each Object.entries($notebooks) as [id, { title }], i (id)}
 						<li class="group">
 							<a
-								class="p-0 active:!bg-transparent {selectedNotebookId === id
+								class="flex p-0 active:!bg-transparent {selectedNotebookId === id
 									? 'bg-neutral/10'
 									: ''}"
 								href={null}
 								class:active={id === activeNotebookId}
 							>
-								<a class="p-2 flex" href="/{id}">
+								<a class="p-2 flex-1" href="/{id}">
 									{title}
 								</a>
 								<div
 									class="{selectedNotebookId === id
 										? 'flex'
-										: 'hidden group-hover:flex'}  absolute right-0 px-2 top-0 h-full justify-center items-center"
+										: 'hidden group-hover:flex'} {renameMode
+										? 'inset-0'
+										: ''} absolute right-0 px-2 top-0 h-full justify-center items-center"
 								>
-									<button
-										class="btn btn-xs btn-circle btn-ghost"
-										on:click={(e) => openPopover(e, id)}
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke-width="1.5"
-											stroke="currentColor"
-											class="size-6"
+									{#if renameMode && id === selectedNotebookId}
+										<input
+											id="rename"
+											name="rename notebook"
+											bind:this={newTitleInputEle}
+											bind:value={newTitle}
+											type="text"
+											class="input input-primary input-bordered input-xs w-full"
+											on:blur={renameHandler}
+										/>
+									{:else}
+										<button
+											class="btn btn-xs btn-circle btn-ghost"
+											on:click={(e) => openPopover(e, id)}
 										>
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-											/>
-										</svg>
-									</button>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke-width="1.5"
+												stroke="currentColor"
+												class="size-6"
+											>
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+												/>
+											</svg>
+										</button>
+									{/if}
 								</div>
 							</a>
 						</li>
@@ -146,7 +196,7 @@
 	id="options"
 	class="m-0 p-0 bg-transparent"
 	on:toggle={({ newState }) => {
-		if (newState === 'closed') {
+		if (newState === 'closed' && !renameMode) {
 			closePopover()
 		}
 	}}
@@ -154,7 +204,7 @@
 	{#if selectedNotebookId}
 		<ul class="menu bg-base-100 border border-base-300 rounded-box">
 			<li>
-				<a href={null}
+				<a href={null} on:click={onRename}
 					><svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -172,7 +222,7 @@
 				>
 			</li>
 			<li>
-				<a href={null} class="text-error">
+				<a href={null} class="text-error" on:click={deleteNotebookHandler}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"

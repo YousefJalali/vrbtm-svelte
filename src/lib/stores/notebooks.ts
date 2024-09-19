@@ -127,7 +127,7 @@ async function fetchTitle(text: string) {
 	}
 }
 
-const sampleNotebook = {
+const sampleNotebook = () => ({
 	[uuid()]: {
 		title: 'New notebook',
 		text: [
@@ -140,7 +140,7 @@ const sampleNotebook = {
 		isOmitted: false,
 		isOmittedWordsVisible: false
 	}
-}
+})
 
 function handleNotebooks() {
 	const { subscribe, set, update } = writable<{
@@ -153,11 +153,8 @@ function handleNotebooks() {
 	}>(fetchNotebooks())
 
 	function create() {
-		// const allNotebooks = { ...get(notebooks) }
-
-		// if (allNotebooks['New notebook']) return
-
-		update((notebooks) => ({ ...sampleNotebook, ...notebooks }))
+		console.log('create')
+		update((notebooks) => ({ ...sampleNotebook(), ...notebooks }))
 
 		// const storedNotebooks = localStorage.getItem('notebooks') || {}
 		// localStorage.setItem('notebooks', JSON.stringify({ ...newNotebook, ...storedNotebooks }))
@@ -191,14 +188,20 @@ function handleNotebooks() {
 		set(allNotebooks)
 	}
 
-	function remove(id: string) {
-		let allNotebooks = { ...get(notebooks) }
+	function remove({ id }: { id: string | null }) {
+		if (!id) return
+
+		const allNotebooks = { ...get(notebooks) }
 		delete allNotebooks[id]
 
-		if (!Object.keys(allNotebooks).length)
-			allNotebooks = {
-				...sampleNotebook
-			}
+		// if (!Object.keys(allNotebooks).length) {
+		// 	console.log('here', allNotebooks)
+		// 	allNotebooks = {
+		// 		...sampleNotebook
+		// 	}
+		// }
+
+		// console.log('here 2', allNotebooks)
 
 		set(allNotebooks)
 
@@ -222,21 +225,21 @@ function handleNotebooks() {
 	// 	set(allNotebooks)
 	// }
 
-	function showOmittedWords({ id }: { id: string }) {
-		const allNotebooks = { ...get(notebooks) }
-		if (!allNotebooks[id]) return
+	// function showOmittedWords({ id }: { id: string }) {
+	// 	const allNotebooks = { ...get(notebooks) }
+	// 	if (!allNotebooks[id]) return
 
-		allNotebooks[id].isOmittedWordsVisible = true
-		set(allNotebooks)
-	}
+	// 	allNotebooks[id].isOmittedWordsVisible = true
+	// 	set(allNotebooks)
+	// }
 
-	function hideOmittedWords({ id }: { id: string }) {
-		const allNotebooks = { ...get(notebooks) }
-		if (!allNotebooks[id]) return
+	// function hideOmittedWords({ id }: { id: string }) {
+	// 	const allNotebooks = { ...get(notebooks) }
+	// 	if (!allNotebooks[id]) return
 
-		allNotebooks[id].isOmittedWordsVisible = false
-		set(allNotebooks)
-	}
+	// 	allNotebooks[id].isOmittedWordsVisible = false
+	// 	set(allNotebooks)
+	// }
 
 	async function omit({ id, textIndex }: { id: string; textIndex: number }) {
 		const allNotebooks = { ...get(notebooks) }
@@ -286,8 +289,8 @@ function handleNotebooks() {
 		addText,
 		remove,
 		// clearOmit,
-		showOmittedWords,
-		hideOmittedWords,
+		// showOmittedWords,
+		// hideOmittedWords,
 		generateTitle,
 		omit
 	}
