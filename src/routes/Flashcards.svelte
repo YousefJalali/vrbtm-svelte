@@ -74,14 +74,14 @@
 	}
 </script>
 
-<div class="flex flex-col flex-1 h-0 drawer drawer-end lg:drawer-open">
+<div class="flex flex-col flex-1 h-0 drawer drawer-end lg:drawer-open z-10">
 	<input id="flashcards-drawer" type="checkbox" class="drawer-toggle" />
 
 	<div class="drawer-content flex flex-col items-center justify-center"></div>
 	<div class="drawer-side lg:rounded-box">
 		<label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
-		<div class="bg-base-200 flex flex-col w-[80vw] lg:w-full min-h-screen lg:min-h-fit">
+		<div class="bg-base-200 flex flex-col w-[80vw] md:w-[40vw] lg:w-full min-h-screen lg:min-h-fit">
 			<div class="sticky top-0 z-50 flex justify-between items-center p-4 pb-2">
 				<h1 class="text-2xl font-bold">Flashcards</h1>
 				<button

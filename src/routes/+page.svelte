@@ -56,12 +56,12 @@
 <svelte:window bind:innerWidth={windowSize} />
 
 <div
-	class=" md:flex flex-col bg-base-200 md:border md:border-base-300 md:rounded-box md:gap-4 md:basis-0 md:grow-[4] lg:grow-[2] md:mt-4 md:ml-4 lg:m-0"
+	class=" md:flex flex-col bg-base-200 md:border md:border-base-300 md:rounded-box md:gap-4 md:basis-0 md:grow-[3] lg:grow-[2.5] md:mt-4 md:ml-4 lg:m-0"
 >
 	<Notebooks />
 </div>
 
-<div class="relative w-full flex flex-col md:gap-4 md:basis-0 md:grow-[6] mx-4">
+<div class="relative w-full flex flex-col md:gap-4 md:basis-0 md:grow-[5.5] mx-4">
 	{#if activeNotebook}
 		<div class="pb-4 flex flex-col-reverse gap-4 flex-1 h-0 overflow-y-scroll">
 			{#if omitting}
@@ -143,7 +143,7 @@
 
 <!-- Flashcards -->
 <div
-	class="flex flex-col lg:bg-base-200 lg:border lg:border-base-300 lg:rounded-box lg:basis-0 lg:grow-[2]"
+	class="flex flex-col lg:bg-base-200 lg:border lg:border-base-300 lg:rounded-box lg:basis-0 lg:grow-[3]"
 >
 	<Flashcards />
 </div>

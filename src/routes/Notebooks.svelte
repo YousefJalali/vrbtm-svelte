@@ -59,7 +59,7 @@
 	</button>
 </div> -->
 
-<div class="flex flex-col flex-1 h-0 drawer md:drawer-open z-30">
+<div class="flex flex-col flex-1 h-0 drawer md:drawer-open z-[1]">
 	<input id="nav-drawer" type="checkbox" class="drawer-toggle" />
 
 	<div class="drawer-content flex flex-col items-center justify-center"></div>
@@ -87,18 +87,42 @@
 							</svg>
 						</button>
 					</h2>
-					<ul>
-						{#each Object.keys($notebooks) as notebookName (notebookName)}
-							<li>
-								<a
-									class={notebookName === activeNotebook ? 'active' : ''}
-									href={null}
-									on:click={() => clickHandler(notebookName)}>{notebookName}</a
-								>
-							</li>
-						{/each}
-					</ul>
 				</li>
+				<ul>
+					{#each Object.keys($notebooks) as notebookName (notebookName)}
+						<li class="group active:!bg-transparent">
+							<div>
+								<a
+									class:active={notebookName === activeNotebook}
+									href={null}
+									on:click={() => clickHandler(notebookName)}
+								>
+									{notebookName}
+								</a>
+								<div
+									class="hidden group-hover:flex absolute right-0 px-2 top-0 h-full justify-center items-center"
+								>
+									<button class="btn btn-xs btn-circle btn-ghost">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke-width="1.5"
+											stroke="currentColor"
+											class="size-6"
+										>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+											/>
+										</svg>
+									</button>
+								</div>
+							</div>
+						</li>
+					{/each}
+				</ul>
 			</ul>
 		</div>
 	</div>
