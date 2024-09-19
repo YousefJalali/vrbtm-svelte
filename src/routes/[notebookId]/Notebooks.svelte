@@ -108,25 +108,40 @@
 		<label for="nav-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
 		<div class="bg-base-200 flex flex-col w-[70vw] md:w-full min-h-screen md:min-h-fit">
+			<button class="btn btn-outline m-4" on:click={() => notebooks.create()}>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="size-6"
+				>
+					<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+				</svg>
+				New Notebook
+			</button>
+
 			<ul class="menu rounded-box w-full">
 				<li>
-					<h2 class="menu-title flex items-center justify-between">
-						<span>Notebooks</span>
-						<button
-							class="btn btn-circle btn-outline btn-ghost btn-xs -mr-2"
-							on:click={() => notebooks.create()}
-						>
+					<h2 class="menu-title flex items-center gap-4 px-1.5">
+						<span class="text-base-content">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke-width="1.5"
 								stroke="currentColor"
-								class="size-4"
+								class="size-6"
 							>
-								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+								/>
 							</svg>
-						</button>
+						</span>
+						Notebooks
 					</h2>
 				</li>
 				<ul>

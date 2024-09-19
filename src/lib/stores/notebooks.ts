@@ -9,8 +9,16 @@ const defaultNotebooks = {
 			{
 				id: uuid(),
 				original:
+					'Advanced calculus often involves techniques such as integration by parts, partial fractions, and contour integration. For instance, the integral of e^x from 0 to 1 is e - 1, which is approximately 1.718. Another key concept is the Taylor series, which provides a polynomial approximation of functions around a point. Understanding these techniques is essential for solving complex problems in fields like physics and engineering. The interplay between theory and application makes advanced calculus a critical area of study.',
+				omitted:
+					'``Advanced calculus`` often involves techniques such as ``integration by parts``, ``partial fractions``, and ``contour integration``. For instance, the integral of ``e^x`` from ``0`` to ``1`` is ``e - 1``, which is approximately ``1.718``. Another key concept is the ``Taylor series``, which provides a polynomial approximation of functions around a point. Understanding these techniques is essential for solving complex problems in fields like ``physics`` and ``engineering``. The interplay between theory and application makes ``advanced calculus`` a critical area of study.'
+			},
+			{
+				id: uuid(),
+				original:
 					'Quantum physics explores the behavior of particles at the atomic and subatomic levels. For example, particles can exist in multiple states simultaneously, a phenomenon known as superposition. Additionally, the uncertainty principle, formulated by Werner Heisenberg, states that one cannot simultaneously know both the position and momentum of a particle with absolute precision. This principle is crucial for understanding the complex nature of quantum mechanics. It is fascinating how such principles influence technologies like quantum computing and cryptography.',
-				omitted: ''
+				omitted:
+					'`Quantum physics` explores the behavior of `particles` at the `atomic` and `subatomic` levels. For example, `particles` can exist in multiple states simultaneously, a phenomenon known as `superposition`. Additionally, the `uncertainty principle`, formulated by `Werner Heisenberg`, states that one cannot simultaneously know both the `position` and `momentum` of a `particle` with absolute precision. This principle is crucial for understanding the complex nature of `quantum mechanics`. It is fascinating how such principles influence technologies like `quantum computing` and `cryptography`.'
 			}
 		],
 		isOmitted: false,
@@ -188,20 +196,21 @@ function handleNotebooks() {
 		set(allNotebooks)
 	}
 
+	function removeText({ id, textId }: { id: string | null; textId: string }) {
+		if (!id) return
+		const allNotebooks = { ...get(notebooks) }
+		if (!allNotebooks[id]) return
+
+		allNotebooks[id].text = allNotebooks[id].text.filter((t) => t.id !== textId)
+
+		set(allNotebooks)
+	}
+
 	function remove({ id }: { id: string | null }) {
 		if (!id) return
 
 		const allNotebooks = { ...get(notebooks) }
 		delete allNotebooks[id]
-
-		// if (!Object.keys(allNotebooks).length) {
-		// 	console.log('here', allNotebooks)
-		// 	allNotebooks = {
-		// 		...sampleNotebook
-		// 	}
-		// }
-
-		// console.log('here 2', allNotebooks)
 
 		set(allNotebooks)
 
@@ -251,6 +260,8 @@ function handleNotebooks() {
 
 		const omitted = await fetchOmittedText(notebook.text[index].original)
 
+		console.log(omitted)
+
 		if (typeof omitted === 'string') return { success: false }
 
 		notebook.text[index].omitted = omitted.choices[0].message.content
@@ -287,6 +298,7 @@ function handleNotebooks() {
 		updateTitle,
 		updateText,
 		addText,
+		removeText,
 		remove,
 		// clearOmit,
 		// showOmittedWords,
