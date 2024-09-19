@@ -82,13 +82,34 @@ function fetchNotebooks() {
 
 async function fetchOmittedText(text: string) {
 	try {
-		const res = await fetch('/api', {
+		const res = await fetch('/api/notebook/omit', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
 				message: text
+			})
+		})
+
+		const data = await res.json()
+
+		return data
+	} catch (error) {
+		console.log('err', error)
+		return 'something went wrong'
+	}
+}
+
+async function fetchTitle(text: string) {
+	try {
+		const res = await fetch('/api/notebook/title', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				text
 			})
 		})
 
@@ -122,9 +143,13 @@ function handleNotebooks() {
 		}
 	}>(fetchNotebooks())
 
-	function create({ name }: { name: string }) {
+	function create() {
+		const allNotebooks = { ...get(notebooks) }
+
+		if (allNotebooks['New notebook']) return
+
 		const newNotebook = {
-			[name]: sampleNotebook
+			'New notebook': sampleNotebook
 		}
 		update((notebooks) => ({ ...newNotebook, ...notebooks }))
 
@@ -244,6 +269,19 @@ function handleNotebooks() {
 		return { success: true }
 	}
 
+	async function generateTitle({ name }: { name: string }) {
+		if (name !== 'New notebook') return
+
+		const allNotebooks = { ...get(notebooks) }
+		const notebook = allNotebooks[name]
+
+		const title = await fetchTitle(notebook.text[0].original)
+
+		delete Object.assign(allNotebooks, { [title]: allNotebooks[name] })[name]
+
+		set(allNotebooks)
+	}
+
 	return {
 		subscribe,
 		set,
@@ -256,6 +294,7 @@ function handleNotebooks() {
 		// clearOmit,
 		showOmittedWords,
 		hideOmittedWords,
+		generateTitle,
 		omit
 	}
 }

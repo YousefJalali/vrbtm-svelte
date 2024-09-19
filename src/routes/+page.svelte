@@ -45,7 +45,10 @@
 
 		notebooks.addText({ name: activeNotebook, text: temp })
 		const { success } = await notebooks.omit({ name: activeNotebook, textIndex: 0 })
+
 		omitting = false
+
+		await notebooks.generateTitle({ name: activeNotebook })
 
 		// if (!success) {
 		// 	text = temp

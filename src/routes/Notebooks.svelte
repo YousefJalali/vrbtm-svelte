@@ -3,8 +3,11 @@
 	import { page } from '$app/stores'
 	import { notebooks } from '$lib/stores'
 
+	let popover: HTMLElement
 	let notebooksFormModal: HTMLDialogElement
 	let selectedNotebookId: null | string = null
+
+	$: activeNotebook = $page.url.searchParams.get('notebook')
 
 	function clickHandler(notebookName: string) {
 		let query = new URLSearchParams()
@@ -14,32 +17,34 @@
 		goto(`?${query.toString()}`)
 	}
 
-	$: activeNotebook = $page.url.searchParams.get('notebook')
+	// function handleNotebookForm(e: SubmitEvent) {
+	// 	if (!e.target) return
 
-	function handleNotebookForm(e: SubmitEvent) {
-		if (!e.target) return
+	// 	const formData = new FormData(e.target as HTMLFormElement)
 
-		const formData = new FormData(e.target as HTMLFormElement)
+	// 	const data: { [key: string]: string } = {}
 
-		const data: { [key: string]: string } = {}
+	// 	for (let field of formData) {
+	// 		const [key, value] = field
+	// 		data[key] = value.toString()
+	// 	}
 
-		for (let field of formData) {
-			const [key, value] = field
-			data[key] = value.toString()
-		}
+	// 	notebooks.create({ name: data.name })
 
-		notebooks.create({ name: data.name })
+	// 	notebooksFormModal.close()
+	// }
 
-		// if (selectedNotebookId) {
-		// 	flashcards.edit({ id: selectedCardId, question: data.question, answer: data.answer })
-		// } else {
-		// 	const notebookName = $page.url.searchParams.get('notebook')
-		// 	const notebookId = notebooks.findId(notebookName)
-		// 	if (!notebookId) return
-		// 	flashcards.create({ notebookId, question: data.question, answer: data.answer })
-		// }
+	function openPopover(e: MouseEvent, notebookName: string) {
+		selectedNotebookId = notebookName
 
-		notebooksFormModal.close()
+		const { x, y, height } = (e.target as HTMLButtonElement).getBoundingClientRect()
+
+		popover.style.transform = `translate(${x}px, ${y + height}px)`
+		popover.togglePopover()
+	}
+
+	function closePopover() {
+		selectedNotebookId = ''
 	}
 </script>
 
@@ -66,14 +71,14 @@
 	<div class="drawer-side md:rounded-box">
 		<label for="nav-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
-		<div class="bg-base-200 flex flex-col w-[80vw] md:w-full min-h-screen md:min-h-fit">
+		<div class="bg-base-200 flex flex-col w-[70vw] md:w-full min-h-screen md:min-h-fit">
 			<ul class="menu rounded-box w-full">
 				<li>
 					<h2 class="menu-title flex items-center justify-between">
 						<span>Notebooks</span>
 						<button
 							class="btn btn-circle btn-outline btn-ghost btn-xs -mr-2"
-							on:click={() => notebooksFormModal.showModal()}
+							on:click={() => notebooks.create()}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -89,20 +94,27 @@
 					</h2>
 				</li>
 				<ul>
-					{#each Object.keys($notebooks) as notebookName (notebookName)}
-						<li class="group active:!bg-transparent">
-							<div>
-								<a
-									class:active={notebookName === activeNotebook}
-									href={null}
-									on:click={() => clickHandler(notebookName)}
-								>
+					{#each Object.keys($notebooks) as notebookName, i (notebookName)}
+						<li class="group">
+							<a
+								class="p-0 active:!bg-transparent {selectedNotebookId === notebookName
+									? 'bg-neutral/10'
+									: ''}"
+								href={null}
+								class:active={notebookName === activeNotebook}
+							>
+								<a class="p-2 flex" href={null} on:click={() => clickHandler(notebookName)}>
 									{notebookName}
 								</a>
 								<div
-									class="hidden group-hover:flex absolute right-0 px-2 top-0 h-full justify-center items-center"
+									class="{selectedNotebookId === notebookName
+										? 'flex'
+										: 'hidden group-hover:flex'}  absolute right-0 px-2 top-0 h-full justify-center items-center"
 								>
-									<button class="btn btn-xs btn-circle btn-ghost">
+									<button
+										class="btn btn-xs btn-circle btn-ghost"
+										on:click={(e) => openPopover(e, notebookName)}
+									>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											fill="none"
@@ -119,7 +131,7 @@
 										</svg>
 									</button>
 								</div>
-							</div>
+							</a>
 						</li>
 					{/each}
 				</ul>
@@ -128,7 +140,61 @@
 	</div>
 </div>
 
-<dialog
+<div
+	bind:this={popover}
+	popover=""
+	id="options"
+	class="m-0 p-0 bg-transparent"
+	on:toggle={({ newState }) => {
+		if (newState === 'closed') {
+			closePopover()
+		}
+	}}
+>
+	{#if selectedNotebookId}
+		<ul class="menu bg-base-100 border border-base-300 rounded-box">
+			<li>
+				<a href={null}
+					><svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="size-5"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+						/>
+					</svg>Rename</a
+				>
+			</li>
+			<li>
+				<a href={null} class="text-error">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="size-5"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+						/>
+					</svg>
+					Delete</a
+				>
+			</li>
+		</ul>
+	{/if}
+</div>
+
+<!-- <dialog
 	bind:this={notebooksFormModal}
 	id="notebooks_form_modal"
 	class="modal modal-bottom sm:modal-middle"
@@ -141,7 +207,7 @@
 		</div>
 
 		<div class="prose mb-4">
-			<h3>{selectedNotebookId ? 'Update' : 'Create'} Notebook</h3>
+			<h3>Create Notebook</h3>
 			<p>Fill in the details below to craft your perfect notebook and make learning a breeze!</p>
 		</div>
 
@@ -159,9 +225,7 @@
 				/>
 			</label>
 
-			<button class="btn btn-primary" type="submit"
-				>{selectedNotebookId ? 'Update' : 'Create'}</button
-			>
+			<button class="btn btn-primary" type="submit">Create</button>
 		</form>
 	</div>
-</dialog>
+</dialog> -->
