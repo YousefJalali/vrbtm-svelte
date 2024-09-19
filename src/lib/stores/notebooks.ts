@@ -3,7 +3,8 @@ import { get, writable } from 'svelte/store'
 import { v4 as uuid } from 'uuid'
 
 const defaultNotebooks = {
-	'Understanding Quantum Physics': {
+	'ab5cba1a-ae9c-463d-96f7-17b6e74bd9c9': {
+		title: 'Understanding Quantum Physics',
 		text: [
 			{
 				id: uuid(),
@@ -15,7 +16,8 @@ const defaultNotebooks = {
 		isOmitted: false,
 		isOmittedWordsVisible: false
 	},
-	'Advanced Calculus Techniques': {
+	'6d9d30de-0c07-43b0-97df-1506caa33431': {
+		title: 'Advanced Calculus Techniques',
 		text: [
 			{
 				id: uuid(),
@@ -27,7 +29,8 @@ const defaultNotebooks = {
 		isOmitted: false,
 		isOmittedWordsVisible: false
 	},
-	'Chemical Reactions and Equilibria': {
+	'a484e566-5acc-4113-9140-f17d87562dbe': {
+		title: 'Chemical Reactions and Equilibria',
 		text: [
 			{
 				id: uuid(),
@@ -39,7 +42,8 @@ const defaultNotebooks = {
 		isOmitted: false,
 		isOmittedWordsVisible: false
 	},
-	'Exploring Modern Literature': {
+	'fa9de3d6-0478-401f-b2c0-aa9b72bc4b6d': {
+		title: 'Exploring Modern Literature',
 		text: [
 			{
 				id: uuid(),
@@ -51,7 +55,8 @@ const defaultNotebooks = {
 		isOmitted: false,
 		isOmittedWordsVisible: false
 	},
-	'World War II: Key Events': {
+	'a069bc0b-bb9a-46de-8008-fc19f355c985': {
+		title: 'World War II: Key Events',
 		text: [
 			{
 				id: uuid(),
@@ -123,20 +128,24 @@ async function fetchTitle(text: string) {
 }
 
 const sampleNotebook = {
-	text: [
-		{
-			id: uuid(),
-			original: '',
-			omitted: ''
-		}
-	],
-	isOmitted: false,
-	isOmittedWordsVisible: false
+	[uuid()]: {
+		title: 'New notebook',
+		text: [
+			{
+				id: uuid(),
+				original: '',
+				omitted: ''
+			}
+		],
+		isOmitted: false,
+		isOmittedWordsVisible: false
+	}
 }
 
 function handleNotebooks() {
 	const { subscribe, set, update } = writable<{
 		[notebookId: string]: {
+			title: string
 			text: { id: string; original: string; omitted: string }[]
 			isOmitted: boolean
 			isOmittedWordsVisible: boolean
@@ -144,68 +153,51 @@ function handleNotebooks() {
 	}>(fetchNotebooks())
 
 	function create() {
-		const allNotebooks = { ...get(notebooks) }
+		// const allNotebooks = { ...get(notebooks) }
 
-		if (allNotebooks['New notebook']) return
+		// if (allNotebooks['New notebook']) return
 
-		const newNotebook = {
-			'New notebook': sampleNotebook
-		}
-		update((notebooks) => ({ ...newNotebook, ...notebooks }))
+		update((notebooks) => ({ ...sampleNotebook, ...notebooks }))
 
 		// const storedNotebooks = localStorage.getItem('notebooks') || {}
 		// localStorage.setItem('notebooks', JSON.stringify({ ...newNotebook, ...storedNotebooks }))
 	}
 
-	function updateName({ oldName, newName }: { oldName: string; newName: string }) {
+	function updateTitle({ id, newTitle }: { id: string; newTitle: string }) {
 		const allNotebooks = { ...get(notebooks) }
-		if (!allNotebooks[oldName]) return
-		delete Object.assign(allNotebooks, { [newName]: allNotebooks[oldName] })[oldName]
-		// let newNotebook = {
-		// 	[name]: allNotebooks[name]
-		// }
+		if (!allNotebooks[id]) return
+		allNotebooks[id].title = newTitle
 
 		// delete allNotebooks[name]
 		set({ ...allNotebooks })
 	}
 
-	function updateText({
-		name,
-		text,
-		textIndex
-	}: {
-		name: string
-		text: string
-		textIndex: number
-	}) {
+	function updateText({ id, text, textIndex }: { id: string; text: string; textIndex: number }) {
 		const allNotebooks = { ...get(notebooks) }
-		if (!allNotebooks[name]) return
+		if (!allNotebooks[id]) return
 
-		allNotebooks[name].text[textIndex].original = text
+		allNotebooks[id].text[textIndex].original = text
 		set(allNotebooks)
 
 		// localStorage.setItem('notebooks', JSON.stringify(allNotebooks))
 	}
 
-	function addText({ name, text }: { name: string; text: string }) {
+	function addText({ id, text }: { id: string; text: string }) {
 		const allNotebooks = { ...get(notebooks) }
-		if (!allNotebooks[name]) return
+		if (!allNotebooks[id]) return
 
-		allNotebooks[name].text = [
-			{ id: uuid(), original: text, omitted: '' },
-			...allNotebooks[name].text
-		]
+		allNotebooks[id].text = [{ id: uuid(), original: text, omitted: '' }, ...allNotebooks[id].text]
 
 		set(allNotebooks)
 	}
 
-	function remove(name: string) {
+	function remove(id: string) {
 		let allNotebooks = { ...get(notebooks) }
-		delete allNotebooks[name]
+		delete allNotebooks[id]
 
 		if (!Object.keys(allNotebooks).length)
 			allNotebooks = {
-				sample: sampleNotebook
+				...sampleNotebook
 			}
 
 		set(allNotebooks)
@@ -230,25 +222,25 @@ function handleNotebooks() {
 	// 	set(allNotebooks)
 	// }
 
-	function showOmittedWords({ name }: { name: string }) {
+	function showOmittedWords({ id }: { id: string }) {
 		const allNotebooks = { ...get(notebooks) }
-		if (!allNotebooks[name]) return
+		if (!allNotebooks[id]) return
 
-		allNotebooks[name].isOmittedWordsVisible = true
+		allNotebooks[id].isOmittedWordsVisible = true
 		set(allNotebooks)
 	}
 
-	function hideOmittedWords({ name }: { name: string }) {
+	function hideOmittedWords({ id }: { id: string }) {
 		const allNotebooks = { ...get(notebooks) }
-		if (!allNotebooks[name]) return
+		if (!allNotebooks[id]) return
 
-		allNotebooks[name].isOmittedWordsVisible = false
+		allNotebooks[id].isOmittedWordsVisible = false
 		set(allNotebooks)
 	}
 
-	async function omit({ name, textIndex }: { name: string; textIndex: number }) {
+	async function omit({ id, textIndex }: { id: string; textIndex: number }) {
 		const allNotebooks = { ...get(notebooks) }
-		const notebook = allNotebooks[name]
+		const notebook = allNotebooks[id]
 
 		if (!notebook || !notebook.text.length || textIndex < 0) return { success: false }
 
@@ -262,22 +254,24 @@ function handleNotebooks() {
 		notebook.isOmitted = true
 		notebook.isOmittedWordsVisible = false
 
-		allNotebooks[name] = notebook
+		allNotebooks[id] = notebook
 
 		set(allNotebooks)
 
 		return { success: true }
 	}
 
-	async function generateTitle({ name }: { name: string }) {
-		if (name !== 'New notebook') return
-
+	async function generateTitle({ id }: { id: string }) {
 		const allNotebooks = { ...get(notebooks) }
-		const notebook = allNotebooks[name]
+		const notebook = allNotebooks[id]
 
-		const title = await fetchTitle(notebook.text[0].original)
+		if (notebook.title !== 'New notebook') return
 
-		delete Object.assign(allNotebooks, { [title]: allNotebooks[name] })[name]
+		const res = await fetchTitle(notebook.text[0].original)
+
+		if (typeof res === 'string') return { success: false }
+
+		notebook.title = res.choices[0].message.content
 
 		set(allNotebooks)
 	}
@@ -287,7 +281,7 @@ function handleNotebooks() {
 		set,
 		update,
 		create,
-		updateName,
+		updateTitle,
 		updateText,
 		addText,
 		remove,

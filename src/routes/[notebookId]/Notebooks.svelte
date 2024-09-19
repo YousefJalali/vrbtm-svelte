@@ -7,15 +7,15 @@
 	let notebooksFormModal: HTMLDialogElement
 	let selectedNotebookId: null | string = null
 
-	$: activeNotebook = $page.url.searchParams.get('notebook')
+	$: activeNotebookId = $page.params.notebookId
 
-	function clickHandler(notebookName: string) {
-		let query = new URLSearchParams()
+	// function clickHandler(notebookName: string) {
+	// 	let query = new URLSearchParams()
 
-		query.set('notebook', notebookName)
+	// 	query.set('notebook', notebookName)
 
-		goto(`?${query.toString()}`)
-	}
+	// 	goto(`?${query.toString()}`)
+	// }
 
 	// function handleNotebookForm(e: SubmitEvent) {
 	// 	if (!e.target) return
@@ -34,8 +34,8 @@
 	// 	notebooksFormModal.close()
 	// }
 
-	function openPopover(e: MouseEvent, notebookName: string) {
-		selectedNotebookId = notebookName
+	function openPopover(e: MouseEvent, notebookId: string) {
+		selectedNotebookId = notebookId
 
 		const { x, y, height } = (e.target as HTMLButtonElement).getBoundingClientRect()
 
@@ -94,26 +94,26 @@
 					</h2>
 				</li>
 				<ul>
-					{#each Object.keys($notebooks) as notebookName, i (notebookName)}
+					{#each Object.entries($notebooks) as [id, { title }], i (id)}
 						<li class="group">
 							<a
-								class="p-0 active:!bg-transparent {selectedNotebookId === notebookName
+								class="p-0 active:!bg-transparent {selectedNotebookId === id
 									? 'bg-neutral/10'
 									: ''}"
 								href={null}
-								class:active={notebookName === activeNotebook}
+								class:active={id === activeNotebookId}
 							>
-								<a class="p-2 flex" href={null} on:click={() => clickHandler(notebookName)}>
-									{notebookName}
+								<a class="p-2 flex" href="/{id}">
+									{title}
 								</a>
 								<div
-									class="{selectedNotebookId === notebookName
+									class="{selectedNotebookId === id
 										? 'flex'
 										: 'hidden group-hover:flex'}  absolute right-0 px-2 top-0 h-full justify-center items-center"
 								>
 									<button
 										class="btn btn-xs btn-circle btn-ghost"
-										on:click={(e) => openPopover(e, notebookName)}
+										on:click={(e) => openPopover(e, id)}
 									>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"

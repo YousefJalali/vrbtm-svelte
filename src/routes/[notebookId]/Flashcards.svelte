@@ -102,49 +102,67 @@
 			</div>
 
 			<ul class="h-full flex-1 px-4 py-6 space-y-4 text-center">
-				{#each $flashcards as flashcard (flashcard.id)}
-					{#if flashcard.notebookName === activeNotebook}
-						<li class="relative min-h-[100px] flex" bind:this={cards[flashcard.id]}>
-							<label class="swap swap-flip flex-1 place-content-stretch">
-								<input type="checkbox" />
+				{#if !!$flashcards.length}
+					<div class="prose prose-sm flex flex-col items-center justify-center text-center">
+						<h3 class="">No Flashcards Found</h3>
+						<p class="">It looks like you don't have any flashcards yet.</p>
 
-								<div class="swap-on">
-									<div class="card bg-base-200 border-4 border-base-100 shadow-md h-full">
-										<div class="card-body p-4 flex justify-center items-center">
-											<p class="flex-none">{flashcard.answer}</p>
+						<div class="flex flex-col justify-center">
+							<button
+								class="btn btn-primary btn-sm"
+								on:click={() => flashcardsFormModal.showModal()}
+							>
+								Create Flashcard
+							</button>
+							<div class="divider">or</div>
+							<button class="btn btn-secondary btn-sm"> Generate with AI </button>
+						</div>
+					</div>
+				{:else}
+					{#each $flashcards as flashcard (flashcard.id)}
+						{#if flashcard.notebookName === activeNotebook}
+							<li class="relative min-h-[100px] flex" bind:this={cards[flashcard.id]}>
+								<label class="swap swap-flip flex-1 place-content-stretch">
+									<input type="checkbox" />
+
+									<div class="swap-on">
+										<div class="card bg-base-200 border-4 border-base-100 shadow-md h-full">
+											<div class="card-body p-4 flex justify-center items-center">
+												<p class="flex-none">{flashcard.answer}</p>
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="swap-off">
-									<div class="relative card bg-base-100 shadow-md h-full">
-										<div class="card-body p-4 flex justify-center items-center">
-											<p class="flex-none">{flashcard.question}</p>
-										</div>
+									<div class="swap-off">
+										<div class="relative card bg-base-100 shadow-md h-full">
+											<div class="card-body p-4 flex justify-center items-center">
+												<p class="flex-none">{flashcard.question}</p>
+											</div>
 
-										<button
-											on:click={() => onShowOptions(flashcard.id)}
-											class="btn btn-xs btn-circle absolute top-1 right-1"
-											><svg
-												xmlns="http://www.w3.org/2000/svg"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke-width="1.5"
-												stroke="currentColor"
-												class="size-6"
+											<button
+												on:click={() => onShowOptions(flashcard.id)}
+												class="btn btn-xs btn-circle absolute top-1 right-1"
+												><svg
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke-width="1.5"
+													stroke="currentColor"
+													class="size-6"
+												>
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+													/>
+												</svg></button
 											>
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-												/>
-											</svg></button
-										>
+										</div>
 									</div>
-								</div>
-							</label>
-						</li>
-					{/if}
-				{/each}
+								</label>
+							</li>
+						{/if}
+					{/each}
+				{/if}
 			</ul>
 		</div>
 	</div>
