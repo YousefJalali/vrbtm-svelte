@@ -82,6 +82,12 @@
 		newTitle = ''
 		selectedNotebookId = null
 	}
+
+	function createNotebookHandler() {
+		notebooks.create()
+		const createdNotebookId = Object.keys($notebooks)[0]
+		goto(`/${createdNotebookId}`)
+	}
 </script>
 
 <!-- <div class="flex justify-between items-center p-4 pb-2">
@@ -108,7 +114,7 @@
 		<label for="nav-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
 		<div class="bg-base-200 flex flex-col w-[70vw] md:w-full min-h-screen md:min-h-fit">
-			<button class="btn btn-outline m-4" on:click={() => notebooks.create()}>
+			<button class="btn btn-outline m-4" on:click={createNotebookHandler}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"

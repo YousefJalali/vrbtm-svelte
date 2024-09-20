@@ -138,13 +138,7 @@ async function fetchTitle(text: string) {
 const sampleNotebook = () => ({
 	[uuid()]: {
 		title: 'New notebook',
-		text: [
-			{
-				id: uuid(),
-				original: '',
-				omitted: ''
-			}
-		],
+		text: [],
 		isOmitted: false,
 		isOmittedWordsVisible: false
 	}
@@ -161,7 +155,6 @@ function handleNotebooks() {
 	}>(fetchNotebooks())
 
 	function create() {
-		console.log('create')
 		update((notebooks) => ({ ...sampleNotebook(), ...notebooks }))
 
 		// const storedNotebooks = localStorage.getItem('notebooks') || {}
@@ -259,8 +252,6 @@ function handleNotebooks() {
 		const index = Math.min(textIndex, notebook.text.length - 1)
 
 		const omitted = await fetchOmittedText(notebook.text[index].original)
-
-		console.log(omitted)
 
 		if (typeof omitted === 'string') return { success: false }
 

@@ -10,8 +10,6 @@ export const POST = async (event: RequestEvent) => {
 	const requestBody = await event.request.json()
 	const { text } = requestBody
 
-	// console.log({ _message })
-
 	const chatCompletion = await openai.chat.completions.create({
 		messages: [
 			{

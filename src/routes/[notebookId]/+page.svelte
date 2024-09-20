@@ -22,7 +22,6 @@
 	})
 
 	$: if (activeNotebookId !== $page.params.notebookId) {
-		// console.log('navigate')
 		activeNotebookId = $page.params.notebookId
 	}
 
