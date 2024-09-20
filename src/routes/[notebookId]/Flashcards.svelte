@@ -3,34 +3,23 @@
 	import { flashcards } from '$lib/stores'
 
 	let flashcardsFormModal: HTMLDialogElement
-	let flashcardsOptionsModal: HTMLDialogElement
+	let popover: HTMLElement
+	let selectedFlashcardId: null | string = null
 	let cards: { [cardId: string]: HTMLLIElement } = {}
 	let selectedCardId: null | string = null
-	let selectedCardPos: null | { x: number; y: number } = null
 	let generatingFlashcard = false
-
-	let optionsStyle = ''
-	$: if (selectedCardPos) {
-		optionsStyle = `position: absolute; width: 208px; top: ${selectedCardPos.y + 24}px; left: ${selectedCardPos.x - 208 - 24}px`
-	}
 
 	$: activeNotebook = $page.params.notebookId
 
-	function onShowOptions(cardId: string) {
-		if (!cards[cardId]) return
+	function openPopover(e: MouseEvent, flashcardId: string) {
+		selectedFlashcardId = flashcardId
 
-		selectedCardId = cardId
+		const { x, y, height } = (e.target as HTMLButtonElement).getBoundingClientRect()
 
-		flashcardsOptionsModal.showModal()
+		let padding = 16
 
-		const { x, y, width, right } = cards[cardId].getBoundingClientRect()
-
-		if (right < 600) return //return if mobile
-
-		selectedCardPos = {
-			x: x + width,
-			y: y
-		}
+		popover.style.transform = `translate(${x - 100 - padding}px, ${y + height - padding}px)`
+		popover.togglePopover()
 	}
 
 	function handleFlashcardForm(e: SubmitEvent) {
@@ -60,17 +49,15 @@
 		if (!selectedCardId) return
 		flashcards.remove(selectedCardId)
 
-		flashcardsOptionsModal.close()
+		popover.hidePopover()
 	}
 
-	function onEdit() {
-		flashcardsOptionsModal.close()
+	function onEdit(id: string | null) {
+		if (!id) return
+
+		selectedCardId = id
+		popover.hidePopover()
 		flashcardsFormModal.showModal()
-	}
-
-	function onOptionsModalClose() {
-		selectedCardId = null
-		selectedCardPos = null
 	}
 
 	async function generateFlashcard() {
@@ -88,32 +75,59 @@
 		<label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
 		<div class="bg-base-200 flex flex-col w-[80vw] md:w-[40vw] lg:w-full min-h-screen lg:min-h-fit">
-			<div class="sticky top-0 z-50 flex justify-between items-center p-4 pb-2">
+			<div class="sticky top-0 z-50 bg-base-200 flex justify-between items-center p-4 pb-2">
 				<h1 class="text-2xl font-bold">Flashcards</h1>
-				<button
-					class="btn btn-ghost btn-circle btn-sm -mr-2"
-					on:click={() => flashcardsFormModal.showModal()}
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke-width="1.5"
-						stroke="currentColor"
-						class="size-6"
+				<div class="flex flex-row-reverse gap-2">
+					<!-- CreateFlashcard -->
+					<button
+						name="create"
+						class="btn btn-ghost btn-circle btn-sm"
+						on:click={() => flashcardsFormModal.showModal()}
 					>
-						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-					</svg>
-				</button>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="size-5"
+						>
+							<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+						</svg>
+					</button>
+
+					<!-- Generate Flashcard -->
+					<button
+						name="generate"
+						class="btn btn-ghost btn-circle btn-sm"
+						on:click={generateFlashcard}
+						disabled={generatingFlashcard}
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="size-5"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+							/>
+						</svg>
+					</button>
+				</div>
 			</div>
 
 			<ul class="h-full flex-1 px-4 py-6 space-y-4 text-center">
-				{#if generatingFlashcard}
-					<div
+				{#if generatingFlashcard && !$flashcards.length}
+					<li
 						class="relative min-h-[100px] card bg-base-100 shadow-md flex justify-center items-center"
 					>
 						Generating...
-					</div>
+					</li>
 				{:else if !$flashcards.length}
 					<div class="prose prose-sm flex flex-col items-center justify-center text-center">
 						<h3 class="">No Flashcards Found</h3>
@@ -152,11 +166,18 @@
 										stroke-linejoin="round"
 										d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
 									/>
-								</svg> Generate with AI
+								</svg> Generate Flashcard
 							</button>
 						</div>
 					</div>
 				{:else}
+					{#if generatingFlashcard}
+						<li
+							class="relative min-h-[100px] card bg-base-100 shadow-md flex justify-center items-center"
+						>
+							Generating...
+						</li>
+					{/if}
 					{#each $flashcards as flashcard (flashcard.id)}
 						{#if flashcard.notebookId === activeNotebook}
 							<li class="relative min-h-[100px] flex" bind:this={cards[flashcard.id]}>
@@ -177,7 +198,7 @@
 											</div>
 
 											<button
-												on:click={() => onShowOptions(flashcard.id)}
+												on:click={(e) => openPopover(e, flashcard.id)}
 												class="btn btn-xs btn-circle absolute top-1 right-1"
 												><svg
 													xmlns="http://www.w3.org/2000/svg"
@@ -206,19 +227,24 @@
 	</div>
 </div>
 
-<!-- flashcardsOptionsModal -->
-<dialog
-	bind:this={flashcardsOptionsModal}
-	id="flashcards_options_modal"
-	class="modal modal-bottom sm:modal-middle sm:backdrop:bg-transparent"
+<!-- Options -->
+<div
+	bind:this={popover}
+	popover=""
+	id="options"
+	class="m-0 p-4 bg-transparent"
+	on:toggle={({ newState }) => {
+		if (newState === 'closed') {
+			selectedFlashcardId = ''
+		}
+	}}
 >
-	<form method="dialog" class="modal-backdrop">
-		<button on:click={onOptionsModalClose}>close</button>
-	</form>
-	<div class="modal-box p-0" style={optionsStyle}>
-		<ul class="menu dropdown-content bg-base-100 rounded-box z-[1] p-2 shadow">
+	{#if selectedFlashcardId}
+		<ul
+			class="menu dropdown-content border border-base-300 bg-base-100 rounded-box z-[1] p-2 shadow-lg"
+		>
 			<li>
-				<a href={null} on:click={onEdit}
+				<a href={null} on:click={() => onEdit(selectedFlashcardId)}
 					><svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -256,8 +282,8 @@
 				>
 			</li>
 		</ul>
-	</div>
-</dialog>
+	{/if}
+</div>
 
 <!-- flashcardsModal -->
 <dialog
