@@ -2,7 +2,7 @@
 	import '../app.css'
 </script>
 
-<div class="flex flex-col h-dvh max-h-screen">
+<div class="flex flex-col h-dvh max-h-screen max-w-[90rem] mx-auto">
 	<header class="max-w-none border-b flex items-center justify-between lg:justify-center p-4">
 		<label for="nav-drawer" class="btn btn-ghost btn-sm -ml-2 drawer-button md:hidden">
 			<svg

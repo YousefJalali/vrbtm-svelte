@@ -16,7 +16,7 @@ export const POST = async (event: RequestEvent) => {
 		messages: [
 			{
 				role: 'user',
-				content: `"${_message}". Find all the keywords and put them inside double backticks in place. and return the text without double quote. note: if you receive anything other than text, reply with something like please provide text`
+				content: `"${_message}". Find all the keywords and put them inside double backticks in place. and return the text without double quote. note: if you receive anything other than text, reply with something like Please insert a paragraph`
 			}
 		],
 		model: 'gpt-4o-mini'

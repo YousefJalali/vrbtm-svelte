@@ -66,12 +66,12 @@ const defaultNotebooks = {
 	'a069bc0b-bb9a-46de-8008-fc19f355c985': {
 		title: 'World War II: Key Events',
 		text: [
-			{
-				id: uuid(),
-				original:
-					'World War II, which lasted from 1939 to 1945, was marked by significant events and turning points. The invasion of Poland by Germany in September 1939 triggered the conflict. Key moments include the Battle of Stalingrad, which ended with a decisive Soviet victory, and the D-Day invasion of Normandy in June 1944, which marked the beginning of the end for Nazi Germany. The war concluded with the unconditional surrender of Germany in May 1945 and Japan in September 1945 after the atomic bombings of Hiroshima and Nagasaki. These events reshaped global geopolitics and led to the establishment of the United Nations.',
-				omitted: ''
-			}
+			// {
+			// 	id: uuid(),
+			// 	original:
+			// 		'World War II, which lasted from 1939 to 1945, was marked by significant events and turning points. The invasion of Poland by Germany in September 1939 triggered the conflict. Key moments include the Battle of Stalingrad, which ended with a decisive Soviet victory, and the D-Day invasion of Normandy in June 1944, which marked the beginning of the end for Nazi Germany. The war concluded with the unconditional surrender of Germany in May 1945 and Japan in September 1945 after the atomic bombings of Hiroshima and Nagasaki. These events reshaped global geopolitics and led to the establishment of the United Nations.',
+			// 	omitted: ''
+			// }
 		],
 		isOmitted: false,
 		isOmittedWordsVisible: false
