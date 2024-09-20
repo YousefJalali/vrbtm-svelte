@@ -160,7 +160,7 @@
 								<div
 									class="{selectedNotebookId === id
 										? 'flex'
-										: 'hidden group-hover:flex'} {renameMode
+										: 'flex lg:hidden lg:group-hover:flex'} {renameMode
 										? 'inset-0'
 										: ''} absolute right-0 px-2 top-0 h-full justify-center items-center"
 								>
