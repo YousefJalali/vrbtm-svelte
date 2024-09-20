@@ -1,20 +1,20 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import { flashcards, notebooks } from '$lib/stores'
-	import ListWithOptions from '$lib/ui/ListWithOptions.svelte'
+	import { flashcards } from '$lib/stores'
 
 	let flashcardsFormModal: HTMLDialogElement
 	let flashcardsOptionsModal: HTMLDialogElement
 	let cards: { [cardId: string]: HTMLLIElement } = {}
 	let selectedCardId: null | string = null
 	let selectedCardPos: null | { x: number; y: number } = null
+	let generatingFlashcard = false
 
 	let optionsStyle = ''
 	$: if (selectedCardPos) {
 		optionsStyle = `position: absolute; width: 208px; top: ${selectedCardPos.y + 24}px; left: ${selectedCardPos.x - 208 - 24}px`
 	}
 
-	$: activeNotebook = $page.url.searchParams.get('notebook')
+	$: activeNotebook = $page.params.notebookId
 
 	function onShowOptions(cardId: string) {
 		if (!cards[cardId]) return
@@ -48,9 +48,9 @@
 		if (selectedCardId) {
 			flashcards.edit({ id: selectedCardId, question: data.question, answer: data.answer })
 		} else {
-			const notebookName = $page.url.searchParams.get('notebook')
-			if (!notebookName) return
-			flashcards.create({ notebookName, question: data.question, answer: data.answer })
+			const notebookId = $page.params.notebookId
+			if (!notebookId) return
+			flashcards.create({ notebookId, question: data.question, answer: data.answer })
 		}
 
 		flashcardsFormModal.close()
@@ -71,6 +71,12 @@
 	function onOptionsModalClose() {
 		selectedCardId = null
 		selectedCardPos = null
+	}
+
+	async function generateFlashcard() {
+		generatingFlashcard = true
+		await flashcards.generate({ notebookId: activeNotebook })
+		generatingFlashcard = false
 	}
 </script>
 
@@ -102,7 +108,13 @@
 			</div>
 
 			<ul class="h-full flex-1 px-4 py-6 space-y-4 text-center">
-				{#if !!$flashcards.length}
+				{#if generatingFlashcard}
+					<div
+						class="relative min-h-[100px] card bg-base-100 shadow-md flex justify-center items-center"
+					>
+						Generating...
+					</div>
+				{:else if !$flashcards.length}
 					<div class="prose prose-sm flex flex-col items-center justify-center text-center">
 						<h3 class="">No Flashcards Found</h3>
 						<p class="">It looks like you don't have any flashcards yet.</p>
@@ -126,7 +138,7 @@
 								Create Flashcard
 							</button>
 							<div class="divider">or</div>
-							<button class="btn btn-secondary btn-sm">
+							<button class="btn btn-secondary btn-sm" on:click={generateFlashcard}>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"
@@ -146,7 +158,7 @@
 					</div>
 				{:else}
 					{#each $flashcards as flashcard (flashcard.id)}
-						{#if flashcard.notebookName === activeNotebook}
+						{#if flashcard.notebookId === activeNotebook}
 							<li class="relative min-h-[100px] flex" bind:this={cards[flashcard.id]}>
 								<label class="swap swap-flip flex-1 place-content-stretch">
 									<input type="checkbox" />
