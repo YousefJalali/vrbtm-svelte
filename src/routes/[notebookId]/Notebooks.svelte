@@ -211,6 +211,7 @@
 	</div>
 </div>
 
+<!-- Notebook Options -->
 <div
 	bind:this={popover}
 	popover=""
@@ -264,39 +265,3 @@
 		</ul>
 	{/if}
 </div>
-
-<!-- <dialog
-	bind:this={notebooksFormModal}
-	id="notebooks_form_modal"
-	class="modal modal-bottom sm:modal-middle"
->
-	<div class="modal-box">
-		<div class="modal-action m-0">
-			<form method="dialog">
-				<button class="btn btn-sm">x</button>
-			</form>
-		</div>
-
-		<div class="prose mb-4">
-			<h3>Create Notebook</h3>
-			<p>Fill in the details below to craft your perfect notebook and make learning a breeze!</p>
-		</div>
-
-		<form class="flex flex-col gap-4" on:submit|preventDefault={handleNotebookForm}>
-			<label class="form-control w-full">
-				<div class="label">
-					<span class="label-text">Name</span>
-				</div>
-				<input
-					name="name"
-					type="text"
-					placeholder="test"
-					class="input input-bordered w-full"
-					value=""
-				/>
-			</label>
-
-			<button class="btn btn-primary" type="submit">Create</button>
-		</form>
-	</div>
-</dialog> -->
