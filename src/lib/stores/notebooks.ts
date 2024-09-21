@@ -170,11 +170,19 @@ function handleNotebooks() {
 		set({ ...allNotebooks })
 	}
 
-	function updateText({ id, text, textIndex }: { id: string; text: string; textIndex: number }) {
+	function updateText({
+		id,
+		newText,
+		textIndex
+	}: {
+		id: string
+		newText: string
+		textIndex: number
+	}) {
 		const allNotebooks = { ...get(notebooks) }
 		if (!allNotebooks[id]) return
 
-		allNotebooks[id].text[textIndex].original = text
+		allNotebooks[id].text[textIndex].original = newText
 		set(allNotebooks)
 
 		// localStorage.setItem('notebooks', JSON.stringify(allNotebooks))
