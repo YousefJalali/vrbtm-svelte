@@ -12,7 +12,7 @@
 </script>
 
 <div
-	class="border-[1.5px] focus-within:border-primary t-1 p-2 lg:p-4 lg:m-0 rounded-box overflow-hidden"
+	class="border-[1.5px] focus-within:border-primary p-2 lg:p-3 lg:m-0 rounded-box overflow-hidden"
 >
 	<textarea
 		style="field-sizing: content;"
@@ -23,7 +23,7 @@
 
 	<div class="divider my-0 p-0"></div>
 
-	<div class="flex justify-between items-center">
+	<div class="flex justify-between items-center mt-1">
 		<button class="btn btn-sm btn-ghost w-fit">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

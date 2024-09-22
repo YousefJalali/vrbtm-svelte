@@ -4,23 +4,32 @@
 
 	let flashcardsFormModal: HTMLDialogElement
 	let popover: HTMLElement
-	let selectedFlashcardId: null | string = null
-	let cards: { [cardId: string]: HTMLLIElement } = {}
+	let optionsOfFlashcardId: null | string = null
+	let flashcardsEle: { [cardId: string]: HTMLLIElement } = {}
 	let selectedCardId: null | string = null
 	let generatingFlashcard = false
 
 	$: activeNotebookId = $page.params.notebookId
 	$: notebookHasText = $notebooks[$page.params.notebookId]?.text?.length || 0
-
-	function openPopover(e: MouseEvent, flashcardId: string) {
-		selectedFlashcardId = flashcardId
-
-		const { x, y, height } = (e.target as HTMLButtonElement).getBoundingClientRect()
-
+	let selectedFlashcardEleTop = 1
+	$: if (optionsOfFlashcardId && selectedFlashcardEleTop) {
+		// console.log('called', flashcardsEle[optionsOfFlashcardId].getBoundingClientRect().top)
+		const { x, y, width } = flashcardsEle[optionsOfFlashcardId].getBoundingClientRect()
 		let padding = 16
 
-		popover.style.transform = `translate(${x - 100 - padding}px, ${y + height - padding}px)`
-		popover.togglePopover()
+		popover.style.transform = `translate(${x - padding + width - 140}px, ${y - padding + 24}px)`
+		popover.showPopover()
+	}
+
+	function openPopover(e: MouseEvent, flashcardId: string) {
+		optionsOfFlashcardId = flashcardId
+
+		// const { x, y, height } = (e.target as HTMLButtonElement).getBoundingClientRect()
+
+		// let padding = 16
+
+		// popover.style.transform = `translate(${x - 100 - padding}px, ${y + height - padding}px)`
+		// popover.togglePopover()
 	}
 
 	function handleFlashcardForm(e: SubmitEvent) {
@@ -72,11 +81,23 @@
 	<input id="flashcards-drawer" type="checkbox" class="drawer-toggle" />
 
 	<div class="drawer-content flex flex-col items-center justify-center"></div>
-	<div class="drawer-side lg:rounded-box">
+	<div
+		class="drawer-side lg:rounded-box"
+		on:scroll={() => {
+			if (optionsOfFlashcardId) {
+				selectedFlashcardEleTop = flashcardsEle[optionsOfFlashcardId].getBoundingClientRect().top
+				// console.log(selectedFlashcardEleTop, e.target.getBoundingClientRect().top + 24)
+				// if (selectedFlashcardEleTop < e.target.getBoundingClientRect().top + 24) {
+				// 	console.log('here')
+				// 	optionsOfFlashcardId = null
+				// }
+			}
+		}}
+	>
 		<label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
 		<div class="bg-base-200 flex flex-col w-[80vw] md:w-[40vw] lg:w-full min-h-screen lg:min-h-fit">
-			<div class="sticky top-0 z-50 bg-base-200 flex justify-between items-center p-4 pb-2">
+			<div class="sticky top-0 z-50 bg-base-200 flex justify-between items-center p-3 pb-2">
 				<h1 class="text-2xl font-bold">Flashcards</h1>
 				<div class="flex flex-row-reverse gap-2">
 					<!-- CreateFlashcard -->
@@ -124,7 +145,7 @@
 				</div>
 			</div>
 
-			<ul class="h-full flex-1 px-4 py-6 space-y-4 text-center">
+			<ul class="h-full flex-1 px-3 py-4 space-y-4 text-center">
 				{#if generatingFlashcard && !$flashcards.length}
 					<li
 						class="relative min-h-[100px] card bg-base-100 shadow-md flex justify-center items-center"
@@ -189,7 +210,7 @@
 					{/if}
 					{#each $flashcards as flashcard (flashcard.id)}
 						{#if flashcard.notebookId === activeNotebookId}
-							<li class="relative min-h-[100px] flex" bind:this={cards[flashcard.id]}>
+							<li class="relative min-h-[100px] flex" bind:this={flashcardsEle[flashcard.id]}>
 								<label class="swap swap-flip flex-1 place-content-stretch">
 									<input type="checkbox" />
 
@@ -244,16 +265,16 @@
 	class="m-0 p-4 bg-transparent"
 	on:toggle={({ newState }) => {
 		if (newState === 'closed') {
-			selectedFlashcardId = ''
+			optionsOfFlashcardId = ''
 		}
 	}}
 >
-	{#if selectedFlashcardId}
+	{#if optionsOfFlashcardId}
 		<ul
 			class="menu dropdown-content border border-base-300 bg-base-100 rounded-box z-[1] p-2 shadow-lg"
 		>
 			<li>
-				<a href={null} on:click={() => onEdit(selectedFlashcardId)}
+				<a href={null} on:click={() => onEdit(optionsOfFlashcardId)}
 					><svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"

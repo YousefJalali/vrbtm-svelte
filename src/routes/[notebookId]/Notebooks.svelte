@@ -126,7 +126,7 @@
 		></label>
 
 		<div class="bg-base-200 flex flex-col w-[70vw] md:w-full min-h-screen md:min-h-fit">
-			<button class="btn btn-outline m-4" on:click={createNotebookHandler}>
+			<button class="btn btn-outline m-3" on:click={createNotebookHandler}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -140,7 +140,7 @@
 				New Notebook
 			</button>
 
-			<ul class="menu rounded-box w-full">
+			<ul class="menu rounded-box w-full p-3">
 				<li>
 					<h2 class="menu-title flex items-center gap-4 px-1.5">
 						<span class="text-base-content">
@@ -172,7 +172,7 @@
 								href={null}
 								class:active={id === activeNotebookId}
 							>
-								<a class="p-2 flex-1" href="/{id}">
+								<a class="p-2 flex-1 line-clamp-1 leading-loose" href="/{id}">
 									{title}
 								</a>
 								<div
@@ -194,7 +194,7 @@
 										/>
 									{:else}
 										<button
-											class="btn btn-xs btn-circle btn-ghost"
+											class="btn btn-xs btn-circle btn-ghost backdrop-blur"
 											on:click={(e) => openPopover(e, id)}
 										>
 											<svg
