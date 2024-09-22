@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto, onNavigate } from '$app/navigation'
+	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { notebooks } from '$lib/stores'
 
@@ -66,7 +66,9 @@
 
 		notebooks.remove({ id: selectedNotebookId })
 
-		popover.togglePopover()
+		selectedNotebookId = ''
+
+		popover.hidePopover()
 	}
 
 	function onRename() {
@@ -99,13 +101,14 @@
 		notebooks.create()
 		const createdNotebookId = Object.keys($notebooks)[0]
 		goto(`/${createdNotebookId}`)
+		toggleDrawer()
 	}
 
-	onNavigate(() => {
+	function toggleDrawer() {
 		if (drawerLabel) {
 			drawerLabel.click()
 		}
-	})
+	}
 </script>
 
 <!-- <div class="flex justify-between items-center p-4 pb-2">
@@ -190,7 +193,11 @@
 								href={null}
 								class:active={id === activeNotebookId}
 							>
-								<a class="p-2 flex-1 line-clamp-1 leading-loose" href="/{id}">
+								<a
+									class="p-2 flex-1 line-clamp-1 leading-loose"
+									href="/{id}"
+									on:click={toggleDrawer}
+								>
 									{title}
 								</a>
 								<div
@@ -207,12 +214,12 @@
 											bind:this={newTitleInputEle}
 											bind:value={newTitle}
 											type="text"
-											class="input input-primary input-bordered input-xs w-full text-base"
+											class="input input-primary input-bordered input-xs w-full text-base text-neutral"
 											on:blur={renameHandler}
 										/>
 									{:else}
 										<button
-											class="btn btn-xs btn-circle btn-ghost backdrop-blur"
+											class="btn btn-xs btn-circle btn-ghost backdrop-blur ml-auto"
 											on:click={(e) => openPopover(e, id)}
 										>
 											<svg
