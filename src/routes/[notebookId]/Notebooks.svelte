@@ -9,16 +9,27 @@
 	let newTitle = ''
 	let newTitleInputEle: HTMLInputElement
 	let drawerLabel: HTMLLabelElement
+	let notebooksEle: { [notebookId: string]: HTMLLIElement } = {}
 
 	$: activeNotebookId = $page.params.notebookId
+
+	let selectedNotebookEleTop = 1
+	$: if (selectedNotebookId && selectedNotebookEleTop) {
+		// console.log('called', flashcardsEle[optionsOfFlashcardId].getBoundingClientRect().top)
+		const { x, y, width } = notebooksEle[selectedNotebookId].getBoundingClientRect()
+		let padding = 16
+
+		popover.style.transform = `translate(${x - padding + width - 16}px, ${y - padding + 48}px)`
+		popover.showPopover()
+	}
 
 	function openPopover(e: MouseEvent, notebookId: string) {
 		selectedNotebookId = notebookId
 
-		const { x, y, height } = (e.target as HTMLButtonElement).getBoundingClientRect()
+		// const { x, y, height } = (e.target as HTMLButtonElement).getBoundingClientRect()
 
-		popover.style.transform = `translate(${x}px, ${y + height}px)`
-		popover.togglePopover()
+		// popover.style.transform = `translate(${x}px, ${y + height}px)`
+		// popover.togglePopover()
 	}
 
 	function closePopover() {
@@ -117,7 +128,14 @@
 	<input id="nav-drawer" type="checkbox" class="drawer-toggle" />
 
 	<div class="drawer-content flex flex-col items-center justify-center"></div>
-	<div class="drawer-side md:rounded-box">
+	<div
+		class="drawer-side md:rounded-box"
+		on:scroll={() => {
+			if (selectedNotebookId) {
+				selectedNotebookEleTop = notebooksEle[selectedNotebookId].getBoundingClientRect().top
+			}
+		}}
+	>
 		<label
 			bind:this={drawerLabel}
 			for="nav-drawer"
@@ -164,7 +182,7 @@
 				</li>
 				<ul>
 					{#each Object.entries($notebooks) as [id, { title }], i (id)}
-						<li class="group">
+						<li class="group" bind:this={notebooksEle[id]}>
 							<a
 								class="flex p-0 active:!bg-transparent {selectedNotebookId === id
 									? 'bg-neutral/10'
@@ -189,7 +207,7 @@
 											bind:this={newTitleInputEle}
 											bind:value={newTitle}
 											type="text"
-											class="input input-primary input-bordered input-xs w-full"
+											class="input input-primary input-bordered input-xs w-full text-base"
 											on:blur={renameHandler}
 										/>
 									{:else}

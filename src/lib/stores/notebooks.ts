@@ -27,12 +27,12 @@ const defaultNotebooks = {
 	'6d9d30de-0c07-43b0-97df-1506caa33431': {
 		title: 'Advanced Calculus Techniques',
 		text: [
-			{
-				id: uuid(),
-				original:
-					'Advanced calculus often involves techniques such as integration by parts, partial fractions, and contour integration. For instance, the integral of e^x from 0 to 1 is e - 1, which is approximately 1.718. Another key concept is the Taylor series, which provides a polynomial approximation of functions around a point. Understanding these techniques is essential for solving complex problems in fields like physics and engineering. The interplay between theory and application makes advanced calculus a critical area of study.',
-				omitted: ''
-			}
+			// {
+			// 	id: uuid(),
+			// 	original:
+			// 		'Advanced calculus often involves techniques such as integration by parts, partial fractions, and contour integration. For instance, the integral of e^x from 0 to 1 is e - 1, which is approximately 1.718. Another key concept is the Taylor series, which provides a polynomial approximation of functions around a point. Understanding these techniques is essential for solving complex problems in fields like physics and engineering. The interplay between theory and application makes advanced calculus a critical area of study.',
+			// 	omitted: ''
+			// }
 		],
 		isOmitted: false,
 		isOmittedWordsVisible: false
@@ -40,12 +40,12 @@ const defaultNotebooks = {
 	'a484e566-5acc-4113-9140-f17d87562dbe': {
 		title: 'Chemical Reactions and Equilibria',
 		text: [
-			{
-				id: uuid(),
-				original:
-					'Chemical reactions are processes in which substances transform into new substances with different properties. For example, the reaction between hydrogen and oxygen to form water is represented by the equation 2H₂ + O₂ → 2H₂O. Chemical equilibria occur when the rate of the forward reaction equals the rate of the reverse reaction, resulting in constant concentrations of reactants and products. The equilibrium constant (K) quantifies the position of equilibrium and is vital for predicting the behavior of reactions in various conditions.',
-				omitted: ''
-			}
+			// {
+			// 	id: uuid(),
+			// 	original:
+			// 		'Chemical reactions are processes in which substances transform into new substances with different properties. For example, the reaction between hydrogen and oxygen to form water is represented by the equation 2H₂ + O₂ → 2H₂O. Chemical equilibria occur when the rate of the forward reaction equals the rate of the reverse reaction, resulting in constant concentrations of reactants and products. The equilibrium constant (K) quantifies the position of equilibrium and is vital for predicting the behavior of reactions in various conditions.',
+			// 	omitted: ''
+			// }
 		],
 		isOmitted: false,
 		isOmittedWordsVisible: false
@@ -53,12 +53,12 @@ const defaultNotebooks = {
 	'fa9de3d6-0478-401f-b2c0-aa9b72bc4b6d': {
 		title: 'Exploring Modern Literature',
 		text: [
-			{
-				id: uuid(),
-				original:
-					"Modern literature often reflects contemporary issues and explores diverse perspectives. Authors like Haruki Murakami and Margaret Atwood use unique narrative styles and address themes such as identity, technology, and society. For example, Murakami's novel '1Q84' blends reality with fantasy in a story set in an alternate Tokyo. Literature from this era frequently incorporates elements like nonlinear storytelling and symbolic language to challenge readers and provoke thought. The rich tapestry of modern literature offers insights into the human condition and cultural shifts.",
-				omitted: ''
-			}
+			// {
+			// 	id: uuid(),
+			// 	original:
+			// 		"Modern literature often reflects contemporary issues and explores diverse perspectives. Authors like Haruki Murakami and Margaret Atwood use unique narrative styles and address themes such as identity, technology, and society. For example, Murakami's novel '1Q84' blends reality with fantasy in a story set in an alternate Tokyo. Literature from this era frequently incorporates elements like nonlinear storytelling and symbolic language to challenge readers and provoke thought. The rich tapestry of modern literature offers insights into the human condition and cultural shifts.",
+			// 	omitted: ''
+			// }
 		],
 		isOmitted: false,
 		isOmittedWordsVisible: false
@@ -76,6 +76,96 @@ const defaultNotebooks = {
 		isOmitted: false,
 		isOmittedWordsVisible: false
 	}
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c986': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c984': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c987': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c988': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c989': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c990': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c991': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c992': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c993': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c994': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c995': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c996': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c997': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c998': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// },
+	// 'a069bc0b-bb9a-46de-8008-fc19f355c999': {
+	// 	title: 'World War II: Key Events',
+	// 	text: [],
+	// 	isOmitted: false,
+	// 	isOmittedWordsVisible: false
+	// }
 }
 
 function fetchNotebooks() {
