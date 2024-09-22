@@ -103,7 +103,7 @@
 	{#if activeNotebookId}
 		<div class="py-4 lg:pt-6 lg:pb-2 flex flex-col-reverse gap-4 flex-1 h-0 overflow-y-scroll">
 			{#if omitting}
-				<div class="p-1 rounded-xl leading-relaxed h-fit w-full [&>p]:m-0 text-center">
+				<div class="p-1 rounded-box leading-relaxed h-fit w-full [&>p]:m-0 text-center">
 					<p class="opacity-80">Scanning text...</p>
 				</div>
 			{/if}
@@ -134,7 +134,7 @@
 			{#each $notebooks[activeNotebookId].text as text, index}
 				{#if text.omitted.length}
 					<div
-						class="p-2 rounded-xl leading-relaxed h-fit w-full bg-base-200 [&>p]:m-0 [&_code]:bg-primary [&_code]:text-primary hover:[&_code]:bg-transparent {activeTextId ===
+						class="p-2 rounded-box leading-relaxed h-fit w-full bg-base-200 [&>p]:m-0 [&_code]:bg-primary [&_code]:text-primary hover:[&_code]:bg-transparent {activeTextId ===
 						text.id
 							? '[&_code]:bg-transparent'
 							: ''}"

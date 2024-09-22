@@ -9,7 +9,7 @@
 	let selectedCardId: null | string = null
 	let generatingFlashcard = false
 
-	$: activeNotebook = $page.params.notebookId
+	$: activeNotebookId = $page.params.notebookId
 	$: notebookHasText = $notebooks[$page.params.notebookId]?.text?.length || 0
 
 	function openPopover(e: MouseEvent, flashcardId: string) {
@@ -63,7 +63,7 @@
 
 	async function generateFlashcard() {
 		generatingFlashcard = true
-		await flashcards.generate({ notebookId: activeNotebook })
+		await flashcards.generate({ notebookId: activeNotebookId })
 		generatingFlashcard = false
 	}
 </script>
@@ -131,7 +131,7 @@
 					>
 						Generating...
 					</li>
-				{:else if !$flashcards.length}
+				{:else if !$flashcards.filter((f) => f.notebookId === activeNotebookId).length}
 					<div class="prose prose-sm flex flex-col items-center justify-center text-center">
 						<h3 class="">No Flashcards Found</h3>
 						<p class="">It looks like you don't have any flashcards yet.</p>
@@ -188,7 +188,7 @@
 						</li>
 					{/if}
 					{#each $flashcards as flashcard (flashcard.id)}
-						{#if flashcard.notebookId === activeNotebook}
+						{#if flashcard.notebookId === activeNotebookId}
 							<li class="relative min-h-[100px] flex" bind:this={cards[flashcard.id]}>
 								<label class="swap swap-flip flex-1 place-content-stretch">
 									<input type="checkbox" />
