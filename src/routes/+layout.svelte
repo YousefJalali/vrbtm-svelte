@@ -41,7 +41,7 @@
 		</label>
 	</header>
 
-	<div class="flex flex-1 h-0 pb-4 lg:p-6">
+	<div class="flex flex-1 h-0 pb-4 lg:p-6 lg:pt-0">
 		<slot />
 	</div>
 </div>

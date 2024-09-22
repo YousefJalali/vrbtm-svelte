@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation'
+	import { goto, onNavigate } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { notebooks } from '$lib/stores'
 
@@ -8,6 +8,7 @@
 	let renameMode = false
 	let newTitle = ''
 	let newTitleInputEle: HTMLInputElement
+	let drawerLabel: HTMLLabelElement
 
 	$: activeNotebookId = $page.params.notebookId
 
@@ -88,6 +89,12 @@
 		const createdNotebookId = Object.keys($notebooks)[0]
 		goto(`/${createdNotebookId}`)
 	}
+
+	onNavigate(() => {
+		if (drawerLabel) {
+			drawerLabel.click()
+		}
+	})
 </script>
 
 <!-- <div class="flex justify-between items-center p-4 pb-2">
@@ -111,7 +118,12 @@
 
 	<div class="drawer-content flex flex-col items-center justify-center"></div>
 	<div class="drawer-side md:rounded-box">
-		<label for="nav-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+		<label
+			bind:this={drawerLabel}
+			for="nav-drawer"
+			aria-label="close sidebar"
+			class="drawer-overlay"
+		></label>
 
 		<div class="bg-base-200 flex flex-col w-[70vw] md:w-full min-h-screen md:min-h-fit">
 			<button class="btn btn-outline m-4" on:click={createNotebookHandler}>
