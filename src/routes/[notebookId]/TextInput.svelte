@@ -3,6 +3,8 @@
 
 	let text = ''
 	let uploadingImage = false
+	let textareaContainer: HTMLDivElement
+	let textarea: HTMLTextAreaElement
 
 	const dispatch = createEventDispatcher()
 
@@ -83,10 +85,12 @@
 			return 'something went wrong'
 		}
 	}
+
+	$: textareaContainerText = text + '\n'
 </script>
 
 <div
-	class="relative flex items-end md:grid md:grid-cols-2 md:gap-2 p-2 md:border-[1.5px] md:focus-within:border-primary md:p-3 md:mx-4 md:rounded-box overflow-hidden"
+	class="relative flex items-end md:grid md:grid-cols-2 md:gap-2 m-3 mt-1 md:border-[1.5px] md:focus-within:border-primary md:p-3 md:m-0 md:mx-4 md:rounded-box overflow-hidden"
 >
 	{#if uploadingImage}
 		<div class="absolute inset-0 bg-base-100 flex justify-center items-center">
@@ -94,12 +98,29 @@
 		</div>
 	{/if}
 
-	<textarea
+	<!-- <textarea
 		style="field-sizing: content;"
-		class="md:col-span-2 m-0 p-1 px-2 md:px-1 border rounded-box md:border-none w-full h-fit max-h-[calc(100vh*0.2)] resize-none md:active:outline-none md:focus:outline-none focus:ring-0"
+		class="md:col-span-2 m-0 p-1 px-2 md:px-1 border rounded-box md:border-none w-full h-fit max-h-[calc(100vh*0.2)] resize-none active:outline-none focus:outline-none focus:ring-0"
 		bind:value={text}
 		placeholder="Add Text..."
-	></textarea>
+	></textarea> -->
+	<div
+		class="col-span-2 relative h-full w-full p-1 px-2 border md:border-none rounded-box overflow-hidden focus-within:border-primary"
+	>
+		<div
+			bind:this={textareaContainer}
+			bind:innerText={textareaContainerText}
+			contenteditable
+			class="flex h-fit w-full opacity-0 max-h-[calc(100vh*0.2)]"
+		></div>
+		<textarea
+			style="field-sizing: content;"
+			class="absolute inset-x-2 inset-y-1 resize-none z-10 md:active:outline-none focus:outline-none md:focus:ring-0 placeholder:text-sm placeholder:leading-6"
+			bind:value={text}
+			bind:this={textarea}
+			placeholder="Type here..."
+		></textarea>
+	</div>
 
 	<div class="col-span-2 h-fit divider my-0 p-0 hidden md:flex"></div>
 
