@@ -4,17 +4,16 @@
 
 	let flashcardsFormModal: HTMLDialogElement
 	let popover: HTMLElement
-	let optionsOfFlashcardId: null | string = null
 	let flashcardsEle: { [cardId: string]: HTMLLIElement } = {}
 	let selectedCardId: null | string = null
 	let generatingFlashcard = false
+	let selectedFlashcardEleTop = 1
+	let editCardId: null | string = null
 
 	$: activeNotebookId = $page.params.notebookId
 	$: notebookHasText = $notebooks[$page.params.notebookId]?.text?.length || 0
-	let selectedFlashcardEleTop = 1
-	$: if (optionsOfFlashcardId && selectedFlashcardEleTop) {
-		// console.log('called', flashcardsEle[optionsOfFlashcardId].getBoundingClientRect().top)
-		const { x, y, width } = flashcardsEle[optionsOfFlashcardId].getBoundingClientRect()
+	$: if (selectedCardId && selectedFlashcardEleTop) {
+		const { x, y, width } = flashcardsEle[selectedCardId].getBoundingClientRect()
 		let padding = 16
 
 		popover.style.transform = `translate(${x - padding + width - 140}px, ${y - padding + 24}px)`
@@ -22,14 +21,7 @@
 	}
 
 	function openPopover(e: MouseEvent, flashcardId: string) {
-		optionsOfFlashcardId = flashcardId
-
-		// const { x, y, height } = (e.target as HTMLButtonElement).getBoundingClientRect()
-
-		// let padding = 16
-
-		// popover.style.transform = `translate(${x - 100 - padding}px, ${y + height - padding}px)`
-		// popover.togglePopover()
+		selectedCardId = flashcardId
 	}
 
 	function handleFlashcardForm(e: SubmitEvent) {
@@ -59,13 +51,14 @@
 		if (!selectedCardId) return
 		flashcards.remove(selectedCardId)
 
+		selectedCardId = ''
 		popover.hidePopover()
 	}
 
-	function onEdit(id: string | null) {
-		if (!id) return
+	function onEdit() {
+		if (!selectedCardId) return
+		editCardId = selectedCardId
 
-		selectedCardId = id
 		popover.hidePopover()
 		flashcardsFormModal.showModal()
 	}
@@ -84,13 +77,8 @@
 	<div
 		class="drawer-side lg:rounded-box"
 		on:scroll={() => {
-			if (optionsOfFlashcardId) {
-				selectedFlashcardEleTop = flashcardsEle[optionsOfFlashcardId].getBoundingClientRect().top
-				// console.log(selectedFlashcardEleTop, e.target.getBoundingClientRect().top + 24)
-				// if (selectedFlashcardEleTop < e.target.getBoundingClientRect().top + 24) {
-				// 	console.log('here')
-				// 	optionsOfFlashcardId = null
-				// }
+			if (selectedCardId) {
+				selectedFlashcardEleTop = flashcardsEle[selectedCardId].getBoundingClientRect().top
 			}
 		}}
 	>
@@ -150,7 +138,8 @@
 					<li
 						class="relative min-h-[100px] card bg-base-100 shadow-md flex justify-center items-center"
 					>
-						Generating Flashcard...
+						<span class="loading loading-infinity mb-2"></span>
+						<span class="opacity-80 text-sm">Generating Flashcard...</span>
 					</li>
 				{:else if !$flashcards.filter((f) => f.notebookId === activeNotebookId).length}
 					<div class="prose my-6 prose-sm flex flex-col items-center justify-center text-center">
@@ -205,7 +194,8 @@
 						<li
 							class="relative min-h-[100px] card bg-base-100 shadow-md flex justify-center items-center"
 						>
-							Generating Flashcard...
+							<span class="loading loading-infinity mb-2"></span>
+							<span class="opacity-80 text-sm">Generating Flashcard...</span>
 						</li>
 					{/if}
 					{#each $flashcards as flashcard (flashcard.id)}
@@ -265,16 +255,16 @@
 	class="m-0 p-4 bg-transparent"
 	on:toggle={({ newState }) => {
 		if (newState === 'closed') {
-			optionsOfFlashcardId = ''
+			selectedCardId = ''
 		}
 	}}
 >
-	{#if optionsOfFlashcardId}
+	{#if selectedCardId}
 		<ul
 			class="menu dropdown-content border border-base-300 bg-base-100 rounded-box z-[1] p-2 shadow-lg"
 		>
 			<li>
-				<a href={null} on:click={() => onEdit(optionsOfFlashcardId)}
+				<a href={null} on:click={onEdit}
 					><svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -324,12 +314,12 @@
 	<div class="modal-box">
 		<div class="modal-action m-0">
 			<form method="dialog">
-				<button class="btn btn-sm">x</button>
+				<button class="btn btn-sm" on:click={() => (editCardId = '')}>x</button>
 			</form>
 		</div>
 
 		<div class="prose mb-4">
-			<h3>{selectedCardId ? 'Update' : 'Create'} Flashcard</h3>
+			<h3>{editCardId ? 'Edit' : 'New'} Flashcard</h3>
 			<p>Fill in the details below to craft your perfect flashcard and make learning a breeze!</p>
 		</div>
 
@@ -343,7 +333,7 @@
 					type="text"
 					placeholder="What is the powerhouse of the cell?"
 					class="input input-bordered w-full"
-					value={$flashcards.find((f) => f.id === selectedCardId)?.question || ''}
+					value={$flashcards.find((f) => f.id === editCardId)?.question || ''}
 				/>
 			</label>
 
@@ -353,13 +343,15 @@
 				</div>
 				<textarea
 					name="answer"
-					class="textarea resize-none textarea-bordered h-24"
+					class="textarea resize-none textarea-bordered h-24 text-base"
 					placeholder="The powerhouse of the cell is the mitochondrion."
-					value={$flashcards.find((f) => f.id === selectedCardId)?.answer || ''}
+					value={$flashcards.find((f) => f.id === editCardId)?.answer || ''}
 				></textarea>
 			</label>
 
-			<button class="btn btn-primary" type="submit">{selectedCardId ? 'Update' : 'Create'}</button>
+			<button class="btn btn-primary" type="submit"
+				>{editCardId ? 'Update' : 'Create'} Flashcard</button
+			>
 		</form>
 	</div>
 </dialog>
