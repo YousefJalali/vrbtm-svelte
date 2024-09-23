@@ -22,7 +22,7 @@
 			</svg>
 		</label>
 
-		<div class="h-[48px]"><Logo /></div>
+		<div class="h-[36px] lg:h-[48px]"><Logo /></div>
 
 		<label for="flashcards-drawer" class="btn btn-ghost btn-sm -mr-2 drawer-button lg:hidden">
 			<svg

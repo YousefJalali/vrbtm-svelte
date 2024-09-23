@@ -150,7 +150,7 @@
 					<li
 						class="relative min-h-[100px] card bg-base-100 shadow-md flex justify-center items-center"
 					>
-						Generating...
+						Generating Flashcard...
 					</li>
 				{:else if !$flashcards.filter((f) => f.notebookId === activeNotebookId).length}
 					<div class="prose my-6 prose-sm flex flex-col items-center justify-center text-center">
@@ -205,7 +205,7 @@
 						<li
 							class="relative min-h-[100px] card bg-base-100 shadow-md flex justify-center items-center"
 						>
-							Generating...
+							Generating Flashcard...
 						</li>
 					{/if}
 					{#each $flashcards as flashcard (flashcard.id)}

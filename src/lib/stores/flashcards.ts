@@ -65,7 +65,10 @@ import { notebooks } from './notebooks'
 // 	}
 // ]
 
-async function generateFlashcard(texts: string[], previousFlashcards: string[]) {
+async function generateFlashcard(
+	texts: string[],
+	previousFlashcards: { question: string; answer: string }[]
+) {
 	try {
 		const res = await fetch('/api/flashcard', {
 			method: 'POST',
@@ -74,7 +77,7 @@ async function generateFlashcard(texts: string[], previousFlashcards: string[]) 
 			},
 			body: JSON.stringify({
 				texts,
-				previousFlashcards
+				previousFlashcards: JSON.stringify(previousFlashcards)
 			})
 		})
 
@@ -106,19 +109,18 @@ function handleFlashcards() {
 
 	async function generate({ notebookId }: { notebookId: string }) {
 		const cards = get(flashcards)
-			.filter((f) => f.notebookId === notebookId)
-			.map((c) => c.question)
+
 		const nbs = { ...get(notebooks) }
 		const texts = nbs[notebookId].text.map((t) => t.original)
 
 		const generated = await generateFlashcard(texts, cards)
 
-		const res = JSON.parse(generated.choices[0].message.content)
+		const res = generated.choices[0].message
 
-		if (res.success) return
+		if (res.refusal) return
 
 		update((flashcards) => [
-			{ id: uuidv4(), notebookId, ...JSON.parse(generated.choices[0].message.content) },
+			{ id: uuidv4(), notebookId, ...JSON.parse(res.content) },
 			...flashcards
 		])
 	}
