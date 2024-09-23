@@ -92,8 +92,9 @@
 <div
 	class="relative flex items-end md:grid md:grid-cols-2 md:gap-2 m-3 mt-1 md:border-[1.5px] md:focus-within:border-primary md:p-3 md:m-0 md:mx-4 md:rounded-box overflow-hidden"
 >
-	{#if uploadingImage}
-		<div class="absolute inset-0 bg-base-100 flex justify-center items-center">
+	{#if !uploadingImage}
+		<div class="absolute inset-0 bg-base-100 flex justify-center items-center z-20">
+			<span class="loading mr-2"></span>
 			Extracting text from photo...
 		</div>
 	{/if}
