@@ -99,9 +99,9 @@
 	<Notebooks />
 </div>
 
-<div class="relative w-full flex flex-col md:gap-4 md:basis-0 md:grow-[5.5] mx-4">
+<div class="relative w-full flex flex-col md:gap-4 md:basis-0 md:grow-[5.5]">
 	{#if activeNotebookId}
-		<div class="py-4 lg:pt-6 lg:pb-2 flex flex-col-reverse gap-4 flex-1 h-0 overflow-y-scroll">
+		<div class="mx-4 py-4 lg:pt-6 lg:pb-2 flex flex-col-reverse gap-4 flex-1 h-0 overflow-y-scroll">
 			{#if omitting}
 				<div class="p-1 rounded-box leading-relaxed h-fit w-full [&>p]:m-0 text-center">
 					<p class="opacity-80">Scanning text...</p>
