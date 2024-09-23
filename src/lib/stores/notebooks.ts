@@ -185,7 +185,7 @@ function fetchNotebooks() {
 
 async function fetchOmittedText(text: string) {
 	try {
-		const res = await fetch('/api/notebook/omit', {
+		const res = await fetch('/api/notebook/omit/text', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

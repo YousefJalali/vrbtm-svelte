@@ -134,9 +134,9 @@
 			{#each $notebooks[activeNotebookId].text as text, index}
 				{#if text.omitted.length}
 					<div
-						class="p-2 rounded-box leading-relaxed h-fit w-full bg-base-200 [&>p]:m-0 [&_code]:bg-primary [&_code]:text-primary hover:[&_code]:bg-transparent {activeTextId ===
+						class="p-2 rounded-box leading-relaxed h-fit w-full bg-base-200 [&>p]:m-0 [&_code]:bg-primary [&_code]:text-transparent hover:[&_code]:bg-transparent hover:[&_code]:text-primary {activeTextId ===
 						text.id
-							? '[&_code]:bg-transparent'
+							? '[&_code]:bg-transparent [&_code]:!text-primary'
 							: ''}"
 					>
 						<div class="relative">

@@ -153,7 +153,7 @@
 						Generating...
 					</li>
 				{:else if !$flashcards.filter((f) => f.notebookId === activeNotebookId).length}
-					<div class="prose prose-sm flex flex-col items-center justify-center text-center">
+					<div class="prose my-6 prose-sm flex flex-col items-center justify-center text-center">
 						<h3 class="">No Flashcards Found</h3>
 						<p class="">It looks like you don't have any flashcards yet.</p>
 
