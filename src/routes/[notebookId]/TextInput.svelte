@@ -14,22 +14,26 @@
 	let files: FileList | null
 
 	$: if (files) {
-		uploadFile(files[0])
-		// for (const file of files) {
-		// 	console.log(file)
-		// }
-		// files = null
+		const file = files[0]
+		const fileMb = file.size / 1024 ** 2
+
+		if (fileMb >= 2) {
+			alert('select a file less tan 2 MB')
+		} else if (file.type.includes('image')) {
+			uploadFile(file)
+		}
 	}
 
 	async function uploadFile(file: File) {
+		uploadingImage = true
 		try {
-			uploadingImage = true
-
 			let base64 = await toBase64(file)
 
 			let res = await readImage(base64)
 
 			const msg = res.choices[0].message
+
+			console.log(msg)
 
 			if (msg.refusal) {
 				uploadingImage = false
@@ -37,14 +41,7 @@
 				return
 			}
 
-			let txt
-			if (msg.parsed) {
-				txt = msg.parsed
-			} else {
-				txt = JSON.parse(msg.content).text
-			}
-
-			text = txt
+			text = msg.parsed || JSON.parse(msg.content).text
 
 			files = null
 			uploadingImage = false
@@ -55,10 +52,14 @@
 	}
 
 	const toBase64 = (file: File) =>
-		new Promise((resolve, reject) => {
+		new Promise<string>((resolve, reject) => {
 			const reader = new FileReader()
 			reader.readAsDataURL(file)
-			reader.onload = () => resolve(reader.result)
+			reader.onload = () => {
+				if (typeof reader.result === 'string') {
+					resolve(reader.result)
+				}
+			}
 			reader.onerror = reject
 		})
 
@@ -89,7 +90,7 @@
 >
 	{#if uploadingImage}
 		<div class="absolute inset-0 bg-base-100 flex justify-center items-center">
-			Reading Image...
+			Extracting text from photo...
 		</div>
 	{/if}
 
@@ -104,7 +105,13 @@
 
 	<div class="flex justify-between items-center mt-1">
 		<label for="image-input" class="btn btn-sm btn-ghost w-fit">
-			<input class="hidden" id="image-input" bind:files type="file" accept="image/*" />
+			<input
+				class="hidden"
+				id="image-input"
+				bind:files
+				type="file"
+				accept="image/png, image/jpeg"
+			/>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
