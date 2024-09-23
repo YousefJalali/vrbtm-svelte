@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Logo from '$lib/ui/Logo.svelte'
 	import '../app.css'
 </script>
 
@@ -21,7 +22,7 @@
 			</svg>
 		</label>
 
-		<h1 class="font-bold text-2xl lg:text-4xl">VRBTM 💉</h1>
+		<div class="h-[48px]"><Logo /></div>
 
 		<label for="flashcards-drawer" class="btn btn-ghost btn-sm -mr-2 drawer-button lg:hidden">
 			<svg
