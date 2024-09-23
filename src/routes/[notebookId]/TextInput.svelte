@@ -99,12 +99,6 @@
 		</div>
 	{/if}
 
-	<!-- <textarea
-		style="field-sizing: content;"
-		class="md:col-span-2 m-0 p-1 px-2 md:px-1 border rounded-box md:border-none w-full h-fit max-h-[calc(100vh*0.2)] resize-none active:outline-none focus:outline-none focus:ring-0"
-		bind:value={text}
-		placeholder="Add Text..."
-	></textarea> -->
 	<div
 		class="col-span-2 relative h-full w-full p-1 px-2 border md:border-none rounded-box overflow-hidden focus-within:border-primary"
 	>
@@ -116,7 +110,7 @@
 		></div>
 		<textarea
 			style="field-sizing: content;"
-			class="absolute inset-x-2 inset-y-1 resize-none z-10 md:active:outline-none focus:outline-none md:focus:ring-0 placeholder:text-sm placeholder:leading-6"
+			class="absolute inset-x-2 inset-y-1 resize-none md:active:outline-none focus:outline-none md:focus:ring-0 placeholder:text-sm placeholder:leading-6"
 			bind:value={text}
 			bind:this={textarea}
 			placeholder="Type here..."
@@ -142,7 +136,7 @@
 			/>
 		</svg>
 
-		<span class="hidden md:inline-block">Image</span>
+		<span class="hidden md:inline-block">Photo</span>
 	</label>
 
 	<button class="btn btn-sm btn-primary w-fit justify-self-end ml-3" on:click={onOmit}>Omit</button>
