@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import { flashcards, notebooks } from '$lib/stores'
+	import { alerts } from '$lib/stores/alerts'
+	import { getErrorMessage } from '$lib/utils'
 
 	let flashcardsFormModal: HTMLDialogElement
 	let popover: HTMLElement
@@ -65,8 +67,16 @@
 
 	async function generateFlashcard() {
 		generatingFlashcard = true
-		await flashcards.generate({ notebookId: activeNotebookId })
-		generatingFlashcard = false
+		try {
+			await flashcards.generate({ notebookId: activeNotebookId })
+			generatingFlashcard = false
+		} catch (error) {
+			generatingFlashcard = false
+			alerts.add({
+				type: 'error',
+				message: getErrorMessage(error)
+			})
+		}
 	}
 </script>
 

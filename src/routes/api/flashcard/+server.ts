@@ -1,6 +1,6 @@
 import OpenAI from 'openai'
 import { OPENAI_API_SECRET_KEY } from '$env/static/private'
-import { json, type RequestEvent } from '@sveltejs/kit'
+import { error, json, type RequestEvent } from '@sveltejs/kit'
 import { z } from 'zod'
 import { zodResponseFormat } from 'openai/helpers/zod'
 
@@ -29,10 +29,13 @@ export const POST = async (event: RequestEvent) => {
 			response_format: zodResponseFormat(GenerateFlashcard, 'generate_flashcard')
 		})
 
-		console.log(chatCompletion.choices[0].message)
+		// throw Error('no way')
 
 		return json(chatCompletion)
-	} catch (error) {
-		console.log('API Flashcard', error)
+	} catch (err) {
+		console.log('API Flashcard', err)
+		error(500, {
+			message: 'Something went wrong!'
+		})
 	}
 }

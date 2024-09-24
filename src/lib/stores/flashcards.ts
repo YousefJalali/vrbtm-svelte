@@ -110,14 +110,17 @@ function handleFlashcards() {
 	async function generate({ notebookId }: { notebookId: string }) {
 		const cards = get(flashcards)
 
-		const nbs = { ...get(notebooks) }
-		const texts = nbs[notebookId].text.map((t) => t.original)
+		const allNotebooks = { ...get(notebooks) }
+		const texts = allNotebooks[notebookId].text.map((t) => t.original)
 
 		const generated = await generateFlashcard(texts, cards)
 
+		//if error
+		if (generated.message) throw Error(generated.message)
+
 		const res = generated.choices[0].message
 
-		if (res.refusal) return
+		if (res.refusal) throw Error(generated.message)
 
 		update((flashcards) => [
 			{ id: uuidv4(), notebookId, ...JSON.parse(res.content) },
