@@ -382,7 +382,7 @@ function handleNotebooks() {
 
 		const res = await fetchTitle(notebook.text[0].original)
 
-		if (typeof res === 'string') return { success: false }
+		if (res.message || res.choices[0].message.refusal) throw Error(res.message)
 
 		notebook.title = res.choices[0].message.content
 

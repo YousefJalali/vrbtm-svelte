@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { alerts } from '$lib/stores/alerts'
+	import { getErrorMessage } from '$lib/utils'
 	import { createEventDispatcher } from 'svelte'
 
 	export const setText = (txt: string) => (text = txt)
@@ -33,23 +35,23 @@
 
 			let res = await readImage(base64)
 
+			// if error
+			if (res.message || res.choices[0].message.refusal) throw Error(res.message)
+
 			const msg = res.choices[0].message
-
-			console.log(msg)
-
-			if (msg.refusal) {
-				uploadingImage = false
-				console.log(msg.refusal)
-				return
-			}
 
 			text = msg.parsed || JSON.parse(msg.content).text
 
 			files = null
+
 			uploadingImage = false
 		} catch (error) {
 			uploadingImage = false
-			console.log('upload', error)
+
+			alerts.add({
+				type: 'error',
+				message: getErrorMessage(error)
+			})
 		}
 	}
 

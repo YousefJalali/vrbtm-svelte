@@ -1,6 +1,6 @@
 import OpenAI from 'openai'
 import { OPENAI_API_SECRET_KEY } from '$env/static/private'
-import { json, type RequestEvent } from '@sveltejs/kit'
+import { error, json, type RequestEvent } from '@sveltejs/kit'
 import { z } from 'zod'
 import { zodResponseFormat } from 'openai/helpers/zod'
 
@@ -17,6 +17,8 @@ export const POST = async (event: RequestEvent) => {
 	const { base64 } = requestBody
 
 	try {
+		// throw Error('no way')
+
 		const response = await openai.chat.completions.create({
 			model: 'gpt-4o-mini',
 			messages: [
@@ -37,7 +39,10 @@ export const POST = async (event: RequestEvent) => {
 		})
 
 		return json(response)
-	} catch (error) {
-		console.log(error)
+	} catch (err) {
+		console.log('Extract Text API', err)
+		error(500, {
+			message: 'Something went wrong!'
+		})
 	}
 }

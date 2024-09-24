@@ -44,7 +44,13 @@
 
 		try {
 			await notebooks.omit({ id: activeNotebookId, textIndex: 0 })
-			await notebooks.generateTitle({ id: activeNotebookId })
+			omitting = false
+
+			try {
+				await notebooks.generateTitle({ id: activeNotebookId })
+			} catch (error) {
+				//do nothing
+			}
 		} catch (error) {
 			omitting = false
 			notebooks.removeText({ id: activeNotebookId, textId })
