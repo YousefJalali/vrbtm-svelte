@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Alert from '$lib/ui/Alert.svelte'
 	import Logo from '$lib/ui/Logo.svelte'
 	import '../app.css'
 </script>
@@ -42,7 +43,9 @@
 		</label>
 	</header>
 
-	<div class="flex flex-1 h-0 md:p-6 md:pt-0">
+	<div class="relative flex flex-1 h-0 md:p-6 md:pt-0">
 		<slot />
+
+		<Alert />
 	</div>
 </div>

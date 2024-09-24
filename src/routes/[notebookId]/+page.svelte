@@ -5,8 +5,10 @@
 	import { notebooks } from '$lib/stores'
 	import { marked } from 'marked'
 	import { goto } from '$app/navigation'
-	import { onMount, type ComponentProps } from 'svelte'
+	import { onMount } from 'svelte'
 	import TextInput from './TextInput.svelte'
+	import { alerts } from '$lib/stores/alerts'
+	import { getErrorMessage } from '$lib/utils'
 
 	let windowSize: number
 	let activeNotebookId: null | string = null
@@ -47,7 +49,11 @@
 			omitting = false
 			notebooks.removeText({ id: activeNotebookId, textId })
 			input.setText(temp)
-			//alert here
+
+			alerts.add({
+				type: 'error',
+				message: getErrorMessage(error)
+			})
 		}
 
 		omitting = false
