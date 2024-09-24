@@ -1,19 +1,19 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 
+	export const setText = (txt: string) => (text = txt)
+
 	let text = ''
 	let uploadingImage = false
-	let textareaContainer: HTMLDivElement
-	let textarea: HTMLTextAreaElement
+	let files: FileList | null
 
 	const dispatch = createEventDispatcher()
 
 	function onOmit() {
 		dispatch('omit', { text })
+
 		text = ''
 	}
-
-	let files: FileList | null
 
 	$: if (files) {
 		const file = files[0]
@@ -103,7 +103,6 @@
 		class="col-span-2 relative h-full w-full p-1 px-2 border md:border-none rounded-box overflow-hidden focus-within:border-primary"
 	>
 		<div
-			bind:this={textareaContainer}
 			bind:innerText={textareaContainerText}
 			contenteditable
 			class="flex h-fit w-full opacity-0 max-h-[calc(100vh*0.2)]"
@@ -112,7 +111,6 @@
 			style="field-sizing: content;"
 			class="absolute inset-x-2 inset-y-1 resize-none md:active:outline-none focus:outline-none md:focus:ring-0 placeholder:text-sm placeholder:leading-6"
 			bind:value={text}
-			bind:this={textarea}
 			placeholder="Type here..."
 		></textarea>
 	</div>

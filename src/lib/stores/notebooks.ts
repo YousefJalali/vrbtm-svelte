@@ -191,7 +191,7 @@ async function fetchOmittedText(text: string) {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				message: text
+				text
 			})
 		})
 
@@ -282,9 +282,13 @@ function handleNotebooks() {
 		const allNotebooks = { ...get(notebooks) }
 		if (!allNotebooks[id]) return
 
-		allNotebooks[id].text = [{ id: uuid(), original: text, omitted: '' }, ...allNotebooks[id].text]
+		const textId = uuid()
+
+		allNotebooks[id].text = [{ id: textId, original: text, omitted: '' }, ...allNotebooks[id].text]
 
 		set(allNotebooks)
+
+		return textId
 	}
 
 	function removeText({ id, textId }: { id: string | null; textId: string }) {
@@ -345,23 +349,29 @@ function handleNotebooks() {
 		const allNotebooks = { ...get(notebooks) }
 		const notebook = allNotebooks[id]
 
-		if (!notebook || !notebook.text.length || textIndex < 0) return { success: false }
+		if (!notebook || !notebook.text.length || textIndex < 0) return
 
 		const index = Math.min(textIndex, notebook.text.length - 1)
 
 		const omitted = await fetchOmittedText(notebook.text[index].original)
 
-		if (typeof omitted === 'string') return { success: false }
+		//if error
+		if (omitted.message) throw Error(omitted.message)
 
-		notebook.text[index].omitted = omitted.choices[0].message.content
+		const res = omitted.choices[0].message
+
+		//Ai refused to respond
+		if (res.refusal) throw Error(omitted.message)
+
+		const content = res.parsed || JSON.parse(res.content).text
+
+		notebook.text[index].omitted = content
 		notebook.isOmitted = true
 		notebook.isOmittedWordsVisible = false
 
 		allNotebooks[id] = notebook
 
 		set(allNotebooks)
-
-		return { success: true }
 	}
 
 	async function generateTitle({ id }: { id: string }) {

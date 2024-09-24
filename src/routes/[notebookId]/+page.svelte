@@ -5,7 +5,7 @@
 	import { notebooks } from '$lib/stores'
 	import { marked } from 'marked'
 	import { goto } from '$app/navigation'
-	import { onMount } from 'svelte'
+	import { onMount, type ComponentProps } from 'svelte'
 	import TextInput from './TextInput.svelte'
 
 	let windowSize: number
@@ -15,6 +15,7 @@
 	let editTextIndex: null | number = null
 	let activeTextId: null | string = null
 	let editor: HTMLDivElement
+	let input: TextInput
 
 	onMount(() => {
 		let firstNotebookId = Object.keys($notebooks)[0]
@@ -34,18 +35,22 @@
 
 		let temp = text
 
+		const textId = notebooks.addText({ id: activeNotebookId, text: temp })
+		if (!textId) return
+
 		omitting = true
 
-		notebooks.addText({ id: activeNotebookId, text: temp })
-		const { success } = await notebooks.omit({ id: activeNotebookId, textIndex: 0 })
+		try {
+			await notebooks.omit({ id: activeNotebookId, textIndex: 0 })
+			await notebooks.generateTitle({ id: activeNotebookId })
+		} catch (error) {
+			omitting = false
+			notebooks.removeText({ id: activeNotebookId, textId })
+			input.setText(temp)
+			//alert here
+		}
 
 		omitting = false
-
-		await notebooks.generateTitle({ id: activeNotebookId })
-
-		// if (!success) {
-		// 	text = temp
-		// }
 	}
 
 	async function reOmitHandler(textIndex: number) {
@@ -278,7 +283,7 @@
 			{/each}
 		</div>
 
-		<TextInput on:omit={omitHandler} />
+		<TextInput on:omit={omitHandler} bind:this={input} />
 	{/if}
 </div>
 
