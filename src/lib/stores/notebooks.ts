@@ -21,8 +21,8 @@ const defaultNotebooks = {
 					'`Quantum physics` explores the behavior of `particles` at the `atomic` and `subatomic` levels. For example, `particles` can exist in multiple states simultaneously, a phenomenon known as `superposition`. Additionally, the `uncertainty principle`, formulated by `Werner Heisenberg`, states that one cannot simultaneously know both the `position` and `momentum` of a `particle` with absolute precision. This principle is crucial for understanding the complex nature of `quantum mechanics`. It is fascinating how such principles influence technologies like `quantum computing` and `cryptography`.'
 			}
 		],
-		isOmitted: false,
-		isOmittedWordsVisible: false
+		archived: false,
+		pinned: false
 	},
 	'6d9d30de-0c07-43b0-97df-1506caa33431': {
 		title: 'Advanced Calculus Techniques',
@@ -34,8 +34,8 @@ const defaultNotebooks = {
 			// 	omitted: ''
 			// }
 		],
-		isOmitted: false,
-		isOmittedWordsVisible: false
+		archived: false,
+		pinned: false
 	},
 	'a484e566-5acc-4113-9140-f17d87562dbe': {
 		title: 'Chemical Reactions and Equilibria',
@@ -47,8 +47,8 @@ const defaultNotebooks = {
 			// 	omitted: ''
 			// }
 		],
-		isOmitted: false,
-		isOmittedWordsVisible: false
+		archived: false,
+		pinned: false
 	},
 	'fa9de3d6-0478-401f-b2c0-aa9b72bc4b6d': {
 		title: 'Exploring Modern Literature',
@@ -60,8 +60,8 @@ const defaultNotebooks = {
 			// 	omitted: ''
 			// }
 		],
-		isOmitted: false,
-		isOmittedWordsVisible: false
+		archived: false,
+		pinned: false
 	},
 	'a069bc0b-bb9a-46de-8008-fc19f355c985': {
 		title: 'World War II: Key Events',
@@ -73,98 +73,98 @@ const defaultNotebooks = {
 			// 	omitted: ''
 			// }
 		],
-		isOmitted: false,
-		isOmittedWordsVisible: false
+		archived: false,
+		pinned: false
 	}
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c986': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c984': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c987': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c988': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c989': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c990': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c991': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c992': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c993': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c994': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c995': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c996': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c997': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c998': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c999': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
-	// 	isOmitted: false,
-	// 	isOmittedWordsVisible: false
+	// 	archived: false,
+	// 	pinned: false
 	// }
 }
 
@@ -229,8 +229,8 @@ const sampleNotebook = () => ({
 	[uuid()]: {
 		title: 'New notebook',
 		text: [],
-		isOmitted: false,
-		isOmittedWordsVisible: false
+		archived: false,
+		pinned: false
 	}
 })
 
@@ -239,8 +239,8 @@ function handleNotebooks() {
 		[notebookId: string]: {
 			title: string
 			text: { id: string; original: string; omitted: string }[]
-			isOmitted: boolean
-			isOmittedWordsVisible: boolean
+			archived: boolean
+			pinned: boolean
 		}
 	}>(fetchNotebooks())
 
@@ -366,8 +366,6 @@ function handleNotebooks() {
 		const content = res.parsed || JSON.parse(res.content).text
 
 		notebook.text[index].omitted = content
-		notebook.isOmitted = true
-		notebook.isOmittedWordsVisible = false
 
 		allNotebooks[id] = notebook
 
@@ -389,6 +387,28 @@ function handleNotebooks() {
 		set(allNotebooks)
 	}
 
+	function toggleArchive({ id }: { id: string | null }) {
+		if (!id) return
+		const allNotebooks = { ...get(notebooks) }
+
+		if (!allNotebooks[id]) return
+
+		allNotebooks[id].archived = !allNotebooks[id].archived
+
+		set(allNotebooks)
+	}
+
+	function togglePin({ id }: { id: string | null }) {
+		if (!id) return
+		const allNotebooks = { ...get(notebooks) }
+
+		if (!allNotebooks[id]) return
+
+		allNotebooks[id].pinned = !allNotebooks[id].pinned
+
+		set(allNotebooks)
+	}
+
 	return {
 		subscribe,
 		set,
@@ -399,11 +419,10 @@ function handleNotebooks() {
 		addText,
 		removeText,
 		remove,
-		// clearOmit,
-		// showOmittedWords,
-		// hideOmittedWords,
 		generateTitle,
-		omit
+		omit,
+		toggleArchive,
+		togglePin
 	}
 }
 

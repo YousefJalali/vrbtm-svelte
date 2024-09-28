@@ -64,9 +64,7 @@
 
 <!-- <svelte:window bind:innerWidth={windowSize} /> -->
 
-<div
-	class="md:flex flex-col md:max-w-72 md:gap-4 md:basis-0 md:grow-[3] lg:grow-[2.5] lg:mt-4 lg:ml-4"
->
+<div class="md:flex flex-col md:max-w-72 md:gap-4 md:basis-0 md:grow-[3] lg:grow-[2.5] lg:ml-4">
 	<Notebooks />
 </div>
 
