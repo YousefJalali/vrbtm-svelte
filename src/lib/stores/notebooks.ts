@@ -22,6 +22,7 @@ const defaultNotebooks = {
 			}
 		],
 		archived: false,
+		flashcards: [],
 		pinned: false
 	},
 	'6d9d30de-0c07-43b0-97df-1506caa33431': {
@@ -35,6 +36,7 @@ const defaultNotebooks = {
 			// }
 		],
 		archived: false,
+		flashcards: [],
 		pinned: false
 	},
 	'a484e566-5acc-4113-9140-f17d87562dbe': {
@@ -48,6 +50,7 @@ const defaultNotebooks = {
 			// }
 		],
 		archived: false,
+		flashcards: [],
 		pinned: false
 	},
 	'fa9de3d6-0478-401f-b2c0-aa9b72bc4b6d': {
@@ -61,6 +64,7 @@ const defaultNotebooks = {
 			// }
 		],
 		archived: false,
+		flashcards: [],
 		pinned: false
 	},
 	'a069bc0b-bb9a-46de-8008-fc19f355c985': {
@@ -74,96 +78,112 @@ const defaultNotebooks = {
 			// }
 		],
 		archived: false,
+		flashcards: [],
 		pinned: false
 	}
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c986': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c984': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c987': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c988': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c989': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c990': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c991': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c992': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c993': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c994': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c995': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c996': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c997': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c998': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// },
 	// 'a069bc0b-bb9a-46de-8008-fc19f355c999': {
 	// 	title: 'World War II: Key Events',
 	// 	text: [],
 	// 	archived: false,
+	// flashcards: [],
 	// 	pinned: false
 	// }
 }
@@ -230,6 +250,7 @@ const sampleNotebook = () => ({
 		title: 'New notebook',
 		text: [],
 		archived: false,
+		flashcards: [],
 		pinned: false
 	}
 })
@@ -241,11 +262,22 @@ function handleNotebooks() {
 			text: { id: string; original: string; omitted: string }[]
 			archived: boolean
 			pinned: boolean
+			flashcards: string[]
 		}
 	}>(fetchNotebooks())
 
 	function create() {
-		update((notebooks) => ({ ...sampleNotebook(), ...notebooks }))
+		let allNotebooks = { ...get(notebooks) }
+		const firstNotebook = Object.values(allNotebooks)[0]
+		if (
+			firstNotebook.title === 'New notebook' &&
+			!firstNotebook.text.length &&
+			!firstNotebook.flashcards.length
+		)
+			throw Error('Already a new notebook')
+
+		allNotebooks = { ...sampleNotebook(), ...allNotebooks }
+		set(allNotebooks)
 
 		// const storedNotebooks = localStorage.getItem('notebooks') || {}
 		// localStorage.setItem('notebooks', JSON.stringify({ ...newNotebook, ...storedNotebooks }))
@@ -409,6 +441,32 @@ function handleNotebooks() {
 		set(allNotebooks)
 	}
 
+	function addFlashcard({ notebookId, flashcardId }: { notebookId: string; flashcardId: string }) {
+		const allNotebooks = { ...get(notebooks) }
+
+		if (!allNotebooks[notebookId]) return
+		allNotebooks[notebookId].flashcards.push(flashcardId)
+
+		set(allNotebooks)
+	}
+
+	function removeFlashcard({
+		notebookId,
+		flashcardId
+	}: {
+		notebookId: string
+		flashcardId: string
+	}) {
+		const allNotebooks = { ...get(notebooks) }
+
+		if (!allNotebooks[notebookId]) return
+		allNotebooks[notebookId].flashcards = allNotebooks[notebookId].flashcards.filter(
+			(f) => f !== flashcardId
+		)
+
+		set(allNotebooks)
+	}
+
 	return {
 		subscribe,
 		set,
@@ -422,7 +480,9 @@ function handleNotebooks() {
 		generateTitle,
 		omit,
 		toggleArchive,
-		togglePin
+		togglePin,
+		addFlashcard,
+		removeFlashcard
 	}
 }
 

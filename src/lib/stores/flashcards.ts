@@ -2,6 +2,8 @@ import { get, writable } from 'svelte/store'
 import { v4 as uuidv4 } from 'uuid'
 import { notebooks } from './notebooks'
 
+type Flashcard = { id: string; notebookId: string; question: string; answer: string }
+
 // const def = [
 // 	{
 // 		id: 'a069bc0b-bb9a-46de-8008-fc19f355c985',
@@ -91,9 +93,7 @@ async function generateFlashcard(
 }
 
 function handleFlashcards() {
-	const { subscribe, set, update } = writable<
-		{ id: string; notebookId: string; question: string; answer: string }[]
-	>([])
+	const { subscribe, set, update } = writable<Flashcard[]>([])
 
 	function create({
 		notebookId,
@@ -104,7 +104,9 @@ function handleFlashcards() {
 		question: string
 		answer: string
 	}) {
-		update((flashcards) => [{ id: uuidv4(), notebookId, question, answer }, ...flashcards])
+		const id = uuidv4()
+		update((flashcards) => [{ id, notebookId, question, answer }, ...flashcards])
+		notebooks.addFlashcard({ notebookId, flashcardId: id })
 	}
 
 	async function generate({ notebookId }: { notebookId: string }) {
@@ -133,7 +135,25 @@ function handleFlashcards() {
 	}
 
 	function remove(flashcardId: string) {
-		update((flashcards) => flashcards.filter((f) => f.id !== flashcardId))
+		const allFlashcards = [...get(flashcards)]
+
+		let removedFlashcard: Flashcard | null = null
+
+		for (const [index, f] of allFlashcards.entries()) {
+			if (f.id === flashcardId) {
+				removedFlashcard = allFlashcards[index]
+				allFlashcards.splice(index, 1)
+			}
+		}
+
+		if (removedFlashcard) {
+			notebooks.removeFlashcard({
+				notebookId: removedFlashcard.notebookId,
+				flashcardId: removedFlashcard.id
+			})
+		}
+
+		set(allFlashcards)
 	}
 
 	return {

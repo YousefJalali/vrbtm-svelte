@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
-	import { notebooks } from '$lib/stores'
+	import { alerts, notebooks } from '$lib/stores'
 	import Logo from '$lib/ui/Logo.svelte'
 
 	let popover: HTMLElement
@@ -101,9 +101,12 @@
 	}
 
 	function createNotebookHandler() {
-		notebooks.create()
-		const createdNotebookId = Object.keys($notebooks)[0]
-		goto(`/${createdNotebookId}`)
+		try {
+			notebooks.create()
+			const createdNotebookId = Object.keys($notebooks)[0]
+			goto(`/${createdNotebookId}`)
+		} catch (error) {}
+
 		toggleDrawer()
 	}
 
@@ -396,45 +399,47 @@
 				>
 			</li>
 			<!-- Pin -->
-			<li>
-				<a href={null} on:click={onPin}>
-					{#if $notebooks[selectedNotebookId].pinned}
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							class="size-5"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="m3 3 1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 0 1 1.743-1.342 48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664 19.5 19.5"
-							/>
-						</svg>
+			{#if !$notebooks[selectedNotebookId].archived}
+				<li>
+					<a href={null} on:click={onPin}>
+						{#if $notebooks[selectedNotebookId].pinned}
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="size-5"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="m3 3 1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 0 1 1.743-1.342 48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664 19.5 19.5"
+								/>
+							</svg>
 
-						Unpin
-					{:else}
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							class="size-5"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
-							/>
-						</svg>
+							Unpin
+						{:else}
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="size-5"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
+								/>
+							</svg>
 
-						Pin
-					{/if}
-				</a>
-			</li>
+							Pin
+						{/if}
+					</a>
+				</li>
+			{/if}
 			<!-- Archive -->
 			<li>
 				<a href={null} on:click={onArchive}>
@@ -445,7 +450,7 @@
 							viewBox="0 0 24 24"
 							stroke-width="1.5"
 							stroke="currentColor"
-							class="size-6"
+							class="size-5"
 						>
 							<path
 								stroke-linecap="round"
