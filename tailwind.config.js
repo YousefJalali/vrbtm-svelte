@@ -19,16 +19,15 @@ export default {
 	daisyui: {
 		themes: [
 			{
-				winter: {
+				acid: {
 					// eslint-disable-next-line @typescript-eslint/no-require-imports
-					...require('daisyui/src/theming/themes')['winter'],
+					...require('daisyui/src/theming/themes')['acid'],
 					primary: '#4E63F2',
 					secondary: '#C7D9FF',
-					accent: '#FF7F50'
+					accent: '#FF7F50',
+					neutral: '#000'
 				}
-			},
-
-			'business'
+			}
 		]
 	}
 }
