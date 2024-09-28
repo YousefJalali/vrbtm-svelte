@@ -219,21 +219,25 @@
 									<input type="checkbox" />
 
 									<div class="swap-on">
-										<div class="card bg-base-100 border-4 shadow-md h-full">
+										<div
+											class="card bg-base-100 border-4 border-primary/40 text-primary/80 shadow-md h-full"
+										>
 											<div class="card-body p-4 flex justify-center items-center">
 												<p class="flex-none">{flashcard.answer}</p>
 											</div>
 										</div>
 									</div>
-									<div class="swap-off">
-										<div class="relative card bg-base-200 border shadow-md h-full">
+									<div class="group swap-off">
+										<div
+											class="relative card bg-secondary/40 hover:border-primary/50 border border-primary/20 text-primary/80 shadow-md h-full"
+										>
 											<div class="card-body p-4 flex justify-center items-center">
 												<p class="flex-none">{flashcard.question}</p>
 											</div>
 
 											<button
 												on:click={(e) => openPopover(e, flashcard.id)}
-												class="btn btn-xs btn-circle absolute top-1 right-1"
+												class="lg:hidden lg:group-hover:flex btn btn-xs btn-ghost btn-circle absolute top-1 right-1"
 												><svg
 													xmlns="http://www.w3.org/2000/svg"
 													fill="none"
@@ -266,7 +270,7 @@
 	bind:this={popover}
 	popover=""
 	id="options"
-	class="m-0 p-4 bg-transparent"
+	class="m-4 bg-transparent"
 	on:toggle={({ newState }) => {
 		if (newState === 'closed') {
 			selectedCardId = ''
@@ -274,9 +278,7 @@
 	}}
 >
 	{#if selectedCardId}
-		<ul
-			class="menu dropdown-content border border-base-300 bg-base-100 rounded-box z-[1] p-2 shadow-lg"
-		>
+		<ul class="menu dropdown-content border border-base-300 bg-base-100 rounded-box z-[1] p-2">
 			<li>
 				<a href={null} on:click={onEdit}
 					><svg
