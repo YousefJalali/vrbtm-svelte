@@ -95,10 +95,10 @@
 		<label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
 		<div
-			class="bg-base-100 md:rounded-box flex flex-col w-[80vw] md:w-full min-h-screen md:min-h-fit"
+			class="bg-base-100 md:bg-transparent md:rounded-box flex flex-col w-[80vw] md:w-full min-h-screen md:min-h-fit"
 		>
 			<div
-				class="sticky bg-transparent border-b top-0 z-50 bg-base-200 flex justify-between items-center p-4"
+				class="sticky rounded-se-box overflow-hidden border-b top-0 z-50 bg-base-100 flex justify-between items-center p-4"
 			>
 				<h1 class="text-2xl font-bold">Flashcards</h1>
 				<div class="flex flex-row-reverse gap-2">

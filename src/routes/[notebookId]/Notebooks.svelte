@@ -159,7 +159,7 @@
 				</a>
 			</div>
 
-			<button class="btn btn-primary btn-sm mb-8" on:click={createNotebookHandler}>
+			<button class="btn btn-primary btn-sm" on:click={createNotebookHandler}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -172,6 +172,8 @@
 				</svg>
 				New Notebook
 			</button>
+
+			<div class="divider"></div>
 
 			<ul class="relative menu rounded-box w-full p-0 pb-6">
 				<!-- <li>

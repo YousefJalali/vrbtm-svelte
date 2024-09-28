@@ -69,7 +69,7 @@
 </div>
 
 <div
-	class="bg-base-100 lg:m-4 lg:mr-0 lg:rounded-s-box border-r lg:border relative w-full flex flex-col lg:basis-0 lg:grow-[5.5]"
+	class="bg-base-100 lg:m-4 lg:mr-0 lg:rounded-s-box border-r lg:border lg:border-r-0 relative w-full flex flex-col lg:basis-0 lg:grow-[5.5]"
 >
 	{#if activeNotebookId}
 		<!-- Notebook Title -->
@@ -77,7 +77,7 @@
 			class="hidden lg:flex justify-between absolute top-0 inset-x-0 p-4 rounded-box h-[64px] z-10 prose max-w-none bg-gradient-to-b from-85% from-base-100 to-transparent"
 		>
 			<h2>{$notebooks[activeNotebookId].title}</h2>
-			<button class="btn btn-ghost btn-circle btn-sm">
+			<!-- <button class="btn btn-ghost btn-circle btn-sm">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -92,7 +92,7 @@
 						d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
 					/>
 				</svg></button
-			>
+			> -->
 		</div>
 
 		<TextList {activeNotebookId} {omitting} />
