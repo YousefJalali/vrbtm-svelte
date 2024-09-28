@@ -8,22 +8,35 @@
 	let activeTextId: null | string = null
 	let reOmittingTextIndex: null | number = null
 	let editTextIndex: null | number = null
-	let editor: HTMLDivElement
+	let textareaEle: HTMLTextAreaElement
+	let editedText = ''
+
+	$: textareaContainerText = editedText.trim() + '\n'
+	$: if (textareaEle) {
+		textareaEle.focus()
+	}
+
+	function onEdit(textIndex: number) {
+		editTextIndex = textIndex
+		editedText = $notebooks[activeNotebookId].text[textIndex].original
+	}
 
 	async function editTextHandler(textIndex: number) {
-		if (!editor || !activeNotebookId) return
+		if (!editedText.length || !activeNotebookId) return
 
-		let newText = editor.innerText.trim()
+		let newText = editedText
 		let oldText = $notebooks[activeNotebookId].text[textIndex].original
 
 		if (newText === oldText.trim()) {
 			editTextIndex = null
+			editedText = ''
 			return
 		}
 
 		notebooks.updateText({ id: activeNotebookId, newText, textIndex })
 
 		editTextIndex = null
+		editedText = ''
 
 		await reOmitHandler(textIndex)
 	}
@@ -38,19 +51,19 @@
 		reOmittingTextIndex = null
 	}
 
-	function pasteHandler(e: ClipboardEvent) {
-		if (!window) return
-		e.preventDefault()
+	// function pasteHandler(e: ClipboardEvent) {
+	// 	if (!window) return
+	// 	e.preventDefault()
 
-		//@ts-ignore
-		const text = (e.originalEvent || e).clipboardData.getData('text')
-		const selection = window.getSelection()
+	// 	//@ts-ignore
+	// 	const text = (e.originalEvent || e).clipboardData.getData('text')
+	// 	const selection = window.getSelection()
 
-		if (selection?.rangeCount) {
-			selection.deleteFromDocument()
-			selection.getRangeAt(0).insertNode(document.createTextNode(text))
-		}
-	}
+	// 	if (selection?.rangeCount) {
+	// 		selection.deleteFromDocument()
+	// 		selection.getRangeAt(0).insertNode(document.createTextNode(text))
+	// 	}
+	// }
 </script>
 
 <div class="mx-4 py-6 md:pt-[48px] flex flex-col-reverse gap-3 flex-1 h-0 overflow-y-scroll">
@@ -96,36 +109,44 @@
 					? '[&_code]:bg-transparent [&_code]:!text-primary'
 					: ''}"
 			>
-				<div class="relative p-2">
+				<div class="relative">
 					{#if reOmittingTextIndex === index}
-						<div class="absolute inset-0 flex justify-center items-center bg-base-200/80">
+						<div
+							class="absolute rounded-box inset-0 flex justify-center items-center bg-base-200/90"
+						>
 							Re-Omitting the text...
 						</div>
 					{/if}
 					{#if editTextIndex === index}
-						<div
-							bind:this={editor}
-							contenteditable
-							class="p-2 bg-base-100 rounded-box w-full resize-none h-fit"
-							on:paste={pasteHandler}
-						>
-							{text.original}
+						<div class="overflow-hidden relative bg-base-100 rounded-box w-full">
+							<!-- on:paste={pasteHandler} -->
+							<div
+								bind:innerText={textareaContainerText}
+								contenteditable
+								class="flex h-fit w-full opacity-0 max-h-[calc(100vh*0.3)]"
+							></div>
+							<textarea
+								bind:this={textareaEle}
+								bind:value={editedText}
+								class="absolute inset-0 z-10 resize-none rounded-box p-2 bg-base-200"
+							></textarea>
 						</div>
 					{:else}
-						{@html marked(text.omitted)}
+						<div class="p-2">
+							{@html marked(text.omitted)}
+						</div>
 					{/if}
 				</div>
 
-				<!-- <div class="divider my-1"></div> -->
-
 				{#if editTextIndex === index}
-					<div class="flex justify-end gap-2 mt-2 max-w-full overflow-hidden">
+					<div class="flex justify-end gap-2 mt-4 max-w-full overflow-hidden">
 						<button class="btn btn-sm" on:click={() => (editTextIndex = null)}>Cancel</button>
 						<button class="btn btn-sm btn-primary" on:click={() => editTextHandler(index)}
 							>Save</button
 						>
 					</div>
 				{:else}
+					<!-- Text Actions -->
 					<div class="flex mt-2">
 						<label class="swap text-neutral/60 btn btn-ghost btn-xs">
 							<input
@@ -176,7 +197,7 @@
 							disabled={reOmittingTextIndex === index}
 							class="flex text-neutral/60 [&>button]:btn [&>button]:btn-ghost [&>button]:btn-xs [&>button]:disabled:bg-base-200"
 						>
-							<button name="edit" on:click={() => (editTextIndex = index)}>
+							<button name="edit" on:click={() => onEdit(index)}>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"
