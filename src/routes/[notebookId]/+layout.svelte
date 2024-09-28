@@ -3,9 +3,11 @@
 	import Logo from '$lib/ui/Logo.svelte'
 </script>
 
-<div class="flex flex-col h-dvh max-h-screen max-w-[90rem] mx-auto">
-	<header class="max-w-none border-b flex items-center justify-between lg:justify-center p-4">
-		<label for="nav-drawer" class="btn btn-ghost btn-sm -ml-2 drawer-button md:hidden">
+<div class="flex flex-col h-dvh max-h-screen">
+	<header
+		class="lg:hidden max-w-none border-b flex items-center justify-between lg:justify-center p-4"
+	>
+		<label for="nav-drawer" class="btn btn-ghost btn-sm -ml-2 drawer-button lg:hidden">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -24,7 +26,10 @@
 
 		<div class="h-[36px] lg:h-[48px]"><Logo /></div>
 
-		<label for="flashcards-drawer" class="btn btn-ghost btn-sm -mr-2 drawer-button lg:hidden">
+		<label
+			for="flashcards-drawer"
+			class="btn btn-ghost btn-sm -mr-2 drawer-button md:opacity-0 lg:hidden"
+		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -41,8 +46,8 @@
 			</svg>
 		</label>
 	</header>
-
-	<div class="relative flex flex-1 h-0 md:p-6 md:pt-0">
+	<!-- max-w-[90rem] mx-auto -->
+	<div class="relative flex flex-1 h-0 bg-base-200">
 		<slot />
 
 		<Alert />

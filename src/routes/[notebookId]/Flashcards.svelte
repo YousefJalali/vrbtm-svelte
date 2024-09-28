@@ -80,12 +80,12 @@
 	}
 </script>
 
-<div class="flex flex-col flex-1 h-0 drawer drawer-end lg:drawer-open z-10">
+<div class="flex flex-col flex-1 h-0 drawer drawer-end md:drawer-open z-10">
 	<input id="flashcards-drawer" type="checkbox" class="drawer-toggle" />
 
 	<div class="drawer-content flex flex-col items-center justify-center"></div>
 	<div
-		class="drawer-side lg:rounded-box"
+		class="drawer-side"
 		on:scroll={() => {
 			if (selectedCardId) {
 				selectedFlashcardEleTop = flashcardsEle[selectedCardId].getBoundingClientRect().top
@@ -94,8 +94,12 @@
 	>
 		<label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
-		<div class="bg-base-200 flex flex-col w-[80vw] md:w-[40vw] lg:w-full min-h-screen lg:min-h-fit">
-			<div class="sticky top-0 z-50 bg-base-200 flex justify-between items-center p-3 pb-2">
+		<div
+			class="bg-base-100 md:rounded-box flex flex-col w-[80vw] md:w-full min-h-screen md:min-h-fit"
+		>
+			<div
+				class="sticky bg-transparent border-b top-0 z-50 bg-base-200 flex justify-between items-center p-4"
+			>
 				<h1 class="text-2xl font-bold">Flashcards</h1>
 				<div class="flex flex-row-reverse gap-2">
 					<!-- CreateFlashcard -->
@@ -143,7 +147,7 @@
 				</div>
 			</div>
 
-			<ul class="h-full flex-1 px-3 py-4 space-y-4 text-center">
+			<ul class="h-full flex-1 p-4 space-y-4 text-center">
 				{#if generatingFlashcard && !$flashcards.length}
 					<li
 						class="relative min-h-[100px] card bg-base-100 shadow-md flex justify-center items-center"
@@ -215,14 +219,14 @@
 									<input type="checkbox" />
 
 									<div class="swap-on">
-										<div class="card bg-base-200 border-4 border-base-100 shadow-md h-full">
+										<div class="card bg-base-100 border-4 shadow-md h-full">
 											<div class="card-body p-4 flex justify-center items-center">
 												<p class="flex-none">{flashcard.answer}</p>
 											</div>
 										</div>
 									</div>
 									<div class="swap-off">
-										<div class="relative card bg-base-100 shadow-md h-full">
+										<div class="relative card bg-base-200 border shadow-md h-full">
 											<div class="card-body p-4 flex justify-center items-center">
 												<p class="flex-none">{flashcard.question}</p>
 											</div>

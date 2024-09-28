@@ -10,7 +10,7 @@
 	import { alerts } from '$lib/stores/alerts'
 	import { getErrorMessage } from '$lib/utils'
 
-	let windowSize: number
+	// let windowSize: number
 	let activeNotebookId: null | string = null
 	let omitting = false
 	let reOmittingTextIndex: null | number = null
@@ -108,23 +108,49 @@
 	}
 </script>
 
-<svelte:window bind:innerWidth={windowSize} />
+<!-- <svelte:window bind:innerWidth={windowSize} /> -->
 
 <div
-	class="lg:mt-6 md:flex flex-col bg-base-200 md:border md:border-base-300 md:rounded-box md:gap-4 md:basis-0 md:grow-[3] lg:grow-[2.5] md:mt-4 md:ml-4 lg:m-0"
+	class="md:flex flex-col md:max-w-72 md:gap-4 md:basis-0 md:grow-[3] lg:grow-[2.5] lg:mt-4 lg:ml-4"
 >
 	<Notebooks />
 </div>
 
-<div class="relative w-full flex flex-col md:gap-4 md:basis-0 md:grow-[5.5]">
+<div
+	class="bg-base-100 lg:m-4 lg:mr-0 lg:rounded-s-box border-r lg:border relative w-full flex flex-col lg:basis-0 lg:grow-[5.5]"
+>
 	{#if activeNotebookId}
-		<div class="mx-4 py-4 lg:pt-6 lg:pb-2 flex flex-col-reverse gap-4 flex-1 h-0 overflow-y-scroll">
+		<div
+			class="hidden lg:flex justify-between absolute top-0 inset-x-0 p-4 rounded-box h-[64px] z-10 prose max-w-none bg-gradient-to-b from-85% from-base-100 to-transparent"
+		>
+			<h2>{$notebooks[activeNotebookId].title}</h2>
+			<button class="btn btn-ghost btn-circle btn-sm">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="size-6"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+					/>
+				</svg></button
+			>
+		</div>
+
+		<div class="mx-4 py-6 md:pt-[48px] flex flex-col-reverse gap-3 flex-1 h-0 overflow-y-scroll">
+			<!-- Scanning text... -->
 			{#if omitting}
 				<div class="p-1 rounded-box leading-relaxed h-fit w-full [&>p]:m-0 text-center">
 					<p class="opacity-80">Scanning text...</p>
 				</div>
 			{/if}
 
+			<!-- Nothing here yet -->
 			{#if !$notebooks[activeNotebookId].text.length}
 				<div class="prose flex flex-col flex-1 items-center justify-center text-center p-6">
 					<!-- Replace this with your SVG -->
@@ -150,13 +176,16 @@
 
 			{#each $notebooks[activeNotebookId].text as text, index}
 				{#if text.omitted.length}
-					<div
-						class="p-2 rounded-box leading-relaxed h-fit w-full bg-base-200 [&>p]:m-0 [&_code]:bg-primary [&_code]:text-transparent hover:[&_code]:bg-transparent hover:[&_code]:text-primary {activeTextId ===
+					{#if index !== 0}
+						<div class="divider m-0"></div>
+					{/if}
+					<article
+						class="rounded-box leading-relaxed h-fit w-full bg-base-100 [&>p]:m-0 [&_code]:inline-block [&_code]:leading-5 [&_code]:bg-primary [&_code]:text-transparent hover:[&_code]:bg-transparent hover:[&_code]:text-primary {activeTextId ===
 						text.id
 							? '[&_code]:bg-transparent [&_code]:!text-primary'
 							: ''}"
 					>
-						<div class="relative">
+						<div class="relative p-2">
 							{#if reOmittingTextIndex === index}
 								<div class="absolute inset-0 flex justify-center items-center bg-base-200/80">
 									Re-Omitting the text...
@@ -176,18 +205,18 @@
 							{/if}
 						</div>
 
-						<div class="divider my-1"></div>
+						<!-- <div class="divider my-1"></div> -->
 
 						{#if editTextIndex === index}
-							<div class="flex justify-end gap-2">
+							<div class="flex justify-end gap-2 mt-2 max-w-full overflow-hidden">
 								<button class="btn btn-sm" on:click={() => (editTextIndex = null)}>Cancel</button>
 								<button class="btn btn-sm btn-primary" on:click={() => editTextHandler(index)}
 									>Save</button
 								>
 							</div>
 						{:else}
-							<div class="flex">
-								<label class="swap btn btn-ghost btn-sm">
+							<div class="flex mt-2">
+								<label class="swap text-neutral/60 btn btn-ghost btn-xs">
 									<input
 										checked={activeTextId === text.id}
 										type="checkbox"
@@ -200,7 +229,7 @@
 											viewBox="0 0 24 24"
 											stroke-width="1.5"
 											stroke="currentColor"
-											class="size-6"
+											class="size-5"
 										>
 											<path
 												stroke-linecap="round"
@@ -221,7 +250,7 @@
 											viewBox="0 0 24 24"
 											stroke-width="1.5"
 											stroke="currentColor"
-											class="size-6"
+											class="size-5"
 										>
 											<path
 												stroke-linecap="round"
@@ -234,7 +263,7 @@
 
 								<fieldset
 									disabled={reOmittingTextIndex === index}
-									class="flex [&>button]:btn [&>button]:btn-ghost [&>button]:btn-sm [&>button]:disabled:bg-base-200"
+									class="flex text-neutral/60 [&>button]:btn [&>button]:btn-ghost [&>button]:btn-xs [&>button]:disabled:bg-base-200"
 								>
 									<button name="edit" on:click={() => (editTextIndex = index)}>
 										<svg
@@ -243,7 +272,7 @@
 											viewBox="0 0 24 24"
 											stroke-width="1.5"
 											stroke="currentColor"
-											class="size-6"
+											class="size-5"
 										>
 											<path
 												stroke-linecap="round"
@@ -259,7 +288,7 @@
 											viewBox="0 0 24 24"
 											stroke-width="1.5"
 											stroke="currentColor"
-											class="size-6 {reOmittingTextIndex === index ? 'animate-spin' : ''}"
+											class="size-5 {reOmittingTextIndex === index ? 'animate-spin' : ''}"
 										>
 											<path
 												stroke-linecap="round"
@@ -278,7 +307,7 @@
 											viewBox="0 0 24 24"
 											stroke-width="1.5"
 											stroke="currentColor"
-											class="size-6"
+											class="size-5"
 										>
 											<path
 												stroke-linecap="round"
@@ -290,7 +319,7 @@
 								</fieldset>
 							</div>
 						{/if}
-					</div>
+					</article>
 				{/if}
 			{/each}
 		</div>
@@ -301,7 +330,7 @@
 
 <!-- Flashcards -->
 <div
-	class="lg:mt-6 flex flex-col lg:bg-base-200 lg:border lg:border-base-300 lg:rounded-box lg:basis-0 lg:grow-[3]"
+	class="flex flex-col bg-base-100 md:max-w-96 lg:m-4 lg:ml-0 lg:border border-l-0 lg:rounded-e-box lg:basis-0 lg:grow-[3]"
 >
 	<Flashcards />
 </div>

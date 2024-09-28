@@ -92,7 +92,7 @@
 </script>
 
 <div
-	class="relative flex items-end md:grid md:grid-cols-2 md:gap-2 m-3 mt-1 md:border-[1.5px] md:focus-within:border-primary md:p-3 md:m-0 md:mx-4 md:rounded-box overflow-hidden"
+	class="p-3 md:m-4 md:mt-2 md:bg-base-200/40 relative flex items-end md:grid md:grid-cols-2 md:gap-2 md:border-[1.5px] md:focus-within:border-primary md:rounded-box overflow-hidden"
 >
 	{#if uploadingImage}
 		<div class="absolute inset-0 bg-base-100 flex justify-center items-center z-20">
@@ -111,7 +111,7 @@
 		></div>
 		<textarea
 			style="field-sizing: content;"
-			class="absolute inset-x-2 inset-y-1 resize-none md:active:outline-none focus:outline-none md:focus:ring-0 placeholder:text-sm placeholder:leading-6"
+			class="absolute bg-transparent inset-x-2 inset-y-1 resize-none md:active:outline-none focus:outline-none md:focus:ring-0 placeholder:text-sm placeholder:leading-6"
 			bind:value={text}
 			placeholder="Type here..."
 		></textarea>
