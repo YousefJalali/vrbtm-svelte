@@ -104,6 +104,8 @@ function handleFlashcards() {
 		question: string
 		answer: string
 	}) {
+		if (!notebookId || !question.trim().length || !answer.trim().length) return
+
 		const id = uuidv4()
 		update((flashcards) => [{ id, notebookId, question, answer }, ...flashcards])
 		notebooks.addFlashcard({ notebookId, flashcardId: id })

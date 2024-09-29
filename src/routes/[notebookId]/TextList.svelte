@@ -104,7 +104,7 @@
 				<div class="divider m-0"></div>
 			{/if}
 			<article
-				class="rounded-box leading-relaxed h-fit w-full bg-base-100 [&>p]:m-0 [&_code]:inline-block [&_code]:leading-5 [&_code]:bg-primary [&_code]:text-transparent hover:[&_code]:bg-transparent hover:[&_code]:text-primary {activeTextId ===
+				class="rounded-box leading-loose h-fit w-full bg-base-100 [&>p]:m-0 [&_code]:inline-block [&_code]:leading-5 [&_code]:bg-primary [&_code]:text-transparent hover:[&_code]:bg-transparent hover:[&_code]:text-primary {activeTextId ===
 				text.id
 					? '[&_code]:bg-transparent [&_code]:!text-primary'
 					: ''}"

@@ -350,6 +350,7 @@
 					placeholder="What is the powerhouse of the cell?"
 					class="input input-bordered w-full"
 					value={$flashcards.find((f) => f.id === editCardId)?.question || ''}
+					required
 				/>
 			</label>
 
@@ -362,6 +363,7 @@
 					class="textarea resize-none textarea-bordered h-24 text-base"
 					placeholder="The powerhouse of the cell is the mitochondrion."
 					value={$flashcards.find((f) => f.id === editCardId)?.answer || ''}
+					required
 				></textarea>
 			</label>
 
