@@ -121,8 +121,8 @@
 					</div>
 				{:else}
 					<!-- Text Actions -->
-					<div class="flex mt-2">
-						<label class="swap text-neutral/60 btn btn-ghost btn-xs">
+					<div class="flex mt-2 gap-2">
+						<label class="swap text-neutral/60 btn btn-sm btn-ghost btn-circle">
 							<input
 								checked={activeTextId === text.id}
 								type="checkbox"
@@ -169,12 +169,20 @@
 
 						<fieldset
 							disabled={reOmittingTextIndex === index}
-							class="flex text-neutral/60 [&>button]:btn [&>button]:btn-ghost [&>button]:btn-xs [&>button]:disabled:bg-base-200"
+							class="flex gap-2 text-neutral/60 [&>button]:disabled:bg-base-200"
 						>
-							<button name="edit" on:click={() => onEdit(index)}>
+							<button
+								class="btn btn-sm btn-ghost btn-circle"
+								name="edit"
+								on:click={() => onEdit(index)}
+							>
 								<Svg icon="edit" size={5} />
 							</button>
-							<button name="refresh" on:click={() => reOmitHandler(index)}>
+							<button
+								class="btn btn-sm btn-ghost btn-circle"
+								name="refresh"
+								on:click={() => reOmitHandler(index)}
+							>
 								<Svg
 									icon="refresh"
 									size={5}
@@ -182,6 +190,7 @@
 								/>
 							</button>
 							<button
+								class="btn btn-sm btn-ghost btn-circle"
 								name="delete"
 								on:click={() => notebooks.removeText({ id: activeNotebookId, textId: text.id })}
 							>
