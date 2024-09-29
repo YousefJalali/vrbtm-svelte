@@ -14,6 +14,8 @@
 		activeNotebookId = $page.params.notebookId
 	}
 
+	$: isFlashcardsVisible = $page.url.pathname.split('/')[3] === 'f'
+
 	async function omitHandler(e: CustomEvent) {
 		let text = e.detail.text
 		if (!activeNotebookId || !text.length) return
@@ -49,23 +51,16 @@
 	}
 </script>
 
-<!-- <svelte:window bind:innerWidth={windowSize} /> -->
-
-<!-- <div class="md:flex flex-col md:max-w-72 md:gap-4 md:basis-0 md:grow-[3] lg:grow-[2.5] lg:ml-4">
-	<Notebooks />
-</div> -->
-
-<!-- <div
-	class="bg-base-100 lg:m-4 lg:mr-0 lg:rounded-s-box border-r lg:border lg:border-r-0 relative w-full flex flex-col lg:basis-0 lg:grow-[5.5]"
-> -->
 <div class="relative flex flex-col lg:basis-0 lg:grow-[5]">
 	{#if activeNotebookId}
 		<!-- Notebook Title -->
 		<div
 			class="hidden lg:flex justify-between absolute top-0 inset-x-0 p-4 rounded-box h-[64px] z-10 prose max-w-none bg-gradient-to-b from-85% from-base-100 to-transparent"
 		>
-			<h2>{$notebooks[activeNotebookId].title}</h2>
-			<!-- <button class="btn btn-ghost btn-circle btn-sm">
+			<h2 class="line-clamp-1 h-fit">{$notebooks[activeNotebookId].title}</h2>
+
+			{#if !isFlashcardsVisible}
+				<a href={`${$page.url.pathname}/f`}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -77,10 +72,11 @@
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
-							d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+							d="M3 8.25V18a2.25 2.25 0 0 0 2.25 2.25h13.5A2.25 2.25 0 0 0 21 18V8.25m-18 0V6a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 6v2.25m-18 0h18M5.25 6h.008v.008H5.25V6ZM7.5 6h.008v.008H7.5V6Zm2.25 0h.008v.008H9.75V6Z"
 						/>
-					</svg></button
-				> -->
+					</svg>
+				</a>
+			{/if}
 		</div>
 
 		<TextList {activeNotebookId} {omitting} />
@@ -90,11 +86,3 @@
 </div>
 
 <slot />
-<!-- </div> -->
-
-<!-- Flashcards -->
-<!-- <div
-	class="flex flex-col bg-base-100 md:max-w-96 lg:m-4 lg:ml-0 lg:border border-l-0 lg:rounded-e-box lg:basis-0 lg:grow-[3]"
->
-	<Flashcards />
-</div> -->

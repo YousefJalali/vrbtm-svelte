@@ -81,8 +81,12 @@
 </script>
 
 <div class="flex flex-col flex-1 h-0 drawer drawer-end md:drawer-open z-10">
-	<!-- checked={$page.url.pathname.split('/')[3] === 'f'} -->
-	<input id="flashcards-drawer" type="checkbox" class="drawer-toggle" />
+	<input
+		id="flashcards-drawer"
+		type="checkbox"
+		class="drawer-toggle"
+		checked={$page.url.pathname.split('/')[3] === 'f'}
+	/>
 
 	<div class="drawer-content flex flex-col items-center justify-center"></div>
 	<div
@@ -93,8 +97,8 @@
 			}
 		}}
 	>
-		<label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-		<!-- <a href={`/n/${$page.params.notebookId}`} aria-label="close sidebar" class="drawer-overlay"></a> -->
+		<!-- <label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label> -->
+		<a href={`/n/${$page.params.notebookId}`} aria-label="close sidebar" class="drawer-overlay"></a>
 
 		<div
 			class="bg-base-100 md:bg-transparent md:rounded-box flex flex-col w-[80vw] md:w-full min-h-screen md:min-h-fit"
@@ -146,6 +150,26 @@
 							</svg>
 						</button>
 					{/if}
+
+					<a
+						href={`/n/${$page.params.notebookId}`}
+						class="hidden lg:flex btn btn-ghost btn-circle btn-sm"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="size-5"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M3 8.25V18a2.25 2.25 0 0 0 2.25 2.25h13.5A2.25 2.25 0 0 0 21 18V8.25m-18 0V6a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 6v2.25m-18 0h18M5.25 6h.008v.008H5.25V6ZM7.5 6h.008v.008H7.5V6Zm2.25 0h.008v.008H9.75V6Z"
+							/>
+						</svg>
+					</a>
 				</div>
 			</div>
 
