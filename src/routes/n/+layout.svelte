@@ -1,6 +1,19 @@
 <script lang="ts">
 	import Alert from '$lib/ui/Alert.svelte'
 	import Logo from '$lib/ui/Logo.svelte'
+	import { onMount } from 'svelte'
+	import Notebooks from './Notebooks.svelte'
+	import { notebooks } from '$lib/stores'
+	import { goto } from '$app/navigation'
+	import { page } from '$app/stores'
+
+	onMount(() => {
+		let firstNotebookId = Object.keys($notebooks)[0]
+
+		let currentPath: string | null = $page.params.notebookId
+
+		goto(`/n/${currentPath || firstNotebookId}`)
+	})
 </script>
 
 <div class="flex flex-col h-dvh max-h-screen">
@@ -26,6 +39,7 @@
 
 		<div class="h-[36px] lg:h-[48px]"><Logo /></div>
 
+		<!-- href={`${$page.url.pathname}/f`} -->
 		<label
 			for="flashcards-drawer"
 			class="btn btn-ghost btn-sm -mr-2 drawer-button md:opacity-0 lg:hidden"
@@ -48,6 +62,10 @@
 	</header>
 	<!-- max-w-[90rem] mx-auto -->
 	<div class="relative flex flex-1 h-0 bg-base-200">
+		<div class="md:flex flex-col md:max-w-72 md:gap-4 md:basis-0 md:grow-[3] lg:grow-[2.5] lg:ml-4">
+			<Notebooks />
+		</div>
+
 		<slot />
 
 		<Alert />

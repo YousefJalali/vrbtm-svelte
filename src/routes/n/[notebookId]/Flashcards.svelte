@@ -81,6 +81,7 @@
 </script>
 
 <div class="flex flex-col flex-1 h-0 drawer drawer-end md:drawer-open z-10">
+	<!-- checked={$page.url.pathname.split('/')[3] === 'f'} -->
 	<input id="flashcards-drawer" type="checkbox" class="drawer-toggle" />
 
 	<div class="drawer-content flex flex-col items-center justify-center"></div>
@@ -93,6 +94,7 @@
 		}}
 	>
 		<label for="flashcards-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+		<!-- <a href={`/n/${$page.params.notebookId}`} aria-label="close sidebar" class="drawer-overlay"></a> -->
 
 		<div
 			class="bg-base-100 md:bg-transparent md:rounded-box flex flex-col w-[80vw] md:w-full min-h-screen md:min-h-fit"

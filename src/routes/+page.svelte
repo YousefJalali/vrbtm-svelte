@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte'
 
 	onMount(() => {
-		goto(`/${Object.keys($notebooks)[0]}`)
+		goto(`/n/${Object.keys($notebooks)[0]}`)
 	})
 </script>
 

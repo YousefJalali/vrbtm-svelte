@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
-	import { alerts, notebooks } from '$lib/stores'
+	import { notebooks } from '$lib/stores'
 	import Logo from '$lib/ui/Logo.svelte'
 
 	let popover: HTMLElement

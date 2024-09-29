@@ -1,27 +1,15 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
-	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { getErrorMessage } from '$lib/utils'
 	import { notebooks, alerts } from '$lib/stores'
 	import Flashcards from './Flashcards.svelte'
-	import Notebooks from './Notebooks.svelte'
 	import TextInput from './TextInput.svelte'
 	import TextList from './TextList.svelte'
 
 	// let windowSize: number
 	let activeNotebookId: null | string = null
 	let omitting = false
-
 	let input: TextInput
-
-	onMount(() => {
-		let firstNotebookId = Object.keys($notebooks)[0]
-
-		let currentPath: string | null = $page.params.notebookId
-
-		goto(`/${currentPath || firstNotebookId}`)
-	})
 
 	$: if (activeNotebookId !== $page.params.notebookId) {
 		activeNotebookId = $page.params.notebookId
@@ -64,9 +52,9 @@
 
 <!-- <svelte:window bind:innerWidth={windowSize} /> -->
 
-<div class="md:flex flex-col md:max-w-72 md:gap-4 md:basis-0 md:grow-[3] lg:grow-[2.5] lg:ml-4">
+<!-- <div class="md:flex flex-col md:max-w-72 md:gap-4 md:basis-0 md:grow-[3] lg:grow-[2.5] lg:ml-4">
 	<Notebooks />
-</div>
+</div> -->
 
 <div
 	class="bg-base-100 lg:m-4 lg:mr-0 lg:rounded-s-box border-r lg:border lg:border-r-0 relative w-full flex flex-col lg:basis-0 lg:grow-[5.5]"
