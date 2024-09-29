@@ -28,9 +28,7 @@
 		</div>
 
 		<div
-			class="relative flex w-full bg-base-100 lg:rounded-box lg:m-4 lg:basis-0 lg:grow-[6] {isFlashcardsVisible
-				? 'border border-blue-100'
-				: ''}"
+			class="relative flex w-full bg-base-100 border lg:rounded-box lg:m-4 lg:basis-0 lg:grow-[6]"
 		>
 			<slot />
 		</div>

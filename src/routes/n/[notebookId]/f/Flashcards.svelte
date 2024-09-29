@@ -109,6 +109,13 @@
 			>
 				<h1 class="text-2xl font-bold font-heading">Flashcards</h1>
 				<div class="flex flex-row-reverse gap-2">
+					<a
+						href={`/n/${$page.params.notebookId}`}
+						class="hidden lg:flex btn btn-ghost btn-circle btn-sm"
+					>
+						<Svg icon="window" />
+					</a>
+
 					<!-- CreateFlashcard -->
 					<button
 						name="create"
@@ -129,13 +136,6 @@
 							<Svg icon="generate" />
 						</button>
 					{/if}
-
-					<a
-						href={`/n/${$page.params.notebookId}`}
-						class="hidden lg:flex btn btn-ghost btn-circle btn-sm"
-					>
-						<Svg icon="window" />
-					</a>
 				</div>
 			</div>
 

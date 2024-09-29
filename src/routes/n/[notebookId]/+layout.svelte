@@ -61,7 +61,7 @@
 			<h2 class="line-clamp-1 h-fit">{$notebooks[activeNotebookId].title}</h2>
 
 			{#if !isFlashcardsVisible}
-				<a href={`${$page.url.pathname}/f`}>
+				<a href={`${$page.url.pathname}/f`} class="btn btn-ghost btn-circle btn-sm">
 					<Svg icon="window" />
 				</a>
 			{/if}

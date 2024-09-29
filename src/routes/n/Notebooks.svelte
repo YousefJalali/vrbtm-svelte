@@ -104,7 +104,7 @@
 		try {
 			notebooks.create()
 			const createdNotebookId = Object.keys($notebooks)[0]
-			goto(`/${createdNotebookId}`)
+			goto(`/n/${createdNotebookId}`)
 		} catch (error) {}
 
 		toggleDrawer()
@@ -227,8 +227,8 @@
 							<span>
 								<Svg icon="archive" size={5} />
 							</span>
-							Archived</summary
-						>
+							Archived
+						</summary>
 						<ul>
 							{#each Object.entries($notebooks) as [id, { title, archived }], i (id)}
 								{#if archived}
@@ -242,7 +242,7 @@
 										>
 											<a
 												class="p-2 flex-1 line-clamp-1 leading-loose"
-												href="/{id}"
+												href="/n/{id}"
 												on:click={toggleDrawer}
 											>
 												{title}
