@@ -72,12 +72,12 @@
 					</ul>
 					<div class="lg:hidden flex items-center mt-3 gap-4">
 						<a
-							href="#"
+							href={null}
 							class="rounded-full text-center transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 focus-visible:outline-none focus-visible:shadow-outline-primary w-full px-5 py-2 bg-base-200 hover:bg-base-300 border-2 border-transparent"
 							>Log in
 						</a>
 						<a
-							href="#"
+							href={null}
 							class="rounded-full text-center transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 focus-visible:outline-none focus-visible:shadow-outline-primary w-full px-5 py-2 bg-primary text-white hover:bg-primary/80"
 							>Try for Free
 						</a>
@@ -87,12 +87,12 @@
 				<div>
 					<div class="hidden lg:flex items-center gap-4">
 						<a
-							href="#"
+							href={null}
 							class="text-sm px-2 py-1 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 focus-visible:outline-none focus-visible:shadow-outline-primary rounded-full"
 							>Log in</a
 						>
 						<a
-							href="#"
+							href={null}
 							class="rounded-full text-center transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 focus-visible:outline-none focus-visible:shadow-outline-primary px-4 py-2 text-sm bg-primary text-white hover:bg-primary/80 inline-flex items-center group gap-px"
 						>
 							<span>Try for Free</span>
@@ -138,7 +138,7 @@
 					</p>
 					<div class="mt-6 flex flex-col sm:flex-row sm:justify-center lg:justify-start gap-3">
 						<a
-							href="#"
+							href={null}
 							target="_blank"
 							rel="noopener"
 							class="rounded-full text-center transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 focus-visible:outline-none focus-visible:shadow-outline-primary px-7 py-2.5 bg-primary text-white hover:bg-primary/80 flex gap-1 items-center justify-center"
@@ -146,7 +146,7 @@
 							Try VRBTM Now
 						</a>
 						<a
-							href="#"
+							href={null}
 							rel="noopener"
 							target="_blank"
 							class="rounded-full text-center transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 focus-visible:outline-none focus-visible:shadow-outline-primary px-7 py-2.5 bg-white border-2 border-primary/50 hover:bg-primary/10 text-primary flex gap-1 items-center justify-center"
@@ -397,7 +397,7 @@
 					</ul>
 					<div class="flex items-center gap-4 mt-6">
 						<a
-							href="#"
+							href={null}
 							class="rounded-full text-center transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 focus-visible:outline-none focus-visible:shadow-outline-primary px-4 py-2 text-sm bg-primary text-white hover:bg-primary/80 inline-flex items-center group gap-px"
 						>
 							<span>Start 14-day trial</span>
@@ -415,7 +415,7 @@
 							</svg>
 						</a>
 						<a
-							href="#"
+							href={null}
 							class="text-sm px-2 transition py-1 text-neutral/60 hover:text-primary focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 focus-visible:outline-none focus-visible:shadow-outline-primary rounded-full"
 						>
 							Contact Support</a
@@ -493,7 +493,7 @@
 					</ul>
 					<div class="flex items-center gap-4 mt-6">
 						<a
-							href="#"
+							href={null}
 							class="rounded-full text-center transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 focus-visible:outline-none focus-visible:shadow-outline-primary px-4 py-2 text-sm bg-primary text-white hover:bg-primary/80 inline-flex items-center group gap-px"
 						>
 							<span>Start 14-day trial</span>
@@ -511,7 +511,7 @@
 							</svg>
 						</a>
 						<a
-							href="#"
+							href={null}
 							class="text-sm px-2 transition py-1 text-neutral/60 hover:text-primary focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 focus-visible:outline-none focus-visible:shadow-outline-primary rounded-full"
 						>
 							Contact Support</a
@@ -1193,7 +1193,7 @@
 			</p>
 			<div class="flex mt-5">
 				<a
-					href="#"
+					href={null}
 					class="rounded-full text-center transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 focus-visible:outline-none focus-visible:shadow-outline-primary px-7 py-2.5 bg-white text-primary/80 border-2 border-transparent"
 					>Start Your Free Trial Today
 				</a>
@@ -1290,7 +1290,7 @@
 					<h3 class="font-medium text-sm text-neutral/80">Company</h3>
 					<div class="flex flex-col mt-3">
 						<a href="/about" class="py-2 text-sm text-neutral/60 hover:text-primary"> About </a><a
-							href="#"
+							href={null}
 							class="py-2 text-sm text-neutral/60 hover:text-primary"
 						>
 							Careers
@@ -1305,14 +1305,13 @@
 				<div>
 					<h3 class="font-medium text-sm text-neutral/80">Product</h3>
 					<div class="flex flex-col mt-3">
-						<a href="#" class="py-2 text-sm text-neutral/60 hover:text-primary"> For Startups </a><a
-							href="#"
-							class="py-2 text-sm text-neutral/60 hover:text-primary"
-						>
+						<a href={null} class="py-2 text-sm text-neutral/60 hover:text-primary">
+							For Startups
+						</a><a href={null} class="py-2 text-sm text-neutral/60 hover:text-primary">
 							Features
 						</a><a href="/pricing" class="py-2 text-sm text-neutral/60 hover:text-primary">
 							Pricing
-						</a><a href="#" class="py-2 text-sm text-neutral/60 hover:text-primary">
+						</a><a href={null} class="py-2 text-sm text-neutral/60 hover:text-primary">
 							Integrations
 						</a>
 					</div>
@@ -1320,14 +1319,13 @@
 				<div>
 					<h3 class="font-medium text-sm text-neutral/80">Resources</h3>
 					<div class="flex flex-col mt-3">
-						<a href="#" class="py-2 text-sm text-neutral/60 hover:text-primary"> Help Center </a><a
-							href="#"
-							class="py-2 text-sm text-neutral/60 hover:text-primary"
-						>
+						<a href={null} class="py-2 text-sm text-neutral/60 hover:text-primary">
+							Help Center
+						</a><a href={null} class="py-2 text-sm text-neutral/60 hover:text-primary">
 							Guides
-						</a><a href="#" class="py-2 text-sm text-neutral/60 hover:text-primary">
+						</a><a href={null} class="py-2 text-sm text-neutral/60 hover:text-primary">
 							Documentation
-						</a><a href="#" class="py-2 text-sm text-neutral/60 hover:text-primary">
+						</a><a href={null} class="py-2 text-sm text-neutral/60 hover:text-primary">
 							Uptime Status
 						</a>
 					</div>

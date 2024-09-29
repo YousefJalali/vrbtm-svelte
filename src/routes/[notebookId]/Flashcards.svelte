@@ -100,7 +100,7 @@
 			<div
 				class="sticky rounded-se-box overflow-hidden border-b top-0 z-50 bg-base-100 flex justify-between items-center p-4"
 			>
-				<h1 class="text-2xl font-bold">Flashcards</h1>
+				<h1 class="text-2xl font-bold font-heading">Flashcards</h1>
 				<div class="flex flex-row-reverse gap-2">
 					<!-- CreateFlashcard -->
 					<button
