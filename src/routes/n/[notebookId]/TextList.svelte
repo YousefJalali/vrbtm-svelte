@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores'
 	import { notebooks } from '$lib/stores'
 	import { Svg } from '$lib/ui'
 	import { marked } from 'marked'
@@ -197,6 +198,13 @@
 								<Svg icon="delete" size={5} />
 							</button>
 						</fieldset>
+
+						<a
+							class="ml-auto btn btn-sm btn-secondary"
+							href={`/n/${$page.params.notebookId}/${text.id}`}
+						>
+							Quiz
+						</a>
 					</div>
 				{/if}
 			</article>

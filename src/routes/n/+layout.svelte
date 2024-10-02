@@ -7,15 +7,15 @@
 	import { page } from '$app/stores'
 	import Header from '$lib/ui/Header.svelte'
 
-	$: isFlashcardsVisible = $page.url.pathname.split('/')[3] === 'f'
+	// $: isFlashcardsVisible = $page.url.pathname.split('/')[3] === 'f'
 
-	onMount(() => {
-		let firstNotebookId = Object.keys($notebooks)[0]
+	// onMount(() => {
+	// 	let firstNotebookId = Object.keys($notebooks)[0]
 
-		let currentPath: string | null = $page.params.notebookId
+	// 	let currentPath: string | null = $page.params.notebookId
 
-		goto(`/n/${currentPath || firstNotebookId}${isFlashcardsVisible ? '/f' : ''}`)
-	})
+	// 	goto(`/n/${currentPath || firstNotebookId}${isFlashcardsVisible ? '/f' : ''}`)
+	// })
 </script>
 
 <div class="flex flex-col h-dvh max-h-screen">

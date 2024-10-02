@@ -10,7 +10,8 @@ const openai = new OpenAI({
 })
 
 const TextOmit = z.object({
-	text: z.string()
+	text: z.string(),
+	omittedKeywords: z.string().array()
 })
 
 export const POST = async (event: RequestEvent) => {
@@ -23,7 +24,7 @@ export const POST = async (event: RequestEvent) => {
 			messages: [
 				{
 					role: 'user',
-					content: `"${text}". Find all the keywords and put them inside double backticks in place. and return the text without double quote. note: if you receive anything other than text, reply with something like Please insert a paragraph`
+					content: `"${text}". Find all the keywords and put them inside double backticks in place. and return the text without double quote and the list of omitted keyword in the text including duplicates.`
 				}
 			],
 			response_format: zodResponseFormat(TextOmit, 'text_omit')

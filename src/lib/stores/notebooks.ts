@@ -7,18 +7,49 @@ const defaultNotebooks = {
 		title: 'Understanding Quantum Physics',
 		text: [
 			{
-				id: uuid(),
+				id: '9ecf1752-c732-4d77-9e54-525d5e784b4d',
 				original:
 					'Advanced calculus often involves techniques such as integration by parts, partial fractions, and contour integration. For instance, the integral of e^x from 0 to 1 is e - 1, which is approximately 1.718. Another key concept is the Taylor series, which provides a polynomial approximation of functions around a point. Understanding these techniques is essential for solving complex problems in fields like physics and engineering. The interplay between theory and application makes advanced calculus a critical area of study.',
 				omitted:
-					'``Advanced calculus`` often involves techniques such as ``integration by parts``, ``partial fractions``, and ``contour integration``. For instance, the integral of ``e^x`` from ``0`` to ``1`` is ``e - 1``, which is approximately ``1.718``. Another key concept is the ``Taylor series``, which provides a polynomial approximation of functions around a point. Understanding these techniques is essential for solving complex problems in fields like ``physics`` and ``engineering``. The interplay between theory and application makes ``advanced calculus`` a critical area of study.'
+					'`Advanced calculus` often involves techniques such as `integration by parts`, `partial fractions`, and `contour integration`. For instance, the integral of `e^x` from `0` to `1` is `e - 1`, which is approximately `1.718`. Another key concept is the `Taylor series`, which provides a polynomial approximation of functions around a point. Understanding these techniques is essential for solving complex problems in fields like `physics` and `engineering`. The interplay between theory and application makes `advanced calculus` a critical area of study.',
+				keywords: [
+					'Advanced calculus',
+					'integration by parts',
+					'partial fractions',
+					'contour integration',
+					'e^x',
+					'0',
+					'1',
+					'e - 1',
+					'1.718',
+					'Taylor series',
+					'physics',
+					'engineering',
+					'advanced calculus'
+				]
 			},
 			{
-				id: uuid(),
+				id: '2e151807-31ff-48af-8914-319a8ad80183',
 				original:
 					'Quantum physics explores the behavior of particles at the atomic and subatomic levels. For example, particles can exist in multiple states simultaneously, a phenomenon known as superposition. Additionally, the uncertainty principle, formulated by Werner Heisenberg, states that one cannot simultaneously know both the position and momentum of a particle with absolute precision. This principle is crucial for understanding the complex nature of quantum mechanics. It is fascinating how such principles influence technologies like quantum computing and cryptography.',
 				omitted:
-					'`Quantum physics` explores the behavior of `particles` at the `atomic` and `subatomic` levels. For example, `particles` can exist in multiple states simultaneously, a phenomenon known as `superposition`. Additionally, the `uncertainty principle`, formulated by `Werner Heisenberg`, states that one cannot simultaneously know both the `position` and `momentum` of a `particle` with absolute precision. This principle is crucial for understanding the complex nature of `quantum mechanics`. It is fascinating how such principles influence technologies like `quantum computing` and `cryptography`.'
+					'`Quantum physics` explores the behavior of `particles` at the `atomic` and `subatomic` levels. For example, `particles` can exist in multiple states simultaneously, a phenomenon known as `superposition`. Additionally, the `uncertainty principle`, formulated by `Werner Heisenberg`, states that one cannot simultaneously know both the `position` and `momentum` of a `particle` with absolute precision. This principle is crucial for understanding the complex nature of `quantum mechanics`. It is fascinating how such principles influence technologies like `quantum computing` and `cryptography`.',
+				keywords: [
+					'Quantum physics',
+					'particles',
+					'atomic',
+					'subatomic',
+					'particles',
+					'superposition',
+					'uncertainty principle',
+					'Werner Heisenberg',
+					'position',
+					'momentum',
+					'particle',
+					'quantum mechanics',
+					'quantum computing',
+					'cryptography'
+				]
 			}
 		],
 		archived: false,
@@ -259,7 +290,7 @@ function handleNotebooks() {
 	const { subscribe, set, update } = writable<{
 		[notebookId: string]: {
 			title: string
-			text: { id: string; original: string; omitted: string }[]
+			text: { id: string; original: string; omitted: string; keywords: string[] }[]
 			archived: boolean
 			pinned: boolean
 			flashcards: string[]
@@ -316,7 +347,10 @@ function handleNotebooks() {
 
 		const textId = uuid()
 
-		allNotebooks[id].text = [{ id: textId, original: text, omitted: '' }, ...allNotebooks[id].text]
+		allNotebooks[id].text = [
+			{ id: textId, original: text, omitted: '', keywords: [] },
+			...allNotebooks[id].text
+		]
 
 		set(allNotebooks)
 
@@ -395,9 +429,12 @@ function handleNotebooks() {
 		//Ai refused to respond
 		if (res.refusal) throw Error(omitted.message)
 
-		const content = res.parsed || JSON.parse(res.content).text
+		const content = res.parsed || JSON.parse(res.content)
 
-		notebook.text[index].omitted = content
+		console.log(content)
+
+		notebook.text[index].omitted = content.text
+		notebook.text[index].keywords = content.omittedKeywords
 
 		allNotebooks[id] = notebook
 
@@ -467,6 +504,14 @@ function handleNotebooks() {
 		set(allNotebooks)
 	}
 
+	function getText({ notebookId, textId }: { notebookId: string; textId: string }) {
+		const allNotebooks = { ...get(notebooks) }
+
+		for (const t of allNotebooks[notebookId].text) {
+			if (t.id === textId) return t
+		}
+	}
+
 	return {
 		subscribe,
 		set,
@@ -482,7 +527,8 @@ function handleNotebooks() {
 		toggleArchive,
 		togglePin,
 		addFlashcard,
-		removeFlashcard
+		removeFlashcard,
+		getText
 	}
 }
 

@@ -52,11 +52,11 @@
 	}
 </script>
 
-<div class="relative flex flex-col lg:basis-0 lg:grow-[5]">
+<div class="relative flex flex-col lg:basis-0 lg:grow-[5] lg:pt-8">
 	{#if activeNotebookId}
 		<!-- Notebook Title -->
 		<div
-			class="hidden lg:flex justify-between absolute top-0 inset-x-0 p-4 rounded-box h-[64px] z-10 prose max-w-none bg-gradient-to-b from-85% from-base-100 to-transparent"
+			class="hidden lg:flex justify-between absolute top-0 inset-x-0 p-4 pb-8 rounded-box z-10 prose max-w-none bg-gradient-to-b from-60% from-base-100 to-transparent"
 		>
 			<h2 class="line-clamp-1 h-fit">{$notebooks[activeNotebookId].title}</h2>
 
