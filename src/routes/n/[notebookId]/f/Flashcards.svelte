@@ -7,6 +7,7 @@
 
 	let flashcardsFormModal: HTMLDialogElement
 	let popover: HTMLElement
+	let newFlashcardPopover: HTMLElement
 	let flashcardsEle: { [cardId: string]: HTMLLIElement } = {}
 	let selectedCardId: null | string = null
 	let generatingFlashcard = false
@@ -67,6 +68,8 @@
 	}
 
 	async function generateFlashcard() {
+		newFlashcardPopover.hidePopover()
+
 		generatingFlashcard = true
 		try {
 			await flashcards.generate({ notebookId: activeNotebookId })
@@ -78,6 +81,18 @@
 				message: getErrorMessage(error)
 			})
 		}
+	}
+
+	function newFlashcardPopoverHandler(e: MouseEvent) {
+		// if(!e.target) return
+
+		const { x, y, width } = (e.target as HTMLElement).getBoundingClientRect()
+		let padding = 16
+
+		let popoverWidth = 200
+
+		newFlashcardPopover.style.transform = `translate(${x - padding + width - popoverWidth - 20}px, ${y - padding + 20}px)`
+		newFlashcardPopover.showPopover()
 	}
 </script>
 
@@ -120,22 +135,10 @@
 					<button
 						name="create"
 						class="btn btn-ghost btn-circle btn-sm"
-						on:click={() => flashcardsFormModal.showModal()}
+						on:click={newFlashcardPopoverHandler}
 					>
 						<Svg icon="plus" />
 					</button>
-
-					<!-- Generate Flashcard -->
-					{#if notebookHasText}
-						<button
-							name="generate"
-							class="btn btn-ghost btn-circle btn-sm"
-							on:click={generateFlashcard}
-							disabled={generatingFlashcard}
-						>
-							<Svg icon="generate" />
-						</button>
-					{/if}
 				</div>
 			</div>
 
@@ -223,7 +226,27 @@
 	</div>
 </div>
 
-<!-- Options -->
+<!-- New flashcard Popover -->
+<div bind:this={newFlashcardPopover} popover="" id="new-flashcard" class="m-4 bg-transparent">
+	<ul class="menu dropdown-content border border-base-300 bg-base-100 rounded-box z-[1] p-2">
+		<li>
+			<a href={null} on:click={() => flashcardsFormModal.showModal()}>
+				<Svg icon="plus" size={5} />
+				Create Flashcard
+			</a>
+		</li>
+		{#if notebookHasText}
+			<li class="text-primary">
+				<a href={null} on:click={generateFlashcard}>
+					<Svg icon="generate" size={5} />
+					Generate Flashcard
+				</a>
+			</li>
+		{/if}
+	</ul>
+</div>
+
+<!-- Options Popover -->
 <div
 	bind:this={popover}
 	popover=""
@@ -239,13 +262,13 @@
 		<ul class="menu dropdown-content border border-base-300 bg-base-100 rounded-box z-[1] p-2">
 			<li>
 				<a href={null} on:click={onEdit}>
-					<Svg icon="edit" />
+					<Svg icon="edit" size={5} />
 					Edit
 				</a>
 			</li>
 			<li class="text-error">
 				<a href={null} on:click={onDelete}>
-					<Svg icon="delete" />
+					<Svg icon="delete" size={5} />
 					Delete
 				</a>
 			</li>
