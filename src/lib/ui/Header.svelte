@@ -16,12 +16,17 @@
 	<div class="h-[36px] lg:h-[48px]"><Logo /></div>
 
 	<!-- href={`${$page.url.pathname}/f`} -->
-	<a
-		href={isFlashcardsVisible ? `/n/${$page.params.notebookId}` : `${$page.url.pathname}/f`}
-		class="btn btn-ghost btn-circle btn-sm drawer-button lg:hidden"
-	>
-		<Svg icon="window" />
-	</a>
+	{#if !$page.params.textId}
+		<a
+			href={isFlashcardsVisible ? `/n/${$page.params.notebookId}` : `${$page.url.pathname}/f`}
+			class="btn btn-ghost btn-circle btn-sm drawer-button lg:hidden"
+		>
+			<Svg icon="window" />
+		</a>
+	{:else}
+		<div class="size-8" />
+	{/if}
+
 	<!-- <label for="flashcards-drawer" class="btn btn-ghost btn-sm -mr-2 drawer-button lg:hidden">
 			{@html card}
 		</label> -->

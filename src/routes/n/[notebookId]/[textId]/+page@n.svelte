@@ -2,9 +2,6 @@
 	import { page } from '$app/stores'
 	import { notebooks } from '$lib/stores'
 	import { Svg } from '$lib/ui'
-	import { marked } from 'marked'
-	import { flip } from 'svelte/animate'
-	import { v4 as uuid } from 'uuid'
 
 	$: notebookId = $page.params.notebookId
 	$: textId = $page.params.textId
@@ -92,15 +89,12 @@
 			dropZones[id].appendChild(draggableItems[itemId])
 			answers[index] = draggableItems[itemId].innerText.trim()
 
-			console.log(answers)
 			return
 		}
 
 		const oldItemId = dropZones[id].children[0].id
 
 		answers[index] = draggableItems[itemId].innerText.trim()
-
-		console.log(answers)
 
 		dropZones['main'].appendChild(draggableItems[oldItemId])
 		dropZones[id].appendChild(draggableItems[itemId])
@@ -127,11 +121,17 @@
 	function reset() {
 		scorePercentage = null
 		wrongAnswersIndex = []
+
+		for (const id of Object.keys(dropZones)) {
+			if (dropZones[id].children.length && id !== 'main') {
+				dropZones['main'].appendChild(dropZones[id].children[0])
+			}
+		}
 	}
 </script>
 
-<div class="flex flex-col flex-1 p-6 overflow-y-scroll">
-	<div class="flex mb-6">
+<div class="flex flex-col flex-1 px-6 overflow-y-scroll">
+	<div class="flex my-4">
 		<a href={`/n/${$page.params.notebookId}`} class="btn btn-ghost btn-circle btn-sm -ml-2">
 			<Svg icon="back" size={5} />
 		</a>
@@ -211,7 +211,7 @@
 		</div>
 
 		{#if !scorePercentage}
-			<div class="flex mt-10">
+			<div class="flex mt-10 mb-6">
 				<button on:click={submitHandler} class="btn btn-primary w-fit mx-auto"
 					>Reveal My Score</button
 				>
@@ -241,7 +241,7 @@
 				<button on:click={reset} class="btn btn-primary w-fit mx-auto">Play Again</button>
 			</div>
 
-			<div class="prose mt-12">
+			<div class="prose mt-12 mb-6">
 				<p class="opacity-70">
 					Tip: Practice daily to improve your language and communication skills!
 				</p>
