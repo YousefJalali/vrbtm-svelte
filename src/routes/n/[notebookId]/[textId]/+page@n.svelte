@@ -130,15 +130,15 @@
 	}
 </script>
 
-<div class="flex flex-col flex-1 p-6">
-	<div class="flex prose">
-		<a href={`/n/${$page.params.notebookId}`} class="btn btn-ghost btn-circle btn-sm mb-6">
+<div class="flex flex-col flex-1 p-6 overflow-y-scroll">
+	<div class="flex mb-6">
+		<a href={`/n/${$page.params.notebookId}`} class="btn btn-ghost btn-circle btn-sm -ml-2">
 			<Svg icon="back" size={5} />
 		</a>
 		<!-- <h1>Improve Your Vocabulary!</h1> -->
 	</div>
 
-	<div class="flex-1 h-0 overflow-y-scroll">
+	<div class="flex-1 lg:h-0 lg:overflow-y-scroll">
 		<div class="prose">
 			<h2>How to Play</h2>
 			<ol>
@@ -159,14 +159,14 @@
 				<div class="cursor-not-allowed absolute inset-0"></div>
 			{/if}
 			{#if text}
-				<p class="leading-loose">
+				<p class="leading-[32px] lg:leading-[36px]">
 					{#each text.omitted.split(/`.*?`/g) as word, i}
 						{@const id = word + i}
 						{#if i !== 0}
 							<!-- svelte-ignore a11y-no-static-element-interactions -->
 							<span
 								{id}
-								class="bg-base-200/50 border rounded-box min-h-6 h-fit px-12 py-0.5 has-[span]:px-0 mx-1 {dragOver ===
+								class="inline-flex bg-base-200/50 border rounded-box mr-0.5 min-h-6 w-20 align-middle has-[span]:h-fit has-[span]:w-fit {dragOver ===
 								id
 									? 'border-primary'
 									: ''} {wrongAnswersIndex.includes(i)
@@ -185,7 +185,7 @@
 					<!-- {@html marked(text.omitted.replace(/`.*?`/g, '<span></span>'))} -->
 				</p>
 
-				<div class="mt-8 flex flex-wrap gap-4 w-fit" bind:this={dropZones['main']}>
+				<div class="mt-8 flex flex-wrap gap-3 w-fit" bind:this={dropZones['main']}>
 					{#each text.keywords as keyword, i (keyword + i)}
 						{@const id = keyword + i}
 						<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -194,7 +194,7 @@
 						<span
 							{id}
 							bind:this={draggableItems[id]}
-							class="prose bg-primary/10 text-primary text-center cursor-grab text-sm px-2 py-1 rounded-box overflow-hidden {draggedItemId ===
+							class="prose bg-primary/10 text-primary text-center cursor-grab text-sm px-2 py-0.5 rounded-box overflow-hidden {draggedItemId ===
 							id
 								? 'hidden'
 								: ''}"
@@ -212,7 +212,7 @@
 
 		{#if !scorePercentage}
 			<div class="flex mt-10">
-				<button on:click={submitHandler} class="btn btn-lg btn-primary w-fit mx-auto"
+				<button on:click={submitHandler} class="btn btn-primary w-fit mx-auto"
 					>Reveal My Score</button
 				>
 			</div>
@@ -238,7 +238,7 @@
 			</div>
 
 			<div class="flex mt-10">
-				<button on:click={reset} class="btn btn-lg btn-primary w-fit mx-auto">Play Again</button>
+				<button on:click={reset} class="btn btn-primary w-fit mx-auto">Play Again</button>
 			</div>
 
 			<div class="prose mt-12">
