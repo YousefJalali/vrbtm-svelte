@@ -40,8 +40,9 @@
 			data[key] = value.toString()
 		}
 
-		if (selectedCardId) {
-			flashcards.edit({ id: selectedCardId, question: data.question, answer: data.answer })
+		if (editCardId) {
+			flashcards.edit({ id: editCardId, question: data.question, answer: data.answer })
+			editCardId = null
 		} else {
 			const notebookId = $page.params.notebookId
 			if (!notebookId) return
