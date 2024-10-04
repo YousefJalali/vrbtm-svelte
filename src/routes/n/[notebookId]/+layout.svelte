@@ -52,7 +52,7 @@
 	}
 </script>
 
-<div class="relative flex flex-col lg:basis-0 lg:grow-[5] lg:pt-8">
+<div class="relative w-full flex flex-col lg:basis-0 lg:grow-[5] lg:pt-8">
 	{#if activeNotebookId}
 		<!-- Notebook Title -->
 		<div

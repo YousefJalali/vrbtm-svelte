@@ -32,6 +32,16 @@
 		}
 	}
 
+	// let w = 0
+	// $: if (draggableItems) {
+	// 	for (const [id, ele] of Object.entries(draggableItems)) {
+	// 		console.log(id, ele.getBoundingClientRect().width)
+	// 		w += ele.getBoundingClientRect().width + 8
+	// 	}
+
+	// 	console.log(w)
+	// }
+
 	function clampScore(score: string) {
 		return +score >= 80 ? 80 : +score >= 50 ? 50 : 0
 	}
@@ -130,8 +140,8 @@
 	}
 </script>
 
-<div class="flex flex-col flex-1 px-6 overflow-y-scroll">
-	<div class="flex my-4">
+<div class="relative flex flex-col flex-1 overflow-y-scroll">
+	<div class="flex my-4 px-4 md:px-6">
 		<a href={`/n/${$page.params.notebookId}`} class="btn btn-ghost btn-circle btn-sm -ml-2">
 			<Svg icon="back" size={5} />
 		</a>
@@ -139,8 +149,8 @@
 	</div>
 
 	<div class="flex-1 lg:h-0 lg:overflow-y-scroll">
-		<div class="prose">
-			<h2>How to Play</h2>
+		<div class="prose px-4 md:px-6">
+			<h2>Instructions</h2>
 			<ol>
 				<li>Drag the words from the list below.</li>
 				<li>Drop them in the appropriate gaps.</li>
@@ -150,16 +160,13 @@
 
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div
-			class="relative mt-12"
+			class="mt-12"
 			on:drop|preventDefault={(e) => dropHandler(e, 'main', Infinity)}
 			on:dragover={dragoverHandler}
 			on:dragleave={dragleaveHandler}
 		>
-			{#if scorePercentage}
-				<div class="cursor-not-allowed absolute inset-0"></div>
-			{/if}
 			{#if text}
-				<p class="leading-[32px] lg:leading-[36px]">
+				<p class="relative leading-[32px] lg:leading-[36px] px-4 md:px-6">
 					{#each text.omitted.split(/`.*?`/g) as word, i}
 						{@const id = word + i}
 						{#if i !== 0}
@@ -182,69 +189,86 @@
 						{/if}
 						{word}
 					{/each}
-					<!-- {@html marked(text.omitted.replace(/`.*?`/g, '<span></span>'))} -->
+
+					{#if scorePercentage}
+						<div class="cursor-not-allowed absolute inset-0"></div>
+					{/if}
 				</p>
 
-				<div class="mt-8 flex flex-wrap gap-3 w-fit" bind:this={dropZones['main']}>
-					{#each text.keywords as keyword, i (keyword + i)}
-						{@const id = keyword + i}
-						<!-- svelte-ignore a11y-no-static-element-interactions -->
-						<!-- bind:this={draggableItems[id]} -->
-						<!-- animate:flip={{ duration: 300 }} -->
-						<span
-							{id}
-							bind:this={draggableItems[id]}
-							class="prose bg-primary/10 text-primary text-center cursor-grab text-sm px-2 py-0.5 rounded-box overflow-hidden {draggedItemId ===
-							id
-								? 'hidden'
-								: ''}"
-							draggable="true"
-							on:dragstart={dragstartHandler}
-							on:drag={dragHandler}
-							on:dragend={(e) => dragendHandler(e, id)}
-						>
-							{keyword}
-						</span>
-					{/each}
+				<div
+					class="py-4 mt-8 sticky bottom-0 bg-base-100 h-fit overflow-y-hidden w-full overflow-x-scroll"
+				>
+					<div
+						class="grid grid-rows-2 gap-2 scroll-px-4 auto-cols-min grid-flow-col sm:px-4 sm:flex sm:flex-wrap {scorePercentage
+							? 'hidden'
+							: ''}"
+						bind:this={dropZones['main']}
+					>
+						{#each text.keywords as keyword, i (keyword + i)}
+							{@const id = keyword + i}
+							<!-- svelte-ignore a11y-no-static-element-interactions -->
+							<!-- bind:this={draggableItems[id]} -->
+							<!-- animate:flip={{ duration: 300 }} -->
+							<span
+								{id}
+								bind:this={draggableItems[id]}
+								class="prose whitespace-nowrap w-fit select-none bg-primary/10 text-primary text-center cursor-grab text-sm px-2 py-0.5 rounded-box overflow-hidden {draggedItemId ===
+								id
+									? 'hidden'
+									: ''}"
+								draggable="true"
+								on:dragstart={dragstartHandler}
+								on:drag={dragHandler}
+								on:dragend={(e) => dragendHandler(e, id)}
+							>
+								{keyword}
+							</span>
+						{/each}
+					</div>
 				</div>
+
+				{#if !scorePercentage}
+					<div class="flex mt-10 mb-4 lg:mb-6">
+						<button on:click={submitHandler} class="btn btn-primary w-fit mx-auto"
+							>Reveal My Score</button
+						>
+					</div>
+				{/if}
 			{/if}
 		</div>
 
-		{#if !scorePercentage}
-			<div class="flex mt-10 mb-6">
-				<button on:click={submitHandler} class="btn btn-primary w-fit mx-auto"
-					>Reveal My Score</button
-				>
-			</div>
-		{:else}
-			<div class="mt-12 mx-auto max-w-5xl w-fit text-center">
-				<div
-					class="radial-progress text-primary"
-					style="--value:{+scorePercentage};"
-					role="progressbar"
-				>
-					{scorePercentage}%
-				</div>
-				<!-- <h3 class="text-3xl font-bold text-center text-gray-700">What Your Results Reveal</h3> -->
+		<!-- Score result -->
+		{#if scorePercentage}
+			<div class="px-4">
+				<div class="mt-12 mx-auto max-w-5xl w-fit text-center">
+					<div
+						class="radial-progress text-primary"
+						style="--value:{+scorePercentage};"
+						role="progressbar"
+					>
+						{scorePercentage}%
+					</div>
+					<!-- <h3 class="text-3xl font-bold text-center text-gray-700">What Your Results Reveal</h3> -->
 
-				<div class="prose mt-8 flex flex-col justify-center">
-					<h4 class="text-xl font-semibold {`${result[clampScore(scorePercentage)].color}`}">
-						{result[clampScore(scorePercentage)].title}
-					</h4>
-					<p class="text-gray-600 mt-2">
-						{result[clampScore(scorePercentage)].description}
+					<div class="prose mt-8 flex flex-col justify-center">
+						<h4 class="text-xl font-semibold {`${result[clampScore(scorePercentage)].color}`}">
+							{result[clampScore(scorePercentage)].title}
+						</h4>
+						<p class="text-gray-600 mt-2">
+							{result[clampScore(scorePercentage)].description}
+						</p>
+					</div>
+				</div>
+
+				<div class="flex mt-10">
+					<button on:click={reset} class="btn btn-primary w-fit mx-auto">Try Again</button>
+				</div>
+
+				<div class="prose mt-12 mb-4 lg:mb-6">
+					<p class="opacity-70">
+						Tip: Practice daily to improve your language and communication skills!
 					</p>
 				</div>
-			</div>
-
-			<div class="flex mt-10">
-				<button on:click={reset} class="btn btn-primary w-fit mx-auto">Play Again</button>
-			</div>
-
-			<div class="prose mt-12 mb-6">
-				<p class="opacity-70">
-					Tip: Practice daily to improve your language and communication skills!
-				</p>
 			</div>
 		{/if}
 	</div>
