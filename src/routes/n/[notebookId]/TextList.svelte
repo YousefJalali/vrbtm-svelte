@@ -54,7 +54,10 @@
 	}
 </script>
 
-<div class="mx-4 py-6 md:pt-[48px] flex flex-col-reverse gap-3 flex-1 h-0 overflow-y-scroll">
+<div
+	title={$notebooks[activeNotebookId].title}
+	class="mx-4 py-6 md:pt-[48px] flex flex-col-reverse gap-3 flex-1 h-0 overflow-y-scroll"
+>
 	<!-- Scanning text... -->
 	{#if omitting}
 		<div class="p-1 rounded-box leading-relaxed h-fit w-full [&>p]:m-0 text-center">
