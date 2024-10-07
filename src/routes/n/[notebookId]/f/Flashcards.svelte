@@ -158,7 +158,7 @@
 
 						<div class="flex flex-col justify-center">
 							<button
-								class="btn btn-primary btn-sm"
+								class="btn btn-primary btn-sm w-fit mx-auto"
 								on:click={() => flashcardsFormModal.showModal()}
 							>
 								<Svg icon="plus" size={5} />

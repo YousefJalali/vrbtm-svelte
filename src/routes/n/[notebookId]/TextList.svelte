@@ -69,7 +69,7 @@
 	{#if !$notebooks[activeNotebookId].text.length}
 		<div class="prose max-w-none flex flex-col flex-1 items-center justify-center text-center p-6">
 			<!-- Replace this with your SVG -->
-			<Svg icon="chat" size={16} />
+			<Svg icon="chat" classes="size-16" />
 
 			<h3>Nothing here yet</h3>
 			<p>Insert some text to be omitted.</p>

@@ -67,9 +67,11 @@
 			{/if}
 		</div>
 
-		<TextList {activeNotebookId} {omitting} />
+		<div class="flex flex-col flex-1 h-0 w-full max-w-3xl mx-auto">
+			<TextList {activeNotebookId} {omitting} />
 
-		<TextInput on:omit={omitHandler} bind:this={input} />
+			<TextInput on:omit={omitHandler} bind:this={input} />
+		</div>
 	{/if}
 </div>
 
