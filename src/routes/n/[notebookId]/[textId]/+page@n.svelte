@@ -6,7 +6,13 @@
 	$: notebookId = $page.params.notebookId
 	$: textId = $page.params.textId
 	$: text = notebooks.getText({ notebookId, textId })
+	$: if (scorePercentage && tipEle) {
+		// container.scrollTop = container.scrollHeight
+		// console.log(container.scrollHeight)
+		tipEle.scrollIntoView({ behavior: 'smooth', block: 'end' })
+	}
 
+	let tipEle: HTMLDivElement
 	let draggedItemId: string | null = null
 	let dragOver: string | null = null
 	let draggableItems: { [id: string]: HTMLSpanElement } = {}
@@ -140,7 +146,7 @@
 	}
 </script>
 
-<div class="relative flex flex-col flex-1 overflow-y-scroll">
+<div class="relative flex flex-col flex-1 overflow-y-scroll max-w-3xl mx-auto">
 	<div class="flex my-4 px-4 md:px-6">
 		<a href={`/n/${$page.params.notebookId}`} class="btn btn-ghost btn-circle btn-sm -ml-2">
 			<Svg icon="back" size={5} />
@@ -264,8 +270,8 @@
 					<button on:click={reset} class="btn btn-primary w-fit mx-auto">Try Again</button>
 				</div>
 
-				<div class="prose mt-12 mb-4 lg:mb-6">
-					<p class="opacity-70">
+				<div bind:this={tipEle} class="prose mt-12 lg:mb-6">
+					<p class="opacity-70 pb-4">
 						Tip: Practice daily to improve your language and communication skills!
 					</p>
 				</div>
