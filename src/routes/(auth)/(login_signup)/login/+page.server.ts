@@ -1,8 +1,15 @@
 import { fail, redirect } from '@sveltejs/kit'
-import type { Actions } from './$types'
+import type { Actions, PageServerLoad } from './$types'
 import prisma from '$lib/prisma'
 import { lucia } from '$lib/server/auth'
 import { Argon2id } from 'oslo/password'
+
+export const load: PageServerLoad = async (event) => {
+	if (event.locals.user) redirect(302, '/')
+	return {
+		user: event.locals.user
+	}
+}
 
 export const actions = {
 	login: async ({ cookies, request }) => {

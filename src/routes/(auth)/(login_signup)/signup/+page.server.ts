@@ -72,7 +72,8 @@ export const actions: Actions = {
 					id: userId,
 					name,
 					email,
-					hashedPassword
+					hashedPassword,
+					usedTokens: 0
 				}
 			})
 		} catch (error) {

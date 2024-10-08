@@ -1,5 +1,14 @@
 <script lang="ts">
 	import '../app.css'
+
+	export let data: {
+		user: {
+			id: string
+			email: string
+			name: string
+			emailVerified: boolean
+		} | null
+	}
 </script>
 
 <svelte:head>
@@ -10,5 +19,11 @@
 		rel="stylesheet"
 	/>
 </svelte:head>
+
+{#if data.user && !data.user.emailVerified}
+	<div class="w-full h-fit bg-warning text-center text-sm py-2">
+		Your email is not verified. <a class="link" href="/email-verification">Verify you email</a>
+	</div>
+{/if}
 
 <slot />

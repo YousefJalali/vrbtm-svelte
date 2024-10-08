@@ -48,6 +48,7 @@ model User {
   emailVerified  Boolean     @default(false)
   name           String
   hashedPassword String?
+  usedTokens     Int
   notebooks      Notebook[]
   flashcards     Flashcard[]
   sessions       Session[]

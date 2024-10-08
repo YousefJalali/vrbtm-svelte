@@ -9,13 +9,12 @@
 
 	// $: isFlashcardsVisible = $page.url.pathname.split('/')[3] === 'f'
 
-	// onMount(() => {
-	// 	let firstNotebookId = Object.keys($notebooks)[0]
-
-	// 	let currentPath: string | null = $page.params.notebookId
-
-	// 	goto(`/n/${currentPath || firstNotebookId}${isFlashcardsVisible ? '/f' : ''}`)
-	// })
+	onMount(() => {
+		if (!$page.params.notebookId) {
+			const firstNotebookId = Object.keys($notebooks)[0]
+			goto(`/n/${firstNotebookId}`)
+		}
+	})
 </script>
 
 <div class="flex flex-col h-dvh max-h-screen">
