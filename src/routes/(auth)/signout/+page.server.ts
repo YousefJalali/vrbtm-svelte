@@ -18,6 +18,6 @@ export const actions: Actions = {
 			path: '.',
 			...sessionCookie.attributes
 		})
-		redirect(302, '/login')
+		redirect(302, '/')
 	}
 }

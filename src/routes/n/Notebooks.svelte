@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { notebooks } from '$lib/stores'
@@ -153,10 +154,38 @@
 		<div
 			class="bg-base-100 lg:bg-base-200 p-4 lg:p-0 flex flex-col w-[80vw] md:max-w-96 lg:w-full min-h-screen lg:min-h-fit"
 		>
-			<div class="flex flex-col mb-12 mt-4">
-				<a class="btn btn-ghost w-fit h-fit mx-auto [&>svg]:size-24" href="/">
+			<div class="flex justify-between mb-12 mt-4 h-10">
+				<a class="btn btn-ghost p-0 w-fit h-full [&>svg]:h-full" href="/">
 					<Logo />
 				</a>
+
+				<div class="dropdown dropdown-end">
+					<div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+						<div class="w-10 rounded-full">
+							<img
+								alt="Tailwind CSS Navbar component"
+								src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+							/>
+						</div>
+					</div>
+					<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+					<ul
+						tabindex="0"
+						class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+					>
+						<li>
+							<a href="/profile" class="justify-between">
+								Profile
+								<span class="badge">New</span>
+							</a>
+							<a href={null} class="flex p-0">
+								<form class="w-full" method="post" action="/signout" use:enhance>
+									<button class="w-full flex py-1 px-3">Sign out</button>
+								</form>
+							</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 
 			<button class="btn btn-primary btn-sm" on:click={createNotebookHandler}>

@@ -77,6 +77,6 @@ export const actions = {
 			redirect(302, '/email-verification')
 		}
 
-		redirect(302, '/')
+		redirect(302, '/n')
 	}
 } satisfies Actions
