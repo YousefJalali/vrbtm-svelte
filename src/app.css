@@ -12,6 +12,7 @@ code {
 
 body {
 	@apply font-body;
+	overscroll-behavior: none;
 }
 
 h1,
